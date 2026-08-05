@@ -34,6 +34,7 @@ export interface DashboardTranslation {
   mandiRateIntelligence: string;
   notificationsTitle: string;
   viewAll: string;
+  quickActions?: string;
 }
 
 export const DASHBOARD_TRANSLATIONS: Record<string, DashboardTranslation> = {
