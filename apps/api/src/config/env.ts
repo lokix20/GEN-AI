@@ -28,6 +28,7 @@ const EnvSchema = z.object({
 
   GOOGLE_CLIENT_ID: z.string().optional(),
   DATA_GOV_API_KEY: z.string().optional(),
+  WEATHER_API_KEY: z.string().optional(),
 });
 
 const parsed = EnvSchema.safeParse(process.env);
