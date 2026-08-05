@@ -12,6 +12,7 @@
   "dependencies": {
     "@haritha/shared-types": "*",
     "@supabase/supabase-js": "^2.112.0",
+    "@types/pg": "^8.20.4",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -22,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "pg": "^8.22.0",
     "socket.io": "^4.8.0",
     "zod": "^3.23.8"
   },

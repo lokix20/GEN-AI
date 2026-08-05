@@ -1,6 +1,6 @@
 import type { ChatMessageDTO, ChatSessionDTO, FarmerContextDTO, SendMessageInput } from "@haritha/shared-types";
 import { HttpError } from "../../middleware/error.middleware.js";
-import { supabase, parseDates } from "../../lib/supabase.js";
+import { queryOne } from "../../lib/db.js";
 import { getAIProvider } from "../../providers/ai/factory.js";
 import type { ChatTurn } from "../../providers/ai/ai-provider.interface.js";
 import * as repo from "./repository.js";
@@ -60,15 +60,10 @@ export async function deleteSession(userId: string, sessionId: string): Promise<
 }
 
 async function loadFarmerContext(userId: string): Promise<FarmerContextDTO> {
-  const { data: user, error } = await supabase
-    .from("User")
-    .select("*, farmerProfile:FarmerProfile(*)")
-    .eq("id", userId)
-    .maybeSingle();
+  const user = await queryOne(`SELECT * FROM "User" WHERE id = $1`, [userId]);
+  if (!user) throw new HttpError(404, "User not found");
 
-  if (error || !user) throw new HttpError(404, "User not found");
-
-  const profile = parseDates<any>(user).farmerProfile;
+  const profile = await queryOne(`SELECT * FROM "FarmerProfile" WHERE "userId" = $1`, [userId]);
   return {
     name: user.name,
     state: profile?.state ?? undefined,
