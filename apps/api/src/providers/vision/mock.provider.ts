@@ -2,22 +2,13 @@ import { createHash } from "node:crypto";
 import { findClosestDiseaseEntry } from "../../seed-data/disease-reference.js";
 import type { AnalyzeCropImageInput, VisionProvider } from "./vision-provider.interface.js";
 import type { DiseaseDetectionResultDTO } from "@haritha/shared-types";
-import { HttpError } from "../../middleware/error.middleware.js";
 
 /**
- * Dev fallback with non-crop validation to detect non-agricultural photos like ID cards.
+ * Dev fallback — deterministically maps the image (by hash) to a plausible disease
+ * reference entry so results are stable per image. Used when no AI key is configured.
  */
 export class MockVisionProvider implements VisionProvider {
-  async analyzeCropImage(input: AnalyzeCropImageInput): Promise<DiseaseDetectionResultDTO> {
-    const { imageBuffer, cropName, originalName } = input;
-    const filenameLower = (originalName || "").toLowerCase();
-
-    // Check if filename indicates non-crop object (e.g. ID cards, documents, passports, faces)
-    const isNonCrop = /id|card|identity|passport|license|aadhaar|document|pdf|thanush|face|person|car|avatar/.test(filenameLower);
-    if (isNonCrop) {
-      throw new HttpError(400, "Invalid Image: No crop or plant leaf detected in the photo. Please upload a clear photo of a crop sample.");
-    }
-
+  async analyzeCropImage({ imageBuffer, cropName }: AnalyzeCropImageInput): Promise<DiseaseDetectionResultDTO> {
     const hash = createHash("sha256")
       .update(imageBuffer)
       .update(cropName ?? "")

@@ -1,226 +1,173 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
-import { LanguageSelector } from "../../components/shared/LanguageSelector.js";
-import { LANDING_TRANSLATIONS, LandingTranslation } from "../../lib/landing-translations.js";
-
-const SAMPLE_LEAF_SCANS = [
-  {
-    id: "paddy-blight",
-    title: "Paddy Bacterial Leaf Blight",
-    crop: "Paddy",
-    confidence: "94% Match",
-    urgency: "Act within 48h",
-    remedy: "Spray Copper Hydroxide @ 2g/L + Streptocycline @ 0.1g/L",
-    organic: "Neem cake soil application + Pseudomonas fluorescens 10g/L",
-    cost: "Est. ₹420 / acre",
-    img: "/images/landing-hero-farmer.jpg"
-  },
-  {
-    id: "tomato-blight",
-    title: "Tomato Early Blight",
-    crop: "Tomato",
-    confidence: "91% Match",
-    urgency: "Act within 24h",
-    remedy: "Mancozeb 75% WP @ 2.5g/L or Azoxystrobin @ 1ml/L",
-    organic: "Trichoderma viride spray @ 5g/L water",
-    cost: "Est. ₹380 / acre",
-    img: "/images/field-scan-real.jpg"
-  }
-];
-
-const FAQS = [
-  {
-    q: "Is Haritha Sahayak approved by government agricultural scientists?",
-    a: "Yes. All diagnostic models and treatment dosages are benchmarked against official ICAR (Indian Council of Agricultural Research) package of practices and validated by KVK (Krishi Vigyan Kendra) extension officers."
-  },
-  {
-    q: "Will this work if I have poor or no 4G internet in my field?",
-    a: "Absolutely. Haritha Sahayak features full offline mode and SMS/USSD fallback. You can capture leaf photos offline; diagnostics auto-sync as soon as signal returns."
-  },
-  {
-    q: "Can I speak to the assistant in my native language instead of typing?",
-    a: "Yes! Simply tap the microphone icon and speak naturally in Telugu, Hindi, Tamil, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi, Odia, Assamese, or Urdu. The assistant will also speak the answer back to you."
-  },
-  {
-    q: "How does the Mandi Price intelligence work?",
-    a: "We pull real-time daily auction rates from Agmarknet & local mandi yards across 14 districts in AP & Telangana, applying AI forecasts to predict whether price will rise or fall over the next 7 days."
-  }
-];
 
 export function LandingPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [langCode, setLangCode] = useState(() => localStorage.getItem("haritha-language") || "te");
-  const [selectedDemo, setSelectedDemo] = useState(SAMPLE_LEAF_SCANS[0]);
-  const [activeFaq, setActiveFaq] = useState<number | null>(0);
-
-  useEffect(() => {
-    const handleLangChange = () => {
-      setLangCode(localStorage.getItem("haritha-language") || "te");
-    };
-    window.addEventListener("haritha-language-change", handleLangChange);
-    return () => window.removeEventListener("haritha-language-change", handleLangChange);
-  }, []);
-
-  const t: LandingTranslation = LANDING_TRANSLATIONS[langCode] || LANDING_TRANSLATIONS["te"] || LANDING_TRANSLATIONS["en"];
 
   return (
     <div className="min-h-screen bg-[#F8F9F5] text-[#0F291E] font-sans antialiased">
       {/* ─── 1. HIGH-CONTRAST HEADER WITH LOCALIZED SCRIPT ─── */}
-      <header className="bg-[#1B4332] px-6 py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[#006837] shadow-md">
+      <header className="bg-[#1B4332] px-6 py-4 flex items-center justify-between sticky top-0 z-50 border-b border-[#006837]">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
-          <div className="w-9.5 h-9.5 rounded-xl bg-[#006837] text-white flex items-center justify-center font-extrabold text-xl shadow-sm border border-[#9BD96B]/30">
+          <div className="w-9 h-9 rounded-xl bg-[#006837] text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
             ह
           </div>
           <div className="flex flex-col text-left">
             <span className="text-white text-lg font-extrabold tracking-tight leading-none">Haritha Sahayak</span>
-            <span className="text-[11px] text-[#A8D4B7] font-semibold mt-0.5">హరిత సహాయక్ · हरित सहायक</span>
+            <span className="text-[11px] text-[#A8D4B7] font-semibold">హరిత సహాయక్ · हरित सहायक</span>
           </div>
         </div>
 
-        <nav className="hidden md:flex gap-8 text-sm text-[#D4E7D7] font-bold">
-          <a href="#features" className="hover:text-white transition">Features</a>
-          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/disease-detection")}>{t.navDiagnosis}</span>
-          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/coming-soon/market")}>{t.navMandi}</span>
-          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/coming-soon/schemes")}>{t.navSchemes}</span>
-          <a href="#faq" className="hover:text-white transition">FAQ</a>
+        <nav className="hidden md:flex gap-6 text-sm text-[#D4E7D7] font-medium">
+          <span className="cursor-pointer hover:text-white transition">Features</span>
+          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/disease-detection")}>Crop diagnosis</span>
+          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/coming-soon/market")}>Market prices</span>
+          <span className="cursor-pointer hover:text-white transition" onClick={() => navigate("/coming-soon/schemes")}>Government schemes</span>
         </nav>
 
         <div className="flex items-center gap-4 text-[#D4E7D7] text-sm">
-          {/* Vernacular Language Selector Dropdown (12 Indian Languages + English) */}
-          <LanguageSelector />
+          {/* Vernacular Language Selector + Voice Icon */}
+          <div className="hidden sm:flex items-center gap-2 bg-[#006837]/60 border border-[#2E7D32] px-3 py-1.5 rounded-lg text-xs">
+            <span className="font-bold text-white">తెలుగు · हिंदी · English</span>
+            <button
+              className="w-6 h-6 rounded-full bg-[#1B4332] text-white flex items-center justify-center hover:bg-[#006837] transition"
+              title="Voice accessibility active"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </button>
+          </div>
 
           {isAuthenticated ? (
             <button
               onClick={() => navigate("/dashboard")}
-              className="bg-white text-[#1B4332] text-sm font-extrabold px-5 py-2.5 rounded-xl hover:bg-[#E8ECE0] transition-all transform active:scale-95 shadow-md"
+              className="bg-white text-[#1B4332] text-sm font-extrabold px-5 py-2.5 rounded-lg hover:bg-[#E8ECE0] transition-all transform active:scale-95 shadow-md"
             >
-              {t.openDashboardBtn}
+              Open Dashboard
             </button>
           ) : (
             <>
-              <span className="cursor-pointer text-white font-bold hover:underline hidden sm:inline" onClick={() => navigate("/login")}>
-                {t.loginBtn}
+              <span className="cursor-pointer text-white font-semibold hover:underline" onClick={() => navigate("/login")}>
+                Log in
               </span>
               <button
                 onClick={() => navigate("/register")}
-                className="bg-[#006837] text-white text-sm font-extrabold px-5 py-2.5 rounded-xl hover:bg-[#1B4332] transition-all transform active:scale-95 shadow-md border border-[#9BD96B]/40"
+                className="bg-[#006837] text-white text-sm font-extrabold px-5 py-2.5 rounded-lg hover:bg-[#1B4332] transition-all transform active:scale-95 shadow-md border border-[#2E7D32]"
               >
-                {t.startFreeBtn}
+                Start free
               </button>
             </>
           )}
         </div>
       </header>
 
-      {/* ─── 2. HERO SECTION — High Daylight Contrast & Dynamic Vernacular Translations ─── */}
+      {/* ─── 2. HERO SECTION — High Daylight Contrast & Raw Split-Screen Preview ─── */}
       <section className="bg-[#F8F9F5] px-6 md:px-16 pt-12 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
         <div className="flex flex-col gap-6 text-left max-w-xl z-10">
           {/* Social Trust Badge */}
-          <div className="inline-flex items-center gap-2.5 bg-white border-2 border-[#1B4332] text-[#1B4332] text-xs font-extrabold px-4 py-2 rounded-full self-start shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-white border-2 border-[#1B4332] text-[#1B4332] text-xs font-extrabold px-4 py-2 rounded-full self-start shadow-sm">
             <span className="w-2.5 h-2.5 rounded-full bg-[#006837] animate-pulse" />
-            {t.trustBadge}
+            Active across 14 AP &amp; Telangana districts · ICAR Verified
           </div>
 
-          {/* Main Value Headline */}
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-[3.3rem] text-[#1B4332] leading-[1.12] tracking-tight font-normal">
-            {t.headlineMain}<br />
-            <span className="text-[#006837] italic font-serif font-bold">{t.headlineHighlight}</span>
+          {/* Headline */}
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-[3.4rem] text-[#1B4332] leading-[1.1] tracking-tight font-normal">
+            Clear answers for your crops,<br />
+            <span className="text-[#006837] italic font-serif font-bold">right when you need them.</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-[#2C4035] text-base md:text-lg leading-relaxed font-semibold">
-            {t.subheadline}
+          <p className="text-[#2C4035] text-base md:text-lg leading-relaxed font-normal">
+            Scan leaf symptoms for immediate treatment steps, track local mandi prices, receive rain alerts, and check government scheme eligibility in your regional language.
           </p>
 
-          {/* Dual Action CTAs */}
+          {/* Dual Solid Green Action CTAs (Outdoor Visibility) */}
           <div className="flex flex-wrap gap-4 pt-2">
             <button
-              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/disease-detection")}
-              className="bg-[#006837] text-white text-base font-extrabold px-8 py-4 rounded-xl hover:bg-[#1B4332] transition shadow-xl border-2 border-[#006837] transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2.5"
+              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/register")}
+              className="bg-[#006837] text-white text-base font-extrabold px-8 py-4 rounded-xl hover:bg-[#1B4332] transition shadow-lg border-2 border-[#006837] transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2"
             >
-              <span>📷</span> {t.scanCta}
+              <span className="text-xl">📸</span> 📸 Scan Leaf / ఉచితంగా ప్రారంభించండి
             </button>
             <button
               onClick={() => navigate("/register")}
-              className="bg-[#1B4332] text-white text-base font-extrabold px-7 py-4 rounded-xl hover:bg-[#006837] transition flex items-center gap-2.5 border-2 border-[#1B4332] shadow-md"
+              className="bg-[#1B4332] text-white text-base font-extrabold px-7 py-4 rounded-xl hover:bg-[#006837] transition flex items-center gap-2 border-2 border-[#1B4332] shadow-md"
             >
-              <span>💬</span> {t.whatsappCta}
+              <span className="text-xl">💬</span> WhatsApp ఫ్రీ సేవ
             </button>
           </div>
 
           {/* Low-Tech Microcopy */}
-          <div className="flex flex-wrap gap-6 pt-3 text-[#3D5245] text-xs sm:text-sm font-extrabold">
-            <span className="flex items-center gap-1.5"><span className="text-[#006837]">✓</span> {t.microLowNetwork}</span>
-            <span className="flex items-center gap-1.5"><span className="text-[#006837]">✓</span> {t.microVoice}</span>
-            <span className="flex items-center gap-1.5"><span className="text-[#006837]">✓</span> {t.microFree}</span>
+          <div className="flex flex-wrap gap-6 pt-4 text-[#3D5245] text-sm font-bold">
+            <span>✓ Works on 2G / low network</span>
+            <span>✓ 100% Vernacular Voice Support</span>
+            <span>✓ 100% Free for farmers</span>
           </div>
         </div>
 
-        {/* ─── 3. RAW SPLIT-SCREEN FIELD & VERNACULAR UI PREVIEW ─── */}
-        <div className="w-full max-w-[520px] mx-auto z-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* ─── 3. RAW SPLIT-SCREEN FIELD & VERNACULAR UI PREVIEW (NO PHONE FRAME) ─── */}
+        <div className="w-full max-w-[500px] mx-auto z-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Authentic Real Field Workflow Photo */}
-          <div className="relative rounded-2xl overflow-hidden border-2 border-[#1B4332] shadow-lg h-[350px] sm:h-[390px] group">
+          <div className="relative rounded-2xl overflow-hidden border-2 border-[#1B4332] shadow-md h-[340px] sm:h-[380px] group">
             <img
               src="/images/landing-hero-farmer.jpg"
               alt="Authentic smallholder farmer inspecting paddy crop field"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1B4332]/95 via-transparent to-transparent flex flex-col justify-end p-4 text-white text-left">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#9BD96B] bg-[#0F2419]/90 px-2 py-0.5 rounded self-start">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1B4332]/90 via-transparent to-transparent flex flex-col justify-end p-4 text-white text-left">
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#A8D4B7] bg-[#1B4332]/80 px-2 py-0.5 rounded self-start">
                 Real Field Scan
               </span>
               <div className="text-sm font-extrabold mt-1">Ramesh Naidu · Kadapa</div>
-              <div className="text-[11px] text-[#D4E7D7] font-medium">4.2 acres Paddy Leaf Inspection</div>
+              <div className="text-[11px] text-[#D4E7D7]">4.2 acres Paddy Leaf Inspection</div>
             </div>
           </div>
 
           {/* Raw High-Contrast Vernacular UI Card */}
-          <div className="bg-white rounded-2xl border-2 border-[#1B4332] p-4 shadow-xl flex flex-col justify-between h-[350px] sm:h-[390px] text-left">
+          <div className="bg-white rounded-2xl border-2 border-[#1B4332] p-4 shadow-xl flex flex-col justify-between h-[340px] sm:h-[380px] text-left">
             {/* High-Contrast Solid Green Header */}
             <div className="bg-[#1B4332] text-white p-3 rounded-xl flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded bg-[#006837] text-white text-xs font-extrabold flex items-center justify-center">ह</div>
-                <span className="text-xs font-extrabold">Haritha Sahayak (Live)</span>
+                <div className="w-6 h-6 rounded bg-[#006837] text-white text-xs font-bold flex items-center justify-center">హ</div>
+                <span className="text-xs font-extrabold">హరిత సహాయక్ (Live)</span>
               </div>
-              <span className="text-[9px] font-extrabold text-[#9BD96B] bg-[#0F2419] px-2 py-0.5 rounded border border-[#9BD96B]/30">ICAR Verified</span>
+              <span className="text-[9px] font-extrabold text-white bg-[#006837] px-2 py-0.5 rounded">ICAR Verified</span>
             </div>
 
-            {/* Advisory Badge */}
+            {/* Telugu Direct Script Advisory Badge */}
             <div className="bg-[#F8F9F5] rounded-xl p-3 border border-[#E0E4D8]">
               <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#E65100]">
                 <span>🔬</span>
-                <span>{t.sol1Sub}</span>
+                <span>వ్యాధి: ఆకు మచ్చల తెగులు (Leaf Blight)</span>
               </div>
-              <div className="text-[11.5px] font-bold text-[#1B4332] mt-1 leading-snug">
-                {t.sol1Desc}
+              <div className="text-[11px] font-bold text-[#1B4332] mt-1 leading-snug">
+                కాపర్ ఆక్సీక్లోరైడ్ 3గ్రా/లీటర్ నీటిలో కలిపి పిచికారీ చేయండి.
               </div>
             </div>
 
-            {/* Mandi Rate Card */}
+            {/* Mandi Rate Telugu Script Card */}
             <div className="bg-[#E8F5E9] rounded-xl p-3 border border-[#2E7D32]/30">
-              <div className="text-[10px] font-extrabold text-[#006837] uppercase">{t.sol2Sub}</div>
-              <div className="text-base font-extrabold text-[#1B4332] mt-0.5 flex items-baseline justify-between">
-                <span>₹2,183 <span className="text-[10px] font-semibold text-[#006837]">/ quintal</span></span>
-                <span className="text-xs font-extrabold text-[#006837]">▲2.4%</span>
+              <div className="text-[10px] font-extrabold text-[#006837] uppercase">కడప మండి ధాన్యం ధర (Kadapa Paddy)</div>
+              <div className="text-base font-extrabold text-[#1B4332] mt-0.5">
+                ₹2,183 <span className="text-[10px] font-semibold text-[#006837]">/ క్వింటా (Hold 2 days)</span>
               </div>
             </div>
 
-            {/* Rain Alert Card */}
+            {/* Hindi Rain Alert Card */}
             <div className="bg-[#E3F2FD] rounded-xl p-3 border border-[#1565C0]/30">
-              <div className="text-[10px] font-extrabold text-[#1565C0] uppercase">Weather &amp; Rain Alert</div>
+              <div className="text-[10px] font-extrabold text-[#1565C0] uppercase">मौसम अलर्ट (Irrigation Rain Alert)</div>
               <div className="text-[11px] font-bold text-[#0D47A1] mt-0.5">
-                Skip Thursday watering — 42mm rain predicted.
+                गुरुवार सिंचाई रोकें — 42 मिमी बारिश की संभावना।
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── 4. SOCIAL PROOF STRIP ─── */}
-      <section className="bg-[#1B4332] px-6 md:px-16 py-8 text-white border-y-2 border-[#006837]">
+      {/* ─── 4. SOCIAL PROOF STRIP — HIGH CONTRAST ─── */}
+      <section className="bg-[#1B4332] px-6 md:px-16 py-8 text-white border-y border-[#006837]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-wrap gap-8 md:gap-12 text-left">
             <div>
@@ -232,115 +179,31 @@ export function LandingPage() {
               <div className="text-xs text-[#A8D4B7] mt-0.5 font-bold uppercase tracking-wider">ICAR-Verified Guidelines</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-extrabold text-white">12 Languages</div>
-              <div className="text-xs text-[#A8D4B7] mt-0.5 font-bold uppercase tracking-wider">Indian Vernacular Support</div>
+              <div className="text-2xl md:text-3xl font-extrabold text-white">11 Languages</div>
+              <div className="text-xs text-[#A8D4B7] mt-0.5 font-bold uppercase tracking-wider">Telugu · Hindi · Vernacular</div>
             </div>
           </div>
-          <div className="bg-[#006837] border border-[#9BD96B]/30 rounded-xl p-4 flex items-center gap-3 text-left max-w-md shadow">
+          <div className="bg-[#006837] border border-[#2E7D32] rounded-xl p-4 flex items-center gap-3 text-left max-w-md">
             <div className="w-10 h-10 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shrink-0">👨‍🌾</div>
-            <div className="text-xs text-white leading-relaxed font-medium">
-              <span className="font-extrabold block text-[#9BD96B]">Human Agronomist Oversight</span>
+            <div className="text-xs text-white leading-relaxed">
+              <span className="font-bold block text-[#A8D4B7]">Human Extension Oversight</span>
               Advisories cross-checked with local Krishi Vigyan Kendra (KVK) guidelines and officers.
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── 5. INTERACTIVE LIVE DIAGNOSTIC SIMULATOR DEMO ─── */}
-      <section className="px-6 md:px-16 py-16 bg-white border-b-2 border-[#1B4332] text-left">
-        <div className="max-w-7xl mx-auto flex flex-col gap-8">
-          <div>
-            <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">Interactive Live Demo</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#1B4332] mt-1 font-normal">
-              Test AI Leaf Diagnosis Instantly
-            </h2>
-            <p className="text-sm text-[#3D5245] font-semibold mt-1 max-w-xl">
-              Click a crop leaf sample below to see how Haritha Sahayak analyzes leaf spots, computes exact chemical dosage, and recommends organic remedies.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-            {/* Sample Selector */}
-            <div className="flex flex-col gap-3">
-              <span className="text-xs font-extrabold text-[#7A877F] uppercase tracking-wider">Select Sample Leaf</span>
-              {SAMPLE_LEAF_SCANS.map((sample) => (
-                <button
-                  key={sample.id}
-                  onClick={() => setSelectedDemo(sample)}
-                  className={`p-4 rounded-xl border-2 text-left transition flex items-center gap-3 ${
-                    selectedDemo.id === sample.id
-                      ? "border-[#006837] bg-[#E8F5E9] shadow-sm"
-                      : "border-[#E0E4D8] bg-[#F8F9F5] hover:bg-white"
-                  }`}
-                >
-                  <div className="w-12 h-12 rounded-lg bg-[#1B4332] text-white flex items-center justify-center font-bold text-xl shrink-0">
-                    🍃
-                  </div>
-                  <div>
-                    <div className="text-xs font-extrabold text-[#006837] uppercase">{sample.crop}</div>
-                    <div className="text-sm font-extrabold text-[#1B4332]">{sample.title}</div>
-                  </div>
-                </button>
-              ))}
-
-              <div 
-                onClick={() => navigate("/disease-detection")}
-                className="p-5 rounded-xl border-2 border-dashed border-[#006837] bg-[#F8F9F5] hover:bg-[#E8F5E9] cursor-pointer transition text-center mt-2 flex flex-col items-center gap-2"
-              >
-                <div className="w-10 h-10 rounded-full bg-[#006837] text-white flex items-center justify-center font-bold text-lg">
-                  📷
-                </div>
-                <div className="text-xs font-extrabold text-[#006837]">Or upload your own leaf photo</div>
-              </div>
-            </div>
-
-            {/* Diagnostic Output Result Card */}
-            <div className="lg:col-span-2 bg-[#F8F9F5] border-2 border-[#1B4332] rounded-2xl p-6 flex flex-col gap-5 shadow-md">
-              <div className="flex items-center justify-between border-b border-[#E0E4D8] pb-4">
-                <div>
-                  <span className="text-xs font-extrabold text-[#006837] uppercase">{selectedDemo.crop} Leaf Diagnosis</span>
-                  <h3 className="text-2xl font-extrabold text-[#1B4332]">{selectedDemo.title}</h3>
-                </div>
-                <div className="flex flex-col items-end">
-                  <span className="bg-[#E8F5E9] text-[#006837] text-xs font-extrabold px-3 py-1 rounded-full border border-[#2E7D32]/30">
-                    {selectedDemo.confidence}
-                  </span>
-                  <span className="text-[11px] font-extrabold text-[#E65100] mt-1">{selectedDemo.urgency}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white border border-[#E0E4D8] rounded-xl p-4 text-left">
-                  <div className="text-xs font-extrabold text-[#006837] uppercase mb-1">🧪 Chemical Treatment</div>
-                  <p className="text-xs font-bold text-[#1B4332] leading-relaxed">{selectedDemo.remedy}</p>
-                </div>
-
-                <div className="bg-white border border-[#E0E4D8] rounded-xl p-4 text-left">
-                  <div className="text-xs font-extrabold text-[#2E7D32] uppercase mb-1">🌱 Organic Remedy</div>
-                  <p className="text-xs font-bold text-[#1B4332] leading-relaxed">{selectedDemo.organic}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between bg-white border border-[#E0E4D8] rounded-xl p-3 px-4">
-                <span className="text-xs font-bold text-[#3D5245]">Estimated input cost at local Krishi Kendra:</span>
-                <span className="text-sm font-extrabold text-[#006837]">{selectedDemo.cost}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 6. CORE 3-STEP SOLUTION MATRIX WITH DYNAMIC TRANSLATIONS ─── */}
-      <section id="features" className="px-6 md:px-16 py-20 max-w-7xl mx-auto">
+      {/* ─── 5. CORE 3-STEP SOLUTION MATRIX WITH DIRECT VERNACULAR LABELS ─── */}
+      <section className="px-6 md:px-16 py-20 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 text-left">
           <div>
             <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">Core Solutions</span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#1B4332] mt-2 font-normal">
-              {t.solutionsTitle}
+              Three pillars for your daily farm decisions.
             </h2>
           </div>
           <p className="text-base text-[#3D5245] md:max-w-[340px] leading-relaxed font-semibold">
-            {t.solutionsDesc}
+            Actionable answers in your mother tongue without relying on delayed agent visits.
           </p>
         </div>
 
@@ -349,17 +212,17 @@ export function LandingPage() {
           <div className="bg-white rounded-2xl p-8 flex flex-col gap-4 text-left shadow-md border-2 border-[#1B4332]">
             <div className="w-14 h-14 rounded-2xl bg-[#E8F5E9] text-[#006837] flex items-center justify-center text-3xl border border-[#2E7D32]/30">📸</div>
             <div>
-              <div className="text-xs font-extrabold text-[#006837] uppercase">{t.sol1Sub}</div>
-              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">{t.sol1Title}</h3>
+              <div className="text-xs font-extrabold text-[#006837] uppercase">పంట ఆకు వ్యాధి నిర్ధారణ</div>
+              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">1. Diagnose Crop Health</h3>
             </div>
             <p className="text-[#3D5245] text-sm leading-relaxed font-medium">
-              {t.sol1Desc}
+              Snap leaf photos for instant spray dosage and verified treatment steps. No guessing.
             </p>
             <button
               onClick={() => navigate("/disease-detection")}
               className="mt-auto bg-[#006837] text-white text-sm font-extrabold py-3 px-5 rounded-xl hover:bg-[#1B4332] transition self-start border border-[#006837]"
             >
-              {t.sol1Cta}
+              ఫోటో తీసి పరీక్షించండి →
             </button>
           </div>
 
@@ -367,17 +230,17 @@ export function LandingPage() {
           <div className="bg-white rounded-2xl p-8 flex flex-col gap-4 text-left shadow-md border-2 border-[#1B4332]">
             <div className="w-14 h-14 rounded-2xl bg-[#FFF8E1] text-[#F57F17] flex items-center justify-center text-3xl border border-[#F57F17]/30">📈</div>
             <div>
-              <div className="text-xs font-extrabold text-[#E65100] uppercase">{t.sol2Sub}</div>
-              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">{t.sol2Title}</h3>
+              <div className="text-xs font-extrabold text-[#E65100] uppercase">నేటి మండి ధరలు &amp; అంచనా</div>
+              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">2. Track Live Mandi Rates</h3>
             </div>
             <p className="text-[#3D5245] text-sm leading-relaxed font-medium">
-              {t.sol2Desc}
+              Daily rates &amp; 3-day AI forecasts for Kadapa, Madanapalle, and Guntur mandis to decide when to sell.
             </p>
             <button
               onClick={() => navigate("/coming-soon/market")}
               className="mt-auto bg-[#1B4332] text-white text-sm font-extrabold py-3 px-5 rounded-xl hover:bg-[#006837] transition self-start border border-[#1B4332]"
             >
-              {t.sol2Cta}
+              మండి ధరలు చూడండి →
             </button>
           </div>
 
@@ -385,43 +248,43 @@ export function LandingPage() {
           <div className="bg-white rounded-2xl p-8 flex flex-col gap-4 text-left shadow-md border-2 border-[#1B4332]">
             <div className="w-14 h-14 rounded-2xl bg-[#F3E5F5] text-[#7B1FA2] flex items-center justify-center text-3xl border border-[#7B1FA2]/30">🏛️</div>
             <div>
-              <div className="text-xs font-extrabold text-[#7B1FA2] uppercase">{t.sol3Sub}</div>
-              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">{t.sol3Title}</h3>
+              <div className="text-xs font-extrabold text-[#7B1FA2] uppercase">ప్రభుత్వ పథకాల అర్హత</div>
+              <h3 className="text-2xl font-extrabold text-[#1B4332] mt-0.5">3. Access Schemes &amp; Subsidies</h3>
             </div>
             <p className="text-[#3D5245] text-sm leading-relaxed font-medium">
-              {t.sol3Desc}
+              Automated eligibility checks for PM-KISAN, Rythu Bharosa, and Fasal Bima Yojna in minutes.
             </p>
             <button
               onClick={() => navigate("/coming-soon/schemes")}
               className="mt-auto bg-[#1B4332] text-white text-sm font-extrabold py-3 px-5 rounded-xl hover:bg-[#006837] transition self-start border border-[#1B4332]"
             >
-              {t.sol3Cta}
+              పథకాల అర్హత తనిఖీ →
             </button>
           </div>
         </div>
       </section>
 
-      {/* ─── 7. LOW-TECH & OFFLINE ACCESSIBILITY WITH DYNAMIC TRANSLATIONS ─── */}
+      {/* ─── 6. LOW-TECH & OFFLINE ACCESSIBILITY ─── */}
       <section className="bg-white border-y-2 border-[#1B4332] px-6 md:px-16 py-16 text-left">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col gap-6">
-            <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">{t.ruralHeader}</span>
+            <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">Built for Rural India</span>
             <h2 className="font-serif text-3xl md:text-4xl text-[#1B4332] leading-tight">
-              {t.ruralTitle}
+              Designed for low connectivity, simple phones, and direct voice interaction.
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
               <div className="bg-[#F8F9F5] p-5 rounded-xl border border-[#E0E4D8]">
                 <div className="text-xl mb-2">⚡</div>
-                <div className="text-base font-extrabold text-[#1B4332]">{t.ruralCard1Title}</div>
+                <div className="text-base font-extrabold text-[#1B4332]">Ultra Low Data Usage</div>
                 <div className="text-xs text-[#3D5245] mt-1 leading-relaxed font-medium">
-                  {t.ruralCard1Desc}
+                  Optimized lightweight payloads work reliably even on weak 2G network signals.
                 </div>
               </div>
               <div className="bg-[#F8F9F5] p-5 rounded-xl border border-[#E0E4D8]">
                 <div className="text-xl mb-2">🗣️</div>
-                <div className="text-base font-extrabold text-[#1B4332]">{t.ruralCard2Title}</div>
+                <div className="text-base font-extrabold text-[#1B4332]">మాట్లాడి తెలుసుకోండి (Voice First)</div>
                 <div className="text-xs text-[#3D5245] mt-1 leading-relaxed font-medium">
-                  {t.ruralCard2Desc}
+                  Speak questions out loud in Telugu or Hindi and listen to clear responses in local accents.
                 </div>
               </div>
             </div>
@@ -437,12 +300,12 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ─── 8. STRUCTURED FARMER CASE STUDIES WITH DYNAMIC TRANSLATIONS ─── */}
+      {/* ─── 7. STRUCTURED FARMER CASE STUDIES ─── */}
       <section className="px-6 md:px-16 py-20 max-w-7xl mx-auto text-left">
         <div className="mb-12">
-          <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">{t.testiHeader}</span>
+          <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">Verified Farmer Results</span>
           <h2 className="font-serif text-3xl md:text-4xl text-[#1B4332] mt-2 font-normal">
-            {t.testiTitle}
+            Real before-and-after results from local farmers.
           </h2>
         </div>
 
@@ -458,21 +321,21 @@ export function LandingPage() {
           <div className="flex flex-col gap-6">
             {/* Location Tag */}
             <div className="inline-flex items-center gap-2 bg-white border-2 border-[#1B4332] text-[#1B4332] text-xs font-extrabold px-3.5 py-1.5 rounded-full self-start shadow-sm">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#006837]" /> {t.testiLoc}
+              <span className="w-2.5 h-2.5 rounded-full bg-[#006837]" /> వల్లాపురం గ్రామము, కడప జిల్లా (Kadapa, AP)
             </div>
 
             {/* Before / After Case Study Card */}
             <div className="bg-white border-2 border-[#1B4332] p-6 rounded-2xl shadow-md grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="border-l-4 border-[#E65100] pl-4">
-                <div className="text-xs font-extrabold text-[#E65100] uppercase tracking-wider">{t.testiBeforeLabel}</div>
+                <div className="text-xs font-extrabold text-[#E65100] uppercase tracking-wider">మొదటి అనుభవం (Before)</div>
                 <p className="text-sm text-[#3D5245] mt-1 italic font-medium">
-                  {t.testiBefore}
+                  "In 2024, leaf blight damaged 50% of my paddy crop before I recognized what spray was needed."
                 </p>
               </div>
               <div className="border-l-4 border-[#006837] pl-4">
-                <div className="text-xs font-extrabold text-[#006837] uppercase tracking-wider">{t.testiAfterLabel}</div>
+                <div className="text-xs font-extrabold text-[#006837] uppercase tracking-wider">హరిత సహాయక్ తర్వాత (After)</div>
                 <p className="text-sm text-[#1B4332] font-bold mt-1">
-                  {t.testiAfter}
+                  "App caught early symptoms on day 2. Sprayed once as recommended and saved ₹45,000 in crop yield."
                 </p>
               </div>
             </div>
@@ -487,8 +350,8 @@ export function LandingPage() {
                   {isPlayingAudio ? "⏸" : "▶"}
                 </button>
                 <div>
-                  <div className="text-xs font-extrabold text-[#1B4332]">{t.testiAudioTitle}</div>
-                  <div className="text-[11px] text-[#3D5245] font-semibold">{t.testiAudioSub}</div>
+                  <div className="text-xs font-extrabold text-[#1B4332]">తెలుగు ఆడియో వినండి (Listen in Telugu 0:45)</div>
+                  <div className="text-[11px] text-[#3D5245] font-semibold">రమేష్ నాయుడు పంట సంరక్షణ అనుభవం</div>
                 </div>
               </div>
               <div className="flex items-center gap-1 h-6 shrink-0">
@@ -508,9 +371,9 @@ export function LandingPage() {
                 />
               </div>
               <div>
-                <div className="text-base font-extrabold text-[#1B4332]">Ramesh Naidu</div>
+                <div className="text-base font-extrabold text-[#1B4332]">Ramesh Naidu (రమేష్ నాయుడు)</div>
                 <div className="text-sm text-[#3D5245] font-semibold">
-                  4.2 acres · Paddy &amp; Tomato · Kadapa, AP
+                  4.2 acres · Paddy &amp; Tomato · Kadapa, Andhra Pradesh
                 </div>
               </div>
             </div>
@@ -518,69 +381,35 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ─── 9. FAQ ACCORDION SECTION ─── */}
-      <section id="faq" className="bg-white border-y-2 border-[#1B4332] px-6 md:px-16 py-16 text-left">
-        <div className="max-w-4xl mx-auto flex flex-col gap-8">
-          <div>
-            <span className="text-xs font-extrabold tracking-widest text-[#006837] uppercase">Frequently Asked Questions</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-[#1B4332] mt-1 font-normal">
-              Everything You Need to Know
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            {FAQS.map((faq, idx) => (
-              <div
-                key={idx}
-                className="border-2 border-[#1B4332] rounded-2xl overflow-hidden bg-[#F8F9F5] shadow-sm"
-              >
-                <button
-                  onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                  className="w-full p-5 text-left font-extrabold text-[#1B4332] text-base flex justify-between items-center gap-4 bg-white hover:bg-[#F8F9F5] transition"
-                >
-                  <span>{faq.q}</span>
-                  <span className="text-xl text-[#006837]">{activeFaq === idx ? "−" : "+"}</span>
-                </button>
-                {activeFaq === idx && (
-                  <div className="p-5 border-t border-[#E0E4D8] text-sm text-[#3D5245] font-semibold leading-relaxed bg-[#F8F9F5]">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── 10. CONVERSION FOOTER WITH DYNAMIC TRANSLATIONS ─── */}
+      {/* ─── 8. CONVERSION FOOTER WITH HIGH-CONTRAST SOLID BUTTONS ─── */}
       <section className="bg-[#1B4332] px-6 py-16 text-center flex flex-col items-center gap-6 text-white border-t-2 border-[#006837]">
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white max-w-3xl leading-tight font-normal">
-          {t.ctaBottomTitle}
+          Protect your crop yield for this season.
         </h2>
         <p className="text-[#D4E7D7] text-base max-w-xl font-semibold">
-          {t.ctaBottomSub}
+          Get started in under 2 minutes in your regional language.
         </p>
         <div className="flex flex-wrap gap-4 justify-center pt-2">
           <button
             onClick={() => navigate(isAuthenticated ? "/dashboard" : "/register")}
             className="bg-[#006837] text-white text-base font-extrabold px-8 py-4 rounded-xl hover:bg-[#1B4332] transition shadow-lg border-2 border-white/20 flex items-center gap-2"
           >
-            <span>📸</span> {t.startFreeBtn}
+            <span>📸</span> Create Free Account
           </button>
           <button className="bg-[#25D366] text-[#1B4332] text-base font-extrabold px-8 py-4 rounded-xl hover:bg-[#1EBE5D] transition shadow-lg flex items-center gap-2">
-            <span>💬</span> {t.whatsappCta}
+            <span>💬</span> WhatsApp ఫ్రీ సేవ (Start Free on WhatsApp)
           </button>
         </div>
       </section>
 
-      {/* ─── FOOTER WITH DYNAMIC TRANSLATIONS ─── */}
+      {/* ─── FOOTER ─── */}
       <footer className="bg-[#091F14] px-6 md:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[#8AA896] text-xs font-bold border-t border-[#1B4332]">
-        <span>{t.footerRights}</span>
+        <span>© 2026 Haritha Sahayak · Supported by ICAR-aligned guidelines</span>
         <div className="flex gap-6">
-          <span className="hover:underline cursor-pointer">{t.privacy}</span>
-          <span className="hover:underline cursor-pointer">{t.terms}</span>
-          <span className="hover:underline cursor-pointer">{t.consent}</span>
-          <span className="hover:underline cursor-pointer">{t.support}</span>
+          <span className="hover:underline cursor-pointer">Privacy</span>
+          <span className="hover:underline cursor-pointer">Terms</span>
+          <span className="hover:underline cursor-pointer">Data &amp; consent</span>
+          <span className="hover:underline cursor-pointer">Support</span>
         </div>
       </footer>
     </div>

@@ -1,7 +1,5 @@
 import type { DiseaseDetectionResultDTO } from "@haritha/shared-types";
 import type { AnalyzeCropImageInput, VisionProvider } from "./vision-provider.interface.js";
-import { MockVisionProvider } from "./mock.provider.js";
-import { logger } from "../../lib/logger.js";
 
 const MODEL = "gpt-4o";
 
@@ -33,55 +31,45 @@ const JSON_SCHEMA = `{
 }`;
 
 export class OpenAIVisionProvider implements VisionProvider {
-  private mockProvider = new MockVisionProvider();
-
   constructor(private readonly apiKey: string) {}
 
-  async analyzeCropImage(input: AnalyzeCropImageInput): Promise<DiseaseDetectionResultDTO> {
-    try {
-      const { imageBuffer, mimeType, cropName } = input;
-      const base64 = imageBuffer.toString("base64");
-      const dataUrl = `data:${mimeType ?? "image/jpeg"};base64,${base64}`;
+  async analyzeCropImage({ imageBuffer, mimeType, cropName }: AnalyzeCropImageInput): Promise<DiseaseDetectionResultDTO> {
+    const base64 = imageBuffer.toString("base64");
+    const dataUrl = `data:${mimeType ?? "image/jpeg"};base64,${base64}`;
 
-      const userText = `Analyze this crop image and return a JSON object matching exactly this schema:\n${JSON_SCHEMA}${cropName ? `\n\nThe crop in the image is: ${cropName}.` : ""}`;
+    const userText = `Analyze this crop image and return a JSON object matching exactly this schema:\n${JSON_SCHEMA}${cropName ? `\n\nThe crop in the image is: ${cropName}.` : ""}`;
 
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: MODEL,
-          response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            {
-              role: "user",
-              content: [
-                { type: "text", text: userText },
-                { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
-              ],
-            },
-          ],
-          max_tokens: 1024,
-        }),
-      });
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          {
+            role: "user",
+            content: [
+              { type: "text", text: userText },
+              { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
+            ],
+          },
+        ],
+        max_tokens: 1024,
+      }),
+    });
 
-      if (!res.ok) {
-        const errorText = await res.text();
-        logger.warn(`OpenAI vision request failed (${res.status}): ${errorText}. Falling back to MockVisionProvider.`);
-        return this.mockProvider.analyzeCropImage(input);
-      }
-
-      const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-      const content = json.choices?.[0]?.message?.content;
-      if (!content) throw new Error("OpenAI vision returned no content");
-
-      return JSON.parse(content) as DiseaseDetectionResultDTO;
-    } catch (err: any) {
-      logger.warn(`OpenAI Vision error (${err?.message || err}). Falling back to MockVisionProvider.`);
-      return this.mockProvider.analyzeCropImage(input);
+    if (!res.ok) {
+      throw new Error(`OpenAI vision request failed: ${res.status} ${await res.text()}`);
     }
+
+    const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
+    const content = json.choices?.[0]?.message?.content;
+    if (!content) throw new Error("OpenAI vision returned no content");
+
+    return JSON.parse(content) as DiseaseDetectionResultDTO;
   }
 }
