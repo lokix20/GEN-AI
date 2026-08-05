@@ -7,31 +7,27 @@ import type {
   ResetPasswordInput,
   VerifyOtpInput,
 } from "@haritha/shared-types";
-import { apiClient } from "../lib/apiClient";
+import { refreshAccessToken } from "../lib/apiClient";
 import { useAuthStore } from "../store/auth.store";
 import * as authApi from "../features/auth/api";
 
 export function useBootstrapSession() {
-  const setSession = useAuthStore((s) => s.setSession);
   const setBootstrapping = useAuthStore((s) => s.setBootstrapping);
 
   useEffect(() => {
     let cancelled = false;
 
-    apiClient
-      .post("/auth/refresh")
-      .then(({ data }) => {
-        if (!cancelled) setSession(data.user, data.accessToken);
-      })
-      .catch(() => undefined)
-      .finally(() => {
-        if (!cancelled) setBootstrapping(false);
-      });
+    // Goes through the shared single-flight refresh so React StrictMode's double-invoked effect
+    // (dev) can't fire two parallel refreshes — the server rotates refresh tokens, so the second
+    // would 401 on a revoked token and log the user straight back out on every reload.
+    refreshAccessToken().finally(() => {
+      if (!cancelled) setBootstrapping(false);
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [setSession, setBootstrapping]);
+  }, [setBootstrapping]);
 }
 
 export function useAuth() {

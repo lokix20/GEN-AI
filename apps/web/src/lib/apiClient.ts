@@ -16,7 +16,12 @@ apiClient.interceptors.request.use((config) => {
 
 let refreshPromise: Promise<string | null> | null = null;
 
-async function refreshAccessToken(): Promise<string | null> {
+/**
+ * Single-flight session refresh. The server rotates refresh tokens (each use revokes the previous
+ * one), so two parallel calls would make the second fail with a revoked token and drop the session.
+ * Every caller must go through this so concurrent callers share one in-flight request.
+ */
+export async function refreshAccessToken(): Promise<string | null> {
   if (!refreshPromise) {
     refreshPromise = axios
       .post("/api/auth/refresh", {}, { withCredentials: true })
