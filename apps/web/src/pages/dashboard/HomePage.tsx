@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Sun, Leaf, Droplets, TrendingUp, Camera, MessageCircle, Calendar, Cloud, Shield, CloudRain, CloudSun } from "lucide-react";
+import { Sun, Leaf, Droplets, TrendingUp, Camera, Calendar, Cloud, Shield, CloudRain, CloudSun } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../lib/apiClient.js";
 import { useAuthStore } from "../../store/auth.store.js";
