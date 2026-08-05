@@ -50,8 +50,11 @@ export function AppRouter() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
 
-        {/* Public disease detection — no login required */}
-        <Route path="/disease-detection" element={<DiseaseDetectionPage />} />
+        {/* Public disease detection — no login required, but still wrapped in AppShell so the
+            sidebar renders like every other page. Outside RouteGuard, inside the shell. */}
+        <Route element={<AppShell />}>
+          <Route path="/disease-detection" element={<DiseaseDetectionPage />} />
+        </Route>
 
         {/* Protected routes */}
         <Route element={<RouteGuard />}>

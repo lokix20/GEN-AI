@@ -53,7 +53,7 @@ export function SchemesPage() {
   const incomeSchemesCount = eligibleSchemes.filter((m) => m.scheme.category === "income" || m.scheme.category === "state").length;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-1rem)] w-full bg-[#F4F3EC] select-none font-sans overflow-hidden text-left">
+    <div className="flex flex-col w-full bg-[#F4F3EC] select-none font-sans text-left pb-10">
       
       {/* Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
