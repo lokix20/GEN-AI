@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 100 20% 97%;
+    --foreground: 152 30% 12%;
+
+    --card: 100 20% 99%;
+    --card-foreground: 152 30% 12%;
+
+    --popover: 100 20% 99%;
+    --popover-foreground: 152 30% 12%;
+
+    --primary: 152 44% 19%;
+    --primary-foreground: 100 20% 98%;
+
+    --secondary: 146 32% 44%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 43 74% 66%;
+    --accent-foreground: 152 44% 12%;
+
+    --muted: 100 15% 93%;
+    --muted-foreground: 152 15% 38%;
+
+    --destructive: 4 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 152 20% 85%;
+    --input: 152 20% 85%;
+    --ring: 152 44% 19%;
+
+    --forest: 152 44% 19%;
+    --forest-foreground: 100 20% 98%;
+    --leaf: 146 32% 44%;
+    --leaf-foreground: 0 0% 100%;
+    --golden: 43 74% 66%;
+    --golden-foreground: 152 44% 12%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 152 25% 8%;
+    --foreground: 100 20% 95%;
+
+    --card: 152 22% 11%;
+    --card-foreground: 100 20% 95%;
+
+    --popover: 152 22% 11%;
+    --popover-foreground: 100 20% 95%;
+
+    --primary: 146 40% 55%;
+    --primary-foreground: 152 30% 10%;
+
+    --secondary: 146 28% 30%;
+    --secondary-foreground: 100 20% 95%;
+
+    --accent: 43 70% 60%;
+    --accent-foreground: 152 30% 10%;
+
+    --muted: 152 18% 16%;
+    --muted-foreground: 100 10% 65%;
+
+    --destructive: 4 62% 45%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 152 18% 20%;
+    --input: 152 18% 20%;
+    --ring: 146 40% 55%;
+
+    --forest: 152 40% 45%;
+    --forest-foreground: 152 30% 8%;
+    --leaf: 146 35% 55%;
+    --leaf-foreground: 152 30% 8%;
+    --golden: 43 70% 60%;
+    --golden-foreground: 152 30% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  /* glassmorphism: translucent card bg + blur + subtle border, used for all card surfaces */
+  .glass-card {
+    @apply rounded-2xl border border-border/50 bg-card/60 shadow-glass backdrop-blur-xl;
+  }
+
+  /* Custom sidebar scrollbar */
+  .sidebar-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .sidebar-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+
+  /* Hero banner section */
+  .hero-banner {
+    @apply relative overflow-hidden rounded-2xl;
+    background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 40%, #40916C 70%, #52B788 100%);
+    min-height: 200px;
+  }
+  .hero-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(82, 183, 136, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    @apply rounded-2xl border border-white/20 p-4 backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+  .dark .stat-card {
+    background: rgba(30, 50, 40, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* AI Assistant section */
+  .ai-assistant-section {
+    @apply relative overflow-hidden rounded-2xl p-6;
+    background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 60%, #40916C 100%);
+  }
+
+  /* Circular progress ring */
+  .progress-ring {
+    transform: rotate(-90deg);
+  }
+  .progress-ring__circle-bg {
+    stroke: #e5e7eb;
+    fill: none;
+  }
+  .progress-ring__circle {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease-in-out;
+  }
+
+  /* Quick action buttons */
+  .quick-action-btn {
+    @apply flex flex-col items-center gap-2 rounded-2xl border border-border/50 bg-card/80 p-3 text-center transition-all;
+  }
+  .quick-action-btn:hover {
+    @apply -translate-y-0.5 border-forest/30 bg-forest/5 shadow-md;
+  }
+  .quick-action-btn .icon-wrapper {
+    @apply flex h-11 w-11 items-center justify-center rounded-xl bg-forest/10 text-forest;
+  }
+
+  /* Expert help CTA card */
+  .expert-help-card {
+    @apply relative overflow-hidden rounded-2xl p-5;
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 50%, #F87171 100%);
+  }
+
+  /* Notification item */
+  .notification-item {
+    @apply flex gap-3 rounded-xl p-3 transition-colors;
+  }
+  .notification-item:hover {
+    @apply bg-muted/50;
+  }
+
+  /* Crop card */
+  .crop-card {
+    @apply flex flex-col items-center gap-2 rounded-2xl border border-border/30 bg-card/80 p-3 text-center transition-all;
+  }
+  .crop-card:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    @apply flex flex-wrap items-center justify-around gap-4 rounded-2xl border border-border/30 bg-card/60 px-6 py-4 backdrop-blur;
+  }
+
+  /* Recommendation list item */
+  .recommendation-item {
+    @apply flex items-start gap-2 py-1.5 text-sm text-foreground/80;
+  }
+
+  /* Suggestion chips */
+  .suggestion-chip {
+    @apply cursor-pointer rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs text-white/90 backdrop-blur-sm transition-all;
+  }
+  .suggestion-chip:hover {
+    @apply bg-white/20 text-white;
+  }
+}
+
+
