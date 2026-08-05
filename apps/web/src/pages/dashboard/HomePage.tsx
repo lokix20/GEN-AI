@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Sun, Leaf, Droplets, TrendingUp, Camera, MessageCircle, Calendar, Cloud, Shield } from "lucide-react";
 import { useAuthStore } from "../../store/auth.store.js";
+import { MandiPriceWidget } from "../../features/mandi/MandiPriceWidget.js";
 
 const sora = { fontFamily: "'Sora', sans-serif" };
 
@@ -132,6 +133,9 @@ export function HomePage() {
       <div style={{ display:'grid', gridTemplateColumns:'1fr 320px', gap:16, alignItems:'start' }}>
         {/* Left Column */}
         <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+          {/* Interactive Mandi Price Intelligence Widget */}
+          <MandiPriceWidget />
+
           {/* My Plots */}
           <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px' }}>
             <div style={{ display:'flex', alignItems:'center', justifyItems:'space-between', justifyContent:'space-between', marginBottom:4 }}>

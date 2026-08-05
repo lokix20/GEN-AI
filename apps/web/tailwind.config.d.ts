@@ -9,6 +9,36 @@ declare const _default: {
                 ring: string;
                 background: string;
                 foreground: string;
+                harvest: {
+                    DEFAULT: string;
+                    hover: string;
+                    light: string;
+                };
+                deepgreen: {
+                    DEFAULT: string;
+                    dark: string;
+                    light: string;
+                };
+                terracotta: {
+                    DEFAULT: string;
+                    hover: string;
+                    light: string;
+                };
+                soil: {
+                    DEFAULT: string;
+                    light: string;
+                    dark: string;
+                };
+                sage: {
+                    DEFAULT: string;
+                    light: string;
+                    dark: string;
+                    subtle: string;
+                };
+                sand: {
+                    DEFAULT: string;
+                    muted: string;
+                };
                 forest: {
                     DEFAULT: string;
                     foreground: string;

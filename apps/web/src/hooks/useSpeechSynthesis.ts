@@ -10,7 +10,14 @@ export function useSpeechSynthesis() {
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang === "hi" ? "hi-IN" : "en-IN";
+      const langMap: Record<string, string> = {
+        te: "te-IN",
+        hi: "hi-IN",
+        ta: "ta-IN",
+        kn: "kn-IN",
+        en: "en-IN",
+      };
+      utterance.lang = langMap[lang] || "en-IN";
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
       utterance.onerror = () => setIsSpeaking(false);

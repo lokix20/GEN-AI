@@ -4,6 +4,7 @@ import { Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { NAV_ITEMS } from "../../app/nav-items";
 import { Badge } from "../../components/ui/badge";
+import { SchemeEligibilityWidget } from "../../features/schemes/SchemeEligibilityWidget";
 
 export function ComingSoonPage() {
   const { key } = useParams<{ key: string }>();
@@ -11,6 +12,14 @@ export function ComingSoonPage() {
   const item = NAV_ITEMS.find((nav) => nav.path.endsWith(`/${key}`));
   const Icon = item?.icon ?? Sparkles;
   const title = item ? t(item.labelKey) : t("common.comingSoon");
+
+  if (key === "schemes") {
+    return (
+      <div className="max-w-4xl mx-auto py-4 space-y-4">
+        <SchemeEligibilityWidget />
+      </div>
+    );
+  }
 
   return (
     <motion.div

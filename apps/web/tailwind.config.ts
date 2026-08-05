@@ -12,6 +12,36 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        harvest: {
+          DEFAULT: "#236A43",
+          hover: "#1B5434",
+          light: "#E4F2E9",
+        },
+        deepgreen: {
+          DEFAULT: "#0F2B1D",
+          dark: "#091F14",
+          light: "#1A3B2A",
+        },
+        terracotta: {
+          DEFAULT: "#C85A32",
+          hover: "#B34E2A",
+          light: "#F5EBE6",
+        },
+        soil: {
+          DEFAULT: "#2B1F17",
+          light: "#3D2E24",
+          dark: "#1C130D",
+        },
+        sage: {
+          DEFAULT: "#5E7A68",
+          light: "#8EA895",
+          dark: "#3F5647",
+          subtle: "#EBF0EC",
+        },
+        sand: {
+          DEFAULT: "#FAF8F5",
+          muted: "#F4EFEA",
+        },
         forest: {
           DEFAULT: "hsl(var(--forest))",
           foreground: "hsl(var(--forest-foreground))",
