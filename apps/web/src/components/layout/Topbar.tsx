@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { LogOut, Menu, Search, Bell, Globe, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+import { LogOut, Menu, Search, Bell } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar.js";
 import { Button } from "../ui/button.js";
 import {
@@ -12,7 +11,8 @@ import {
 import { Dialog, DialogContent } from "../ui/dialog.js";
 import { SidebarNav } from "./Sidebar.js";
 import { useAuth } from "../../hooks/useAuth.js";
-
+import { LanguageSelector } from "../shared/LanguageSelector.js";
+import { DASHBOARD_TRANSLATIONS, DashboardTranslation } from "../../lib/dashboard-translations.js";
 import { cn } from "../../lib/utils.js";
 
 function initials(name: string) {
@@ -25,9 +25,19 @@ function initials(name: string) {
 }
 
 export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar: () => void; sidebarCollapsed: boolean }) {
-  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [langCode, setLangCode] = useState(() => localStorage.getItem("haritha-language") || "te");
+
+  useEffect(() => {
+    const handleLangChange = () => {
+      setLangCode(localStorage.getItem("haritha-language") || "te");
+    };
+    window.addEventListener("haritha-language-change", handleLangChange);
+    return () => window.removeEventListener("haritha-language-change", handleLangChange);
+  }, []);
+
+  const dt: DashboardTranslation = DASHBOARD_TRANSLATIONS[langCode] || DASHBOARD_TRANSLATIONS["te"] || DASHBOARD_TRANSLATIONS["en"];
 
   const displayName = user?.name || "Ramesh Farm";
 
@@ -49,7 +59,7 @@ export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar:
           <Search className="mr-2 h-4 w-4 text-[#8B978F] shrink-0" />
           <input 
             type="text" 
-            placeholder="Search crops, diseases, schemes…" 
+            placeholder={dt.searchPlaceholder} 
             className="w-full bg-transparent outline-none placeholder:text-[#8B978F] text-[#12261D]"
             readOnly
           />
@@ -61,11 +71,8 @@ export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar:
 
       {/* Right Actions */}
       <div className="ml-auto flex items-center gap-4 md:ml-0">
-        <div className="hidden cursor-pointer items-center gap-1 text-sm font-medium text-[#4B5A52] hover:text-[#12261D] sm:flex transition">
-          <Globe className="h-4.5 w-4.5" />
-          <span>English</span>
-          <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-        </div>
+        {/* Vernacular Language Selector Dropdown */}
+        <LanguageSelector buttonClassName="bg-[#F1F0E9] border border-[#E1E0D6] text-[#12261D] px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-[#E4E3DA] transition shadow-sm" />
 
         {/* Bell Alerts */}
         <div className="relative cursor-pointer rounded-full p-2 text-[#4B5A52] hover:bg-muted transition">
@@ -92,9 +99,9 @@ export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar:
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="rounded-xl border border-[#E4E3DA] bg-white">
-            <DropdownMenuItem onClick={() => logout()} className="rounded-lg hover:bg-muted cursor-pointer">
+            <DropdownMenuItem onClick={() => logout()} className="rounded-lg hover:bg-muted cursor-pointer font-bold text-xs">
               <LogOut className="mr-2 h-4 w-4" />
-              {t("common.logout")}
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

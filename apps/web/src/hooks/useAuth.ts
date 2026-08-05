@@ -17,15 +17,20 @@ export function useBootstrapSession() {
   useEffect(() => {
     let cancelled = false;
 
-    // Goes through the shared single-flight refresh so React StrictMode's double-invoked effect
-    // (dev) can't fire two parallel refreshes — the server rotates refresh tokens, so the second
-    // would 401 on a revoked token and log the user straight back out on every reload.
-    refreshAccessToken().finally(() => {
+    // Timeout fallback — if API is unreachable, stop bootstrapping after 3s
+    const timeout = setTimeout(() => {
       if (!cancelled) setBootstrapping(false);
-    });
+    }, 3000);
+
+    refreshAccessToken()
+      .finally(() => {
+        clearTimeout(timeout);
+        if (!cancelled) setBootstrapping(false);
+      });
 
     return () => {
       cancelled = true;
+      clearTimeout(timeout);
     };
   }, [setBootstrapping]);
 }

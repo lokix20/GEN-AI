@@ -1,19 +1,23 @@
 import { env } from "../../config/env.js";
 import { buildSystemPrompt } from "./ai-provider.interface.js";
 import type { AIProvider, StreamChatInput } from "./ai-provider.interface.js";
+import { MockAIProvider } from "./mock.provider.js";
+import { logger } from "../../lib/logger.js";
 
 const MODEL = "gpt-4o-mini";
 
 export class OpenAIProvider implements AIProvider {
+  private mockProvider = new MockAIProvider();
+
   constructor(private readonly apiKey: string) {}
 
-  async *streamChat({ messages, farmerContext, imageUrl, language }: StreamChatInput): AsyncIterable<string> {
+  async *streamChat(input: StreamChatInput): AsyncIterable<string> {
+    const { messages, farmerContext, imageUrl, language } = input;
     const chatMessages: Array<Record<string, unknown>> = [
       { role: "system", content: buildSystemPrompt(farmerContext, language) },
       ...messages.slice(0, -1).map((m) => ({ role: m.role, content: m.content })),
     ];
 
-    // Vision input requires a publicly reachable URL (e.g. Supabase storage); local-disk dev URLs are relative and skipped.
     const last = messages.at(-1);
     if (last) {
       chatMessages.push(
@@ -29,17 +33,27 @@ export class OpenAIProvider implements AIProvider {
       );
     }
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ model: MODEL, messages: chatMessages, stream: true }),
-    });
+    let res: Response;
+    try {
+      res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ model: MODEL, messages: chatMessages, stream: true }),
+      });
 
-    if (!res.ok || !res.body) {
-      throw new Error(`OpenAI request failed: ${res.status} ${await res.text()}`);
+      if (!res.ok || !res.body) {
+        const errText = await res.text();
+        logger.warn(`OpenAI Chat request failed (${res.status}): ${errText}. Falling back to MockAIProvider.`);
+        yield* this.mockProvider.streamChat(input);
+        return;
+      }
+    } catch (err: any) {
+      logger.warn(`OpenAI Chat error (${err?.message || err}). Falling back to MockAIProvider.`);
+      yield* this.mockProvider.streamChat(input);
+      return;
     }
 
     const reader = res.body.getReader();

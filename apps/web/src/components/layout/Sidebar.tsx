@@ -1,48 +1,61 @@
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { cn } from "../../lib/utils.js";
 import { NAV_ITEMS } from "../../app/nav-items.js";
 import { useAuth } from "../../hooks/useAuth.js";
-import { ChevronLeft } from "lucide-react"; // for collapse arrow if needed, actually just use a simple button
-
-const labelMap: Record<string, string> = {
-  home: "Dashboard",
-  chat: "AI Assistant",
-  diseaseDetection: "Crop Diagnosis",
-  weather: "Weather",
-  irrigation: "Irrigation",
-  cropCalendar: "Crop Calendar",
-  farmDiary: "Farm Diary",
-  market: "Market Prices",
-  schemes: "Schemes",
-  expertConsultation: "Expert Help",
-};
+import { ChevronLeft } from "lucide-react";
+import { DASHBOARD_TRANSLATIONS, DashboardTranslation } from "../../lib/dashboard-translations.js";
 
 const GROUPS = [
   {
     title: "TODAY",
-    keys: ["home", "chat", "diseaseDetection"],
+    keys: [
+      { key: "home", dtKey: "sidebarDashboard" as keyof DashboardTranslation },
+      { key: "chat", dtKey: "sidebarAiAssistant" as keyof DashboardTranslation },
+      { key: "diseaseDetection", dtKey: "sidebarCropDiagnosis" as keyof DashboardTranslation },
+    ],
   },
   {
     title: "PLAN THE SEASON",
-    keys: ["weather", "irrigation", "cropCalendar", "farmDiary"],
+    keys: [
+      { key: "weather", dtKey: "sidebarWeather" as keyof DashboardTranslation },
+      { key: "irrigation", dtKey: "sidebarIrrigation" as keyof DashboardTranslation },
+      { key: "cropCalendar", dtKey: "sidebarCropCalendar" as keyof DashboardTranslation },
+      { key: "farmDiary", dtKey: "sidebarFarmDiary" as keyof DashboardTranslation },
+    ],
   },
   {
     title: "MONEY",
-    keys: ["market", "schemes", "expertConsultation"],
+    keys: [
+      { key: "market", dtKey: "sidebarMarketPrices" as keyof DashboardTranslation },
+      { key: "schemes", dtKey: "sidebarSchemes" as keyof DashboardTranslation },
+      { key: "expertConsultation", dtKey: "sidebarExpertHelp" as keyof DashboardTranslation },
+    ],
   },
 ];
 
 export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void; onCollapse?: () => void }) {
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+  const [langCode, setLangCode] = useState(() => localStorage.getItem("haritha-language") || "te");
+
+  useEffect(() => {
+    const handleLangChange = () => {
+      setLangCode(localStorage.getItem("haritha-language") || "te");
+    };
+    window.addEventListener("haritha-language-change", handleLangChange);
+    return () => window.removeEventListener("haritha-language-change", handleLangChange);
+  }, []);
+
+  const dt: DashboardTranslation = DASHBOARD_TRANSLATIONS[langCode] || DASHBOARD_TRANSLATIONS["te"] || DASHBOARD_TRANSLATIONS["en"];
+
   const displayName = user?.name || "Ramesh Farm";
 
   return (
     <div className="flex h-full flex-col bg-[#0F2419] p-5 pb-5 gap-6 text-[#F4F3EC] overflow-y-auto no-scrollbar">
       {/* Top Header */}
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
           <div 
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-[#0F2419] font-serif font-extrabold text-lg shadow-sm"
             style={{ backgroundColor: '#9BD96B' }}
@@ -68,14 +81,14 @@ export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void
       <nav className="flex-1 space-y-6">
         {GROUPS.map((group) => (
           <div key={group.title} className="flex flex-col gap-1.5">
-            <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-2 mb-1">
+            <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-2 mb-1 text-left">
               {group.title}
             </div>
-            {group.keys.map((key) => {
+            {group.keys.map(({ key, dtKey }) => {
               const item = NAV_ITEMS.find((i) => i.key === key);
               if (!item) return null;
               
-              const label = labelMap[key] || item.key;
+              const label = (dt[dtKey] as string) || item.key;
               const Icon = item.icon;
               const path = item.path;
 
@@ -130,7 +143,7 @@ export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void
             Sowing window for paddy closes in 9 days.
           </p>
           <button 
-            onClick={() => navigate("/crop-calendar")}
+            onClick={() => navigate("/coming-soon/crop-calendar")}
             className="w-full rounded-[9px] bg-[#9BD96B] py-[9px] text-[13px] font-bold text-[#0F2419] transition hover:bg-[#8ac75c]"
           >
             Open advisory

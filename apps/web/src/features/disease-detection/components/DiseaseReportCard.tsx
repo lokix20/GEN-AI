@@ -59,7 +59,14 @@ export function DiseaseReportCard({ report }: { report: DiseaseReportDTO }) {
 
       <CardHeader className="space-y-4">
         <div className="relative rounded-2xl overflow-hidden bg-muted max-h-64 w-full border border-[#E4F2E9]">
-          <img src={report.imageUrl} alt={report.cropName} className="max-h-64 w-full object-cover" />
+          <img
+            src={report.imageUrl}
+            alt={report.cropName}
+            className="max-h-64 w-full object-cover"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/images/landing-feat-scan.jpg";
+            }}
+          />
           <div className="absolute bottom-3 left-3 right-3 bg-black/60 backdrop-blur-md rounded-xl p-2.5 text-white flex justify-between items-center text-xs">
             <span className="font-bold">{report.cropName} Leaf Sample</span>
             <span className="text-[11px] text-[#A8D4B7]">{new Date(report.createdAt).toLocaleDateString()}</span>

@@ -50,6 +50,9 @@ export function AppRouter() {
           <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
 
+        {/* Public disease detection — no login required */}
+        <Route path="/disease-detection" element={<DiseaseDetectionPage />} />
+
         {/* Protected routes */}
         <Route element={<RouteGuard />}>
           <Route path="/onboarding" element={<OnboardingPage />} />
@@ -57,7 +60,6 @@ export function AppRouter() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/chat/:sessionId" element={<ChatPage />} />
-            <Route path="/disease-detection" element={<DiseaseDetectionPage />} />
             <Route path="/weather" element={<WeatherPage />} />
             <Route path="/irrigation" element={<IrrigationPage />} />
             <Route path="/crop-calendar" element={<CropCalendarPage />} />

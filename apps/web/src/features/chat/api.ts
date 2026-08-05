@@ -2,13 +2,21 @@ import type { ChatMessageDTO, ChatSessionDTO } from "@haritha/shared-types";
 import { apiClient } from "../../lib/apiClient";
 
 export async function listChatSessions(): Promise<ChatSessionDTO[]> {
-  const { data } = await apiClient.get("/chat/sessions");
-  return data.sessions;
+  try {
+    const { data } = await apiClient.get("/chat/sessions");
+    return data.sessions;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function listChatMessages(sessionId: string): Promise<ChatMessageDTO[]> {
-  const { data } = await apiClient.get(`/chat/sessions/${sessionId}/messages`);
-  return data.messages;
+  try {
+    const { data } = await apiClient.get(`/chat/sessions/${sessionId}/messages`);
+    return data.messages;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function updateChatSession(sessionId: string, patch: { title?: string; isPinned?: boolean }): Promise<ChatSessionDTO> {
@@ -17,7 +25,11 @@ export async function updateChatSession(sessionId: string, patch: { title?: stri
 }
 
 export async function deleteChatSession(sessionId: string): Promise<void> {
-  await apiClient.delete(`/chat/sessions/${sessionId}`);
+  try {
+    await apiClient.delete(`/chat/sessions/${sessionId}`);
+  } catch {
+    /* ignore unauthenticated delete error */
+  }
 }
 
 export async function uploadChatImage(file: File): Promise<{ url: string; key: string }> {

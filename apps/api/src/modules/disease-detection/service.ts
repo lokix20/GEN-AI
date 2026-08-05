@@ -22,7 +22,7 @@ function toDTO(report: Awaited<ReturnType<typeof repo.createReport>>): DiseaseRe
     alternativeDiagnoses: typeof report.alternativeDiagnoses === "string"
       ? JSON.parse(report.alternativeDiagnoses)
       : (report.alternativeDiagnoses ?? []),
-    createdAt: report.createdAt.toISOString(),
+    createdAt: typeof report.createdAt === "string" ? report.createdAt : (report.createdAt?.toISOString ? report.createdAt.toISOString() : new Date().toISOString()),
   };
 }
 
