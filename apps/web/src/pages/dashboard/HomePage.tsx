@@ -1,396 +1,284 @@
 import { useNavigate } from "react-router-dom";
-import { Mic } from "lucide-react";
+import { Sun, Leaf, Droplets, TrendingUp, Camera, MessageCircle, Calendar, Cloud, Shield } from "lucide-react";
 import { useAuthStore } from "../../store/auth.store.js";
+
+const sora = { fontFamily: "'Sora', sans-serif" };
 
 export function HomePage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const displayName = user?.name?.split(" ")[0] ?? "Farmer";
+  const firstName = user?.name?.split(" ")[0] ?? "Ramesh";
 
   return (
-    <div className="flex flex-col gap-6 text-left">
-      {/* 1. GREETING ROW */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="text-left">
-          <h1 className="font-sora text-3xl font-bold tracking-tight text-[#12261D]">
-            Good afternoon, {displayName}
-          </h1>
-          <p className="text-[#5C6B62] text-sm mt-1">
-            Tuesday, 5 August · everything on your farm looks steady today.
-          </p>
+    <div className="flex flex-col gap-5">
+      {/* Header Row */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 style={{ ...sora, fontSize: 28, fontWeight: 700, color: '#12261D', letterSpacing: '-0.02em' }}>Good afternoon, {firstName}</h1>
+          <p style={{ fontSize: 13, color: '#5C6B62', marginTop: 3 }}>Tuesday, 5 August · 2 things need you today</p>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => navigate("/disease-detection")}
-            className="px-4 py-2.5 rounded-lg bg-[#0F2419] text-[#F4F3EC] text-xs font-semibold hover:bg-opacity-90 transition active:scale-95"
-          >
-            Scan a crop
+        <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+          <button onClick={() => navigate('/disease-detection')} style={{ display:'flex', alignItems:'center', gap:6, padding:'9px 16px', borderRadius:9, background:'#12261D', color:'#F4F3EC', fontSize:13, fontWeight:600, border:'none', cursor:'pointer' }}>
+            <Camera size={14}/> Scan a crop
           </button>
-          <button
-            onClick={() => navigate("/coming-soon/farm-diary")}
-            className="px-4 py-2.5 rounded-lg bg-white border border-[#DCDBD1] text-[#2B3A32] text-xs font-semibold hover:bg-[#F9F8F3] transition active:scale-95"
-          >
-            Log activity
-          </button>
+          <button style={{ padding:'9px 16px', borderRadius:9, background:'white', color:'#2B3A32', fontSize:13, fontWeight:600, border:'1px solid #DCDBD1', cursor:'pointer' }}>Log activity</button>
         </div>
       </div>
 
-      {/* 2. MAIN LAYOUT GRID (LEFT MAIN + RIGHT SIDEBAR) */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_344px] gap-6 items-start">
-        
-        {/* LEFT COLUMN */}
-        <div className="flex flex-col gap-6 min-w-0">
-          
-          {/* STAT CARDS (4 COLUMNS) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            {/* CARD 1: Weather */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-[17px] flex flex-col gap-2.5 relative shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#7A877F]">Weather today</span>
-                <span className="w-[22px] height-[22px] h-[22px] rounded-md bg-[#FBF1DC] flex items-center justify-center text-xs">☀️</span>
-              </div>
-              <div className="font-sora text-3xl font-bold text-[#12261D] tracking-tight">28°C</div>
-              <div className="text-xs text-[#5C6B62] font-medium">Sunny · humidity 65%</div>
-              <div className="h-[1px] bg-[#EDECE3] my-0.5" />
-              <div className="text-xs font-bold text-[#1B7A4B] leading-tight">Rain 10% · wind 12 km/h</div>
-            </div>
-
-            {/* CARD 2: Crop Health */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-[17px] flex flex-col gap-2.5 relative shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#7A877F]">Crop health</span>
-                <span className="w-[22px] height-[22px] h-[22px] rounded-md bg-[#E6F3E4] flex items-center justify-center text-xs">🌱</span>
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <div className="font-sora text-3xl font-bold text-[#12261D] tracking-tight">82</div>
-                <div className="text-[13px] text-[#8B978F] font-semibold">/100</div>
-              </div>
-              <div className="h-1.5 rounded-full bg-[#EDECE3] overflow-hidden my-0.5">
-                <div className="w-[82%] h-full bg-[#1B7A4B]" />
-              </div>
-              <div className="text-xs font-bold text-[#1B7A4B] leading-tight">Good · up 4 since last week</div>
-            </div>
-
-            {/* CARD 3: Soil Moisture */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-[17px] flex flex-col gap-2.5 relative shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#7A877F]">Soil moisture</span>
-                <span className="w-[22px] height-[22px] h-[22px] rounded-md bg-[#E4EEF6] flex items-center justify-center text-xs">💧</span>
-              </div>
-              <div className="font-sora text-3xl font-bold text-[#12261D] tracking-tight">45%</div>
-              
-              {/* Range slider indicator */}
-              <div className="h-1.5 rounded-full bg-[#EDECE3] relative my-0.5">
-                {/* Target optimal range band (40%-55%) */}
-                <div className="absolute left-[40%] right-[45%] top-0 bottom-0 bg-[#C4E0B2] rounded-full" />
-                {/* Current value pin (45%) */}
-                <div className="absolute left-[45%] w-1 h-3 -top-[3px] bg-[#12261D] rounded-full" />
-              </div>
-
-              <div className="text-xs font-bold text-[#1B7A4B] leading-tight">Optimal band 40–55%</div>
-            </div>
-
-            {/* CARD 4: Paddy Price */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-[17px] flex flex-col gap-2.5 relative shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-[#7A877F]">Paddy price</span>
-                <span className="w-[22px] height-[22px] h-[22px] rounded-md bg-[#EFE9F7] flex items-center justify-center text-xs">🌾</span>
-              </div>
-              <div className="font-sora text-3xl font-bold text-[#12261D] tracking-tight">₹2,183</div>
-              
-              {/* Mini vertical bar chart */}
-              <div className="flex items-end gap-1 h-5 pt-1 my-0.5">
-                <div className="flex-1 h-[40%] bg-[#DCEBD2] rounded-t-sm" />
-                <div className="flex-1 h-[55%] bg-[#C4E0B2] rounded-t-sm" />
-                <div className="flex-1 h-[45%] bg-[#C4E0B2] rounded-t-sm" />
-                <div className="flex-1 h-[70%] bg-[#9BD96B] rounded-t-sm" />
-                <div className="flex-1 h-[86%] bg-[#1B7A4B] rounded-t-sm" />
-                <div className="flex-1 h-[100%] bg-[#12261D] rounded-t-sm" />
-              </div>
-
-              <div className="text-xs font-bold text-[#1B7A4B] leading-tight">▲ 2.4% /quintal · Kadapa</div>
-            </div>
+      {/* Priority Alert Cards */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:14 }}>
+        {/* Card 1 - DO FIRST (dark) - takes more visual weight */}
+        <div style={{ gridColumn:'1', background:'#0F2419', borderRadius:16, padding:'22px 24px', display:'flex', flexDirection:'column', gap:14 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <span style={{ background:'#C0442F', color:'white', fontSize:10, fontWeight:800, padding:'3px 8px', borderRadius:12, letterSpacing:'0.06em' }}>DO FIRST</span>
+            <span style={{ color:'#7F9A88', fontSize:12 }}>Plot A · paddy · 2.4 ac</span>
           </div>
+          <div style={{ ...sora, fontSize:20, fontWeight:700, color:'#F4F3EC', lineHeight:1.3 }}>Drain Plot A today — blight risk before Wednesday's rain</div>
+          <p style={{ fontSize:13, color:'#8CA396', lineHeight:1.55 }}>Leaf blight was detected on 15% of the plot. Standing water plus 42 mm of rain would spread it across the field within a week.</p>
+          <div style={{ display:'flex', gap:10, marginTop:4 }}>
+            <button style={{ padding:'9px 16px', borderRadius:8, background:'#9BD96B', color:'#0F2419', fontSize:13, fontWeight:700, border:'none', cursor:'pointer' }}>Mark as done</button>
+            <button style={{ padding:'9px 16px', borderRadius:8, background:'transparent', color:'#D7F0C2', fontSize:13, fontWeight:600, border:'1px solid #34523F', cursor:'pointer' }}>See treatment plan</button>
+          </div>
+        </div>
 
-          {/* AI ASSISTANT ROW */}
-          <div className="bg-[#0F2419] rounded-2xl p-6 grid grid-cols-1 md:grid-cols-[1fr_210px] gap-6 items-center shadow-lg relative overflow-hidden">
-            <div className="flex flex-col gap-3.5 text-left text-[#F4F3EC]">
-              <div className="flex items-center gap-2.5">
-                <span className="font-sora text-xl font-bold">Ask the farming assistant</span>
-                <span className="text-[10px] font-bold tracking-wider text-[#0F2419] bg-[#9BD96B] px-2 py-0.5 rounded-md">
-                  BETA
-                </span>
+        {/* Card 2 - TODAY */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px', display:'flex', flexDirection:'column', gap:10 }}>
+          <span style={{ fontSize:10, fontWeight:800, color:'#C27D00', letterSpacing:'0.1em', background:'#FBF1DC', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>TODAY</span>
+          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>Irrigate Plot B before 6 PM</div>
+          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>Tomato soil at 31% — below the fruiting band.</p>
+          <div style={{ marginTop:'auto', display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:10 }}>
+            <span style={{ fontSize:12, color:'#8B978F' }}>~55 min of drip</span>
+            <button onClick={() => navigate('/coming-soon/irrigation')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Schedule →</button>
+          </div>
+        </div>
+
+        {/* Card 3 - THIS WEEK */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px', display:'flex', flexDirection:'column', gap:10 }}>
+          <span style={{ fontSize:10, fontWeight:800, color:'#3B6FA8', letterSpacing:'0.1em', background:'#E4EEF6', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>THIS WEEK</span>
+          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>Claim PM-KISAN ₹2,000</div>
+          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>Eligible · 4 of 5 documents already on file.</p>
+          <div style={{ marginTop:'auto', display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:10 }}>
+            <span style={{ fontSize:12, color:'#8B978F' }}>Closes 22 Aug</span>
+            <button onClick={() => navigate('/coming-soon/schemes')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Apply →</button>
+          </div>
+        </div>
+      </div>
+
+      {/* 4 Stat Cards */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
+        {/* Weather */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:6 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <Sun size={14} color='#C27D00'/>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Weather today</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>28°</span>
+            <span style={{ fontSize:14, color:'#5C6B62', fontWeight:500 }}>Sunny</span>
+          </div>
+          <div style={{ fontSize:12, color:'#8B978F' }}>Humidity 65% · rain 10% · wind 12 km/h</div>
+        </div>
+
+        {/* Crop Health */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <Leaf size={14} color='#1B7A4B'/>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Crop health</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>82</span>
+            <span style={{ fontSize:14, color:'#8B978F' }}>/100</span>
+          </div>
+          <div style={{ height:5, borderRadius:3, background:'#EDECE3', overflow:'hidden' }}>
+            <div style={{ width:'82%', height:'100%', background:'#1B7A4B' }}/>
+          </div>
+        </div>
+
+        {/* Soil Moisture */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <Droplets size={14} color='#3B6FA8'/>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Soil moisture</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>45%</span>
+            <span style={{ fontSize:11, fontWeight:700, color:'#1B7A4B', background:'#E6F3E4', padding:'2px 8px', borderRadius:10 }}>Optimal</span>
+          </div>
+          <div style={{ height:5, borderRadius:3, background:'#EDECE3', position:'relative' }}>
+            <div style={{ position:'absolute', left:'40%', right:'45%', top:0, bottom:0, background:'#C4E0B2', borderRadius:3 }}/>
+            <div style={{ position:'absolute', left:'45%', width:2, top:-2, bottom:-2, background:'#12261D', borderRadius:2 }}/>
+          </div>
+        </div>
+
+        {/* Paddy Price */}
+        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+            <TrendingUp size={14} color='#1B7A4B'/>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Paddy · Kadapa mandi</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <span style={{ ...sora, fontSize:30, fontWeight:700, color:'#12261D' }}>₹2,183</span>
+            <span style={{ fontSize:12, fontWeight:700, color:'#1B7A4B' }}>▲2.4%</span>
+          </div>
+          <div style={{ display:'flex', alignItems:'flex-end', gap:3, height:22 }}>
+            {[35,50,42,65,80,100].map((h,i) => (
+              <div key={i} style={{ flex:1, height:`${h}%`, background: i < 3 ? '#C4E0B2' : i < 5 ? '#9BD96B' : '#12261D', borderRadius:'3px 3px 0 0' }}/>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main 2-column grid */}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 320px', gap:16, alignItems:'start' }}>
+        {/* Left Column */}
+        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+          {/* My Plots */}
+          <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyItems:'space-between', justifyContent:'space-between', marginBottom:4 }}>
+              <div>
+                <span style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>My plots</span>
+                <div style={{ fontSize:12, color:'#8B978F', marginTop:2 }}>4.2 acres · Kharif 2026</div>
               </div>
-              <p className="text-[#9DB3A6] text-sm leading-relaxed">
-                Crops, diseases, weather, soil, schemes — ask by voice in your language.
-              </p>
-              
-              {/* Voice chat box mockup */}
-              <div 
-                onClick={() => navigate("/chat")}
-                className="bg-white rounded-xl p-3 flex items-center justify-between gap-3 shadow-inner cursor-pointer hover:bg-opacity-95 transition"
-              >
-                <span className="text-[#8B978F] text-sm truncate">Type your question or use voice…</span>
-                <div className="flex items-center gap-3.5 text-[#5C6B62]">
-                  <Mic className="h-4.5 w-4.5 shrink-0" />
-                  <div className="w-8 h-8 rounded-lg bg-[#0F2419] text-[#9BD96B] flex items-center justify-center text-sm font-bold">
-                    ↑
+              <button onClick={() => navigate('/coming-soon/farm-diary')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>View all</button>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 80px', gap:10, marginTop:16 }}>
+              {/* Paddy Plot */}
+              <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
+                <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌾<br/><span style={{fontSize:10}}>or browse files</span></div>
+                </div>
+                <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
+                  <span style={{ width:7, height:7, borderRadius:'50%', background:'#C0442F', display:'inline-block', flexShrink:0 }}/>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:700, color:'#12261D' }}>Paddy</div>
+                    <div style={{ fontSize:11, color:'#8B978F' }}>Plot A · tillering</div>
                   </div>
                 </div>
+                <div style={{ height:3, borderRadius:2, background:'#E6F3E4', marginTop:8 }}><div style={{ width:'40%', height:'100%', background:'#1B7A4B', borderRadius:2 }}/></div>
               </div>
-
-              {/* Suggestion Chips */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                <span className="text-xs text-[#D7F0C2] border border-[#34523F] px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#1E3D2C] transition">
-                  Why are my leaves yellow?
-                </span>
-                <span className="text-xs text-[#D7F0C2] border border-[#34523F] px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#1E3D2C] transition">
-                  Best fertilizer for rice
-                </span>
-                <span className="text-xs text-[#D7F0C2] border border-[#34523F] px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#1E3D2C] transition">
-                  Will it rain this week?
-                </span>
-                <span className="text-xs text-[#D7F0C2] border border-[#34523F] px-3 py-1.5 rounded-full cursor-pointer hover:bg-[#1E3D2C] transition">
-                  Schemes for small farmers
-                </span>
+              {/* Tomato Plot */}
+              <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
+                <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🍅<br/><span style={{fontSize:10}}>or browse files</span></div>
+                </div>
+                <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
+                  <span style={{ width:7, height:7, borderRadius:'50%', background:'#E8A33D', display:'inline-block', flexShrink:0 }}/>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:700, color:'#12261D' }}>Tomato</div>
+                    <div style={{ fontSize:11, color:'#8B978F' }}>Plot B · fruiting</div>
+                  </div>
+                </div>
+                <div style={{ height:3, borderRadius:2, background:'#FBF1DC', marginTop:8 }}><div style={{ width:'60%', height:'100%', background:'#E8A33D', borderRadius:2 }}/></div>
               </div>
-            </div>
-
-            {/* Mascot art slot */}
-            <div className="w-[210px] h-[190px] mx-auto rounded-xl overflow-hidden shadow-md shrink-0 bg-[#17311F]">
-              <img
-                src="/images/ai-robot.jpg"
-                alt="AI Robot Assistant"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-
-          {/* CROPS & RECOMMENDATIONS SPLIT ROW */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            
-            {/* Card Left: My Crops */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-5 flex flex-col gap-4 text-left shadow-sm">
-              <div className="flex items-center justify-between">
-                <span className="font-sora text-[17px] font-bold text-[#12261D]">My crops</span>
-                <span className="text-[12.5px] font-semibold text-[#1B7A4B] cursor-pointer hover:underline">
-                  View all
-                </span>
+              {/* Cotton Plot */}
+              <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
+                <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌿<br/><span style={{fontSize:10}}>or browse files</span></div>
+                </div>
+                <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
+                  <span style={{ width:7, height:7, borderRadius:'50%', background:'#1B7A4B', display:'inline-block', flexShrink:0 }}/>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:700, color:'#12261D' }}>Cotton</div>
+                    <div style={{ fontSize:11, color:'#8B978F' }}>Strip C · boll</div>
+                  </div>
+                </div>
+                <div style={{ height:3, borderRadius:2, background:'#E6F3E4', marginTop:8 }}><div style={{ width:'75%', height:'100%', background:'#1B7A4B', borderRadius:2 }}/></div>
               </div>
-              <div className="grid grid-cols-3 gap-2.5">
-                <div className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2">
-                  <div className="w-11 h-11 rounded-full bg-[#E6F3E4] flex items-center justify-center text-xl shadow-inner">🌾</div>
-                  <div className="text-xs font-bold text-[#12261D]">Paddy</div>
-                  <span className="text-[10px] font-bold text-[#1B7A4B] bg-[#E6F3E4] px-2 py-0.5 rounded-full">
-                    Healthy
-                  </span>
-                  <span className="text-[10px] text-[#8B978F] font-medium mt-0.5">Sown 10 Jun</span>
-                </div>
-                <div className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2">
-                  <div className="w-11 h-11 rounded-full bg-[#FFEAE5] flex items-center justify-center text-xl shadow-inner">🍅</div>
-                  <div className="text-xs font-bold text-[#12261D]">Tomato</div>
-                  <span className="text-[10px] font-bold text-[#1B7A4B] bg-[#E6F3E4] px-2 py-0.5 rounded-full">
-                    Healthy
-                  </span>
-                  <span className="text-[10px] text-[#8B978F] font-medium mt-0.5">Sown 05 Jul</span>
-                </div>
-                <div className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2">
-                  <div className="w-11 h-11 rounded-full bg-[#FBF1DC] flex items-center justify-center text-xl shadow-inner">☁️</div>
-                  <div className="text-xs font-bold text-[#12261D]">Cotton</div>
-                  <span className="text-[10px] font-bold text-[#8A6412] bg-[#FBF1DC] px-2 py-0.5 rounded-full">
-                    Moderate
-                  </span>
-                  <span className="text-[10px] text-[#8B978F] font-medium mt-0.5">Sown 20 Jun</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Right: Today's Recommendations */}
-            <div className="bg-white border border-[#E4E3DA] rounded-2xl p-5 flex flex-col gap-3.5 text-left shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-sora text-[17px] font-bold text-[#12261D]">Today's recommendations</span>
-                  <div className="text-[11px] text-[#8B978F] font-medium">Based on weather & crop stage</div>
-                </div>
-                <span className="text-[12.5px] font-semibold text-[#1B7A4B] cursor-pointer hover:underline shrink-0">
-                  View all
-                </span>
-              </div>
-              
-              <div className="flex flex-col gap-2.5">
-                <div className="flex gap-3 items-start">
-                  <span className="w-4.5 h-4.5 rounded-full bg-[#E6F3E4] flex items-center justify-center text-[10px] text-[#1B7A4B] shrink-0 mt-0.5 font-bold">✓</span>
-                  <span className="text-xs text-[#22322A] leading-relaxed">No irrigation needed today — soil is in band.</span>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="w-4.5 h-4.5 rounded-full bg-[#E6F3E4] flex items-center justify-center text-[10px] text-[#1B7A4B] shrink-0 mt-0.5 font-bold">✓</span>
-                  <span className="text-xs text-[#22322A] leading-relaxed">Apply urea in the paddy field before Thursday's rain.</span>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="w-4.5 h-4.5 rounded-full bg-[#FBF1DC] flex items-center justify-center text-[10px] text-[#8A6412] shrink-0 mt-0.5 font-bold">!</span>
-                  <span className="text-xs text-[#22322A] leading-relaxed">Monitor for leaf folder in rice — neighbours reported cases.</span>
-                </div>
-                <div className="flex gap-3 items-start">
-                  <span className="w-4.5 h-4.5 rounded-full bg-[#E6F3E4] flex items-center justify-center text-[10px] text-[#1B7A4B] shrink-0 mt-0.5 font-bold">✓</span>
-                  <span className="text-xs text-[#22322A] leading-relaxed">Ideal window for weeding cotton this week.</span>
-                </div>
+              {/* Add Plot */}
+              <div style={{ border:'1px dashed #C7CDC0', borderRadius:12, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:4, cursor:'pointer', minHeight:120 }}>
+                <span style={{ fontSize:20, color:'#7A877F' }}>+</span>
+                <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Add a plot</span>
               </div>
             </div>
           </div>
 
-          {/* BOTTOM STATS STRIP */}
-          <div className="bg-white border border-[#E4E3DA] rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 shadow-sm text-center">
-            <div className="flex-1 min-w-[120px]">
-              <div className="font-sora text-xl font-bold text-[#12261D]">25K+</div>
-              <div className="text-[11px] text-[#7A877F] font-semibold mt-0.5 uppercase tracking-wider">Farmers helped</div>
+          {/* This Week's Plan */}
+          <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+              <div>
+                <span style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>This week's plan</span>
+                <div style={{ fontSize:12, color:'#8B978F', marginTop:2 }}>Generated from weather, crop stage and your diary</div>
+              </div>
+              <button onClick={() => navigate('/coming-soon/crop-calendar')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Open calendar</button>
             </div>
-            <div className="hidden sm:block w-px h-8 bg-[#EDECE3]" />
-            <div className="flex-1 min-w-[120px]">
-              <div className="font-sora text-xl font-bold text-[#12261D]">1.2M+</div>
-              <div className="text-[11px] text-[#7A877F] font-semibold mt-0.5 uppercase tracking-wider">Questions answered</div>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-[#EDECE3]" />
-            <div className="flex-1 min-w-[120px]">
-              <div className="font-sora text-xl font-bold text-[#12261D]">98%</div>
-              <div className="text-[11px] text-[#7A877F] font-semibold mt-0.5 uppercase tracking-wider">Accuracy rate</div>
-            </div>
-            <div className="hidden sm:block w-px h-8 bg-[#EDECE3]" />
-            <div className="flex-1 min-w-[120px]">
-              <div className="font-sora text-xl font-bold text-[#12261D]">15+</div>
-              <div className="text-[11px] text-[#7A877F] font-semibold mt-0.5 uppercase tracking-wider">Languages</div>
-            </div>
-            <div className="hidden md:block w-px h-8 bg-[#EDECE3]" />
-            <div className="flex-1 min-w-[120px]">
-              <div className="font-sora text-xl font-bold text-[#12261D]">50+</div>
-              <div className="text-[11px] text-[#7A877F] font-semibold mt-0.5 uppercase tracking-wider">Expert advisors</div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:10 }}>
+              {[
+                { day:'TUE 5', tasks:[{label:'Drain Plot A', color:'#C0442F', bg:'#FCECEA'}] },
+                { day:'WED 6', tasks:[{label:'Spray 6 AM', color:'#1B7A4B', bg:'#E6F3E4'},{label:'Rain 42 mm', color:'#5C6B62', bg:'transparent', plain:true}] },
+                { day:'THU 7', tasks:[{label:'Nothing due', color:'#8B978F', bg:'transparent', plain:true}] },
+                { day:'FRI 8', tasks:[{label:'Weed cotton', color:'#1B7A4B', bg:'#E6F3E4'}] },
+                { day:'SAT 9', tasks:[{label:'Mandi visit', color:'#3B6FA8', bg:'#E4EEF6'}] },
+              ].map(col => (
+                <div key={col.day} style={{ borderRadius:10, border:'1px solid #EDECE3', padding:'12px 10px', background:'#FAFAF7' }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:'#8B978F', marginBottom:8, letterSpacing:'0.05em' }}>{col.day}</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                    {col.tasks.map((t,i) => (
+                      <span key={i} style={{ fontSize:11, fontWeight: t.plain ? 400 : 600, color:t.color, background:t.bg, padding: t.plain ? '0' : '4px 8px', borderRadius: t.plain ? 0 : 8 }}>{t.label}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* RIGHT SIDEBAR COLUMN */}
-        <div className="flex flex-col gap-6">
-          
-          {/* NOTIFICATIONS CARD */}
-          <div className="bg-white border border-[#E4E3DA] rounded-2xl p-5 flex flex-col gap-4 text-left shadow-sm">
-            <div className="flex items-center justify-between">
-              <span className="font-sora text-base font-bold text-[#12261D]">Notifications</span>
-              <span className="text-[12.5px] font-semibold text-[#1B7A4B] cursor-pointer hover:underline">
-                View all
-              </span>
+        {/* Right Sidebar */}
+        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+          {/* Notifications */}
+          <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'18px 20px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
+              <span style={{ ...sora, fontSize:15, fontWeight:700, color:'#12261D' }}>Notifications</span>
+              <button style={{ fontSize:12, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>View all</button>
             </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex gap-3 items-start">
-                <span className="w-8 h-8 rounded-lg bg-[#E4EEF6] flex items-center justify-center text-sm shrink-0">🌧️</span>
-                <div className="flex-1 leading-normal">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#12261D]">Rain alert</span>
-                    <span className="text-[10px] text-[#A9B3AC]">2h</span>
+            <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+              {[
+                { color:'#C0D8F0', title:'Rain alert', desc:'42 mm expected Wednesday noon.', time:'2h' },
+                { color:'#C4E0B2', title:'Irrigation reminder', desc:'Tomato needs water in 2 days.', time:'5h' },
+                { color:'#F5DFA8', title:'Scheme update', desc:'PM-KISAN instalment released.', time:'1d' },
+              ].map(n => (
+                <div key={n.title} style={{ display:'flex', gap:10 }}>
+                  <span style={{ width:8, height:8, borderRadius:'50%', background:n.color, flexShrink:0, marginTop:5 }}/>
+                  <div style={{ flex:1 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between' }}>
+                      <span style={{ fontSize:13, fontWeight:600, color:'#12261D' }}>{n.title}</span>
+                      <span style={{ fontSize:11, color:'#A9B3AC' }}>{n.time}</span>
+                    </div>
+                    <div style={{ fontSize:12, color:'#5C6B62', marginTop:2 }}>{n.desc}</div>
                   </div>
-                  <p className="text-xs text-[#5C6B62] mt-0.5 leading-relaxed">Heavy rain expected tomorrow afternoon.</p>
                 </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-8 h-8 rounded-lg bg-[#E6F3E4] flex items-center justify-center text-sm shrink-0">💧</span>
-                <div className="flex-1 leading-normal">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#12261D]">Irrigation reminder</span>
-                    <span className="text-[10px] text-[#A9B3AC]">5h</span>
-                  </div>
-                  <p className="text-xs text-[#5C6B62] mt-0.5 leading-relaxed">Tomato needs water in 2 days.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-8 h-8 rounded-lg bg-[#FBF1DC] flex items-center justify-center text-sm shrink-0">🌾</span>
-                <div className="flex-1 leading-normal">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#12261D]">Scheme update</span>
-                    <span className="text-[10px] text-[#A9B3AC]">1d</span>
-                  </div>
-                  <p className="text-xs text-[#5C6B62] mt-0.5 leading-relaxed">PM-KISAN 16th instalment released.</p>
-                </div>
-              </div>
-              <div className="flex gap-3 items-start">
-                <span className="w-8 h-8 rounded-lg bg-[#EFE9F7] flex items-center justify-center text-sm shrink-0">📈</span>
-                <div className="flex-1 leading-normal">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#12261D]">Market update</span>
-                    <span className="text-[10px] text-[#A9B3AC]">1d</span>
-                  </div>
-                  <p className="text-xs text-[#5C6B62] mt-0.5 leading-relaxed">Paddy prices rose in your mandi.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* QUICK ACTIONS CARD */}
-          <div className="bg-white border border-[#E4E3DA] rounded-2xl p-5 flex flex-col gap-3.5 text-left shadow-sm">
-            <span className="font-sora text-base font-bold text-[#12261D]">Quick actions</span>
-            <div className="grid grid-cols-3 gap-2.5">
-              <div 
-                onClick={() => navigate("/disease-detection")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#E6F3E4] flex items-center justify-center text-xs">📷</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Scan crop</span>
-              </div>
-              <div 
-                onClick={() => navigate("/chat")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#E4EEF6] flex items-center justify-center text-xs">💬</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Ask AI</span>
-              </div>
-              <div 
-                onClick={() => navigate("/coming-soon/crop-calendar")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#FBF1DC] flex items-center justify-center text-xs">📅</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Calendar</span>
-              </div>
-              <div 
-                onClick={() => navigate("/coming-soon/market")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#EFE9F7] flex items-center justify-center text-xs">📈</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Prices</span>
-              </div>
-              <div 
-                onClick={() => navigate("/coming-soon/weather")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#E4EEF6] flex items-center justify-center text-xs">⛅</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Weather</span>
-              </div>
-              <div 
-                onClick={() => navigate("/coming-soon/schemes")}
-                className="border border-[#E4E3DA] rounded-xl p-3 flex flex-col items-center gap-2 cursor-pointer hover:bg-[#F9F8F3] transition"
-              >
-                <span className="w-[26px] h-[26px] rounded-lg bg-[#E6F3E4] flex items-center justify-center text-xs">📰</span>
-                <span className="text-[11px] font-bold text-[#2B3A32] text-center leading-tight">Schemes</span>
-              </div>
+          {/* Quick Actions */}
+          <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'18px 20px' }}>
+            <span style={{ ...sora, fontSize:15, fontWeight:700, color:'#12261D', display:'block', marginBottom:14 }}>Quick actions</span>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+              {[
+                { icon: <Camera size={18}/>, label:'Scan', path:'/disease-detection', bg:'#E6F3E4', color:'#1B7A4B' },
+                { icon: <MessageCircle size={18}/>, label:'Ask AI', path:'/chat', bg:'#E4EEF6', color:'#3B6FA8' },
+                { icon: <Calendar size={18}/>, label:'Calendar', path:'/coming-soon/crop-calendar', bg:'#FBF1DC', color:'#C27D00' },
+                { icon: <TrendingUp size={18}/>, label:'Prices', path:'/coming-soon/market', bg:'#EFE9F7', color:'#7B5EA7' },
+                { icon: <Cloud size={18}/>, label:'Weather', path:'/coming-soon/weather', bg:'#E4EEF6', color:'#3B6FA8' },
+                { icon: <Shield size={18}/>, label:'Schemes', path:'/coming-soon/schemes', bg:'#E6F3E4', color:'#1B7A4B' },
+              ].map(a => (
+                <button key={a.label} onClick={() => navigate(a.path)} style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'12px 8px', display:'flex', flexDirection:'column', alignItems:'center', gap:6, cursor:'pointer', background:'white' }}>
+                  <span style={{ color:a.color, background:a.bg, padding:6, borderRadius:8, display:'flex' }}>{a.icon}</span>
+                  <span style={{ fontSize:11, fontWeight:600, color:'#2B3A32' }}>{a.label}</span>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* EXPERT CONSULTATION CARD */}
-          <div className="bg-[#12261D] rounded-2xl p-5 flex flex-col gap-3 text-left shadow-lg text-white">
-            <span className="font-sora text-base font-bold text-[#F4F3EC]">Need an expert?</span>
-            <p className="text-[12.5px] text-[#9DB3A6] leading-relaxed">
-              Free 15-minute call with an agronomist, 9 AM – 7 PM.
-            </p>
-            <div className="flex items-center gap-3 pt-1">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full border-2 border-[#12261D] bg-[#FFEAE5] flex items-center justify-center text-xs">🧑‍⚕️</div>
-                <div className="w-8 h-8 rounded-full border-2 border-[#12261D] bg-[#E6F3E4] flex items-center justify-center text-xs">👩‍🌾</div>
-              </div>
-              <span className="text-xs text-[#8CA396] font-medium">4 advisors online now</span>
+          {/* Expert Consultation */}
+          <div style={{ background:'#12261D', borderRadius:16, padding:'18px 20px', display:'flex', flexDirection:'column', gap:10 }}>
+            <span style={{ ...sora, fontSize:15, fontWeight:700, color:'#F4F3EC' }}>Need an expert?</span>
+            <p style={{ fontSize:13, color:'#9DB3A6', lineHeight:1.5 }}>Free 15-minute call with an agronomist, 9 AM – 7 PM.</p>
+            <div style={{ display:'flex', alignItems:'center', gap:8, paddingTop:2 }}>
+              <span style={{ width:8, height:8, borderRadius:'50%', background:'#9BD96B', display:'inline-block' }}/>
+              <span style={{ fontSize:12, color:'#8CA396' }}>4 advisors online now</span>
             </div>
-            <button 
-              onClick={() => navigate("/coming-soon/expert-consultation")}
-              className="w-full rounded-xl bg-[#9BD96B] py-3 text-sm font-extrabold text-[#0F2419] transition hover:bg-[#8ac75c] active:scale-[0.98]"
-            >
-              Book consultation
-            </button>
+            <button onClick={() => navigate('/coming-soon/expert-consultation')} style={{ width:'100%', padding:'11px 0', borderRadius:9, background:'#9BD96B', color:'#0F2419', fontSize:13, fontWeight:700, border:'none', cursor:'pointer', marginTop:4 }}>Book consultation</button>
           </div>
         </div>
       </div>
