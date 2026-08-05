@@ -32,14 +32,14 @@ const GROUPS = [
   },
 ];
 
-export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void; onCollapse?: () => void }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   
   const displayName = user?.name || "Ramesh Farm";
 
   return (
-    <div className="flex h-full flex-col bg-[#0F2419] p-5 pb-5 gap-6 text-[#F4F3EC] overflow-y-auto">
+    <div className="flex h-full flex-col bg-[#0F2419] p-5 pb-5 gap-6 text-[#F4F3EC] overflow-y-auto no-scrollbar">
       {/* Top Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
@@ -56,7 +56,10 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
             </span>
           </div>
         </div>
-        <button className="text-[#7F9A88] hover:text-white transition-colors">
+        <button 
+          onClick={onCollapse}
+          className="text-[#7F9A88] hover:text-white transition-colors"
+        >
           <ChevronLeft size={18} />
         </button>
       </div>

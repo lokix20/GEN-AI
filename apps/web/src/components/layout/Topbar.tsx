@@ -13,6 +13,8 @@ import { Dialog, DialogContent } from "../ui/dialog.js";
 import { SidebarNav } from "./Sidebar.js";
 import { useAuth } from "../../hooks/useAuth.js";
 
+import { cn } from "../../lib/utils.js";
+
 function initials(name: string) {
   return name
     .split(" ")
@@ -22,7 +24,7 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-export function Topbar() {
+export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar: () => void; sidebarCollapsed: boolean }) {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -31,7 +33,13 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[#E4E3DA] bg-white/80 backdrop-blur-md px-4 py-3 md:px-6">
-      <Button variant="ghost" size="icon" className="md:hidden text-[#4B5A52]" onClick={() => setMobileNavOpen(true)} aria-label="Open menu">
+      <Button 
+        variant="ghost" 
+        size="icon" 
+        className={cn("text-[#4B5A52]", sidebarCollapsed ? "flex" : "flex md:hidden")} 
+        onClick={sidebarCollapsed ? onToggleSidebar : () => setMobileNavOpen(true)} 
+        aria-label="Open menu"
+      >
         <Menu className="h-5 w-5" />
       </Button>
 
