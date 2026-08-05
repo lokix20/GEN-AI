@@ -6,10 +6,11 @@ export async function createReport(input: { userId: string; cropName: string; im
   const id = randomUUID();
   return queryOne(
     `INSERT INTO "DiseaseReport" (
-      id, "userId", "cropName", "imageUrl", "diseaseName", confidence,
-      "affectedArea", cause, "organicSolution", "chemicalSolution", "preventionTips", "createdAt"
+      id, "userId", "cropName", "imageUrl", "diseaseName", confidence, severity,
+      "affectedArea", cause, "organicSolution", "chemicalSolution", "dosageInstructions",
+      "actWithinHours", "preventionTips", "alternativeDiagnoses", "createdAt"
      )
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, NOW())
      RETURNING *`,
     [
       id,
@@ -18,11 +19,15 @@ export async function createReport(input: { userId: string; cropName: string; im
       input.imageUrl,
       input.diseaseName,
       input.confidence,
+      input.severity,
       input.affectedArea,
       input.cause,
       input.organicSolution,
       input.chemicalSolution,
+      input.dosageInstructions,
+      input.actWithinHours,
       input.preventionTips,
+      JSON.stringify(input.alternativeDiagnoses),
     ]
   );
 }

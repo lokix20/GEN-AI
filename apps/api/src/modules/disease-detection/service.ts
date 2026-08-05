@@ -11,11 +11,17 @@ function toDTO(report: Awaited<ReturnType<typeof repo.createReport>>): DiseaseRe
     imageUrl: report.imageUrl,
     diseaseName: report.diseaseName,
     confidence: report.confidence,
+    severity: report.severity ?? "moderate",
     affectedArea: report.affectedArea,
     cause: report.cause,
     organicSolution: report.organicSolution,
     chemicalSolution: report.chemicalSolution,
+    dosageInstructions: report.dosageInstructions ?? "",
+    actWithinHours: report.actWithinHours ?? 72,
     preventionTips: report.preventionTips,
+    alternativeDiagnoses: typeof report.alternativeDiagnoses === "string"
+      ? JSON.parse(report.alternativeDiagnoses)
+      : (report.alternativeDiagnoses ?? []),
     createdAt: report.createdAt.toISOString(),
   };
 }
@@ -27,7 +33,7 @@ export async function analyzeAndSave(
 ): Promise<DiseaseReportDTO> {
   const [{ url }, result] = await Promise.all([
     getStorageProvider().upload(file, "disease-reports"),
-    getVisionProvider().analyzeCropImage({ imageBuffer: file.buffer, cropName }),
+    getVisionProvider().analyzeCropImage({ imageBuffer: file.buffer, mimeType: file.mimeType, cropName }),
   ]);
 
   const report = await repo.createReport({ userId, cropName, imageUrl: url, ...result });
