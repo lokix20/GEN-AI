@@ -6,7 +6,12 @@ import { Topbar } from "./Topbar.js";
 export function AppShell() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
-  const isCustomHeaderRoute = location.pathname.startsWith("/chat") || location.pathname.startsWith("/disease-detection");
+  const isCustomHeaderRoute = 
+    location.pathname.startsWith("/chat") || 
+    location.pathname.startsWith("/disease-detection") ||
+    location.pathname.startsWith("/weather") ||
+    location.pathname.startsWith("/irrigation") ||
+    location.pathname.startsWith("/crop-calendar");
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#F4F3EC' }}>

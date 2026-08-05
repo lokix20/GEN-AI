@@ -19,6 +19,9 @@ const ChatPage = lazy(() => import("../pages/chat/ChatPage").then((m) => ({ defa
 const DiseaseDetectionPage = lazy(() =>
   import("../pages/disease-detection/DiseaseDetectionPage").then((m) => ({ default: m.DiseaseDetectionPage })),
 );
+const WeatherPage = lazy(() => import("../pages/weather/WeatherPage").then((m) => ({ default: m.WeatherPage })));
+const IrrigationPage = lazy(() => import("../pages/irrigation/IrrigationPage").then((m) => ({ default: m.IrrigationPage })));
+const CropCalendarPage = lazy(() => import("../pages/crop-calendar/CropCalendarPage").then((m) => ({ default: m.CropCalendarPage })));
 const ComingSoonPage = lazy(() => import("../pages/coming-soon/ComingSoonPage").then((m) => ({ default: m.ComingSoonPage })));
 
 function RouteFallback() {
@@ -53,6 +56,9 @@ export function AppRouter() {
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/chat/:sessionId" element={<ChatPage />} />
             <Route path="/disease-detection" element={<DiseaseDetectionPage />} />
+            <Route path="/weather" element={<WeatherPage />} />
+            <Route path="/irrigation" element={<IrrigationPage />} />
+            <Route path="/crop-calendar" element={<CropCalendarPage />} />
             <Route path="/coming-soon/:key" element={<ComingSoonPage />} />
           </Route>
         </Route>

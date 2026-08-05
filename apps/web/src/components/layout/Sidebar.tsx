@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/useAuth.js";
 import { ChevronLeft } from "lucide-react"; // for collapse arrow if needed, actually just use a simple button
 
 const labelMap: Record<string, string> = {
-  dashboard: "Dashboard",
+  home: "Dashboard",
   chat: "AI Assistant",
   diseaseDetection: "Crop Diagnosis",
   weather: "Weather",
@@ -20,7 +20,7 @@ const labelMap: Record<string, string> = {
 const GROUPS = [
   {
     title: "TODAY",
-    keys: ["dashboard", "chat", "diseaseDetection"],
+    keys: ["home", "chat", "diseaseDetection"],
   },
   {
     title: "PLAN THE SEASON",
@@ -77,14 +77,13 @@ export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void
               
               const label = labelMap[key] || item.key;
               const Icon = item.icon;
-              // Override dashboard path
-              const path = key === "dashboard" ? "/dashboard" : item.path;
+              const path = item.path;
 
               return (
                 <NavLink
                   key={key}
                   to={path}
-                  end={path === "/dashboard"}
+                  end={path === "/"}
                   onClick={onNavigate}
                   className={({ isActive }) =>
                     cn(
@@ -131,7 +130,7 @@ export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void
             Sowing window for paddy closes in 9 days.
           </p>
           <button 
-            onClick={() => navigate("/coming-soon/crop-calendar")}
+            onClick={() => navigate("/crop-calendar")}
             className="w-full rounded-[9px] bg-[#9BD96B] py-[9px] text-[13px] font-bold text-[#0F2419] transition hover:bg-[#8ac75c]"
           >
             Open advisory
