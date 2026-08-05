@@ -22,6 +22,8 @@ const DiseaseDetectionPage = lazy(() =>
 const WeatherPage = lazy(() => import("../pages/weather/WeatherPage").then((m) => ({ default: m.WeatherPage })));
 const IrrigationPage = lazy(() => import("../pages/irrigation/IrrigationPage").then((m) => ({ default: m.IrrigationPage })));
 const CropCalendarPage = lazy(() => import("../pages/crop-calendar/CropCalendarPage").then((m) => ({ default: m.CropCalendarPage })));
+const MarketPricesPage = lazy(() => import("../pages/market/MarketPricesPage").then((m) => ({ default: m.MarketPricesPage })));
+const SchemesPage = lazy(() => import("../pages/schemes/SchemesPage").then((m) => ({ default: m.SchemesPage })));
 const ComingSoonPage = lazy(() => import("../pages/coming-soon/ComingSoonPage").then((m) => ({ default: m.ComingSoonPage })));
 
 function RouteFallback() {
@@ -59,6 +61,8 @@ export function AppRouter() {
             <Route path="/weather" element={<WeatherPage />} />
             <Route path="/irrigation" element={<IrrigationPage />} />
             <Route path="/crop-calendar" element={<CropCalendarPage />} />
+            <Route path="/market" element={<MarketPricesPage />} />
+            <Route path="/schemes" element={<SchemesPage />} />
             <Route path="/coming-soon/:key" element={<ComingSoonPage />} />
           </Route>
         </Route>

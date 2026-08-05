@@ -55,7 +55,7 @@ export function CropCalendarPage() {
         <div className="flex-1 flex flex-col gap-6">
           
           {/* Season Timeline */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6 relative overflow-hidden">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6 relative overflow-hidden">
              
              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                <div>
@@ -139,7 +139,7 @@ export function CropCalendarPage() {
           </div>
 
           {/* August Operations Calendar Grid */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -234,7 +234,7 @@ export function CropCalendarPage() {
         <div className="w-full xl:w-[320px] shrink-0 flex flex-col gap-6">
            
            {/* Current Stage Highlight (Dark Green) */}
-           <div className="bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col shadow-sm relative overflow-hidden">
+           <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col shadow-sm relative overflow-hidden">
              <div className="text-[11px] font-extrabold text-[#A2B8AA] uppercase tracking-widest mb-3 relative z-10">
                Stage Now
              </div>
@@ -257,7 +257,7 @@ export function CropCalendarPage() {
            </div>
 
            {/* Coming Up List */}
-           <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
+           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
              <h3 className="text-[16px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                Coming up
              </h3>
@@ -315,7 +315,7 @@ export function CropCalendarPage() {
            </div>
 
            {/* Plan Rabi Info Card */}
-           <div className="bg-[#E6F3E4] border border-[#CDE5C8] rounded-[24px] p-6 flex flex-col gap-3 mt-auto">
+           <div className="shrink-0 bg-[#E6F3E4] border border-[#CDE5C8] rounded-[24px] p-6 flex flex-col gap-3 mt-auto">
               <h4 className="text-[15px] font-extrabold text-[#12261D] tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
                 Plan Rabi already?
               </h4>

@@ -51,7 +51,7 @@ export function IrrigationPage() {
         <div className="flex-1 flex flex-col gap-6">
           
           {/* Next Run Banner */}
-          <div className="bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col md:flex-row md:items-center justify-between shadow-sm relative overflow-hidden">
+          <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col md:flex-row md:items-center justify-between shadow-sm relative overflow-hidden">
              <div className="flex flex-col z-10 gap-3">
                <div className="flex items-center gap-3">
                  <div className="bg-[#1B7A4B] text-white text-[10.5px] font-extrabold px-3 py-1.5 rounded-lg uppercase tracking-widest">
@@ -85,7 +85,7 @@ export function IrrigationPage() {
           </div>
 
           {/* Plot by Plot Tracking */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-8">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-8">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
@@ -179,7 +179,7 @@ export function IrrigationPage() {
           </div>
 
           {/* Next 7 Days Schedule */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                 Next 7 days
@@ -242,7 +242,7 @@ export function IrrigationPage() {
         <div className="w-full lg:w-[320px] shrink-0 flex flex-col gap-6">
            
            {/* Monthly Water */}
-           <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-4">
+           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-4">
               <h3 className="text-[15px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                 This month's water
               </h3>
@@ -263,7 +263,7 @@ export function IrrigationPage() {
            </div>
 
            {/* Sensors List */}
-           <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
+           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
              <h3 className="text-[15px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                Sensors
              </h3>
@@ -300,7 +300,7 @@ export function IrrigationPage() {
            </div>
 
            {/* Saved this season */}
-           <div className="bg-[#E6F3E4] border border-[#CDE5C8] rounded-[24px] p-6 flex flex-col gap-2 mt-auto">
+           <div className="shrink-0 bg-[#E6F3E4] border border-[#CDE5C8] rounded-[24px] p-6 flex flex-col gap-2 mt-auto">
               <div className="text-[12.5px] font-extrabold text-[#1B7A4B] uppercase tracking-widest">
                 Saved this season
               </div>
