@@ -1,12 +1,17 @@
 import { buildSystemPrompt } from "./ai-provider.interface.js";
 import type { AIProvider, StreamChatInput } from "./ai-provider.interface.js";
 
-const MODEL = "gemini-1.5-flash";
+// Pinned to a current stable flash model. gemini-1.5-flash and gemini-2.5-flash both return
+// 404 "no longer available to new users" on newly issued API keys. If this ever 404s again,
+// list what the key can actually reach:
+//   curl "https://generativelanguage.googleapis.com/v1beta/models?key=$GEMINI_API_KEY"
+// ("gemini-flash-latest" is the auto-tracking alias if you'd rather not pin a version.)
+const MODEL = "gemini-3.6-flash";
 
 export class GeminiProvider implements AIProvider {
   constructor(private readonly apiKey: string) {}
 
-  async *streamChat({ messages, farmerContext, imageUrl }: StreamChatInput): AsyncIterable<string> {
+  async *streamChat({ messages, farmerContext, imageUrl, language }: StreamChatInput): AsyncIterable<string> {
     const contents: Array<Record<string, unknown>> = messages.slice(0, -1).map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
@@ -35,7 +40,10 @@ export class GeminiProvider implements AIProvider {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents,
-        systemInstruction: { parts: [{ text: buildSystemPrompt(farmerContext) }] },
+        systemInstruction: { parts: [{ text: buildSystemPrompt(farmerContext, language) }] },
+        // Gemini 3.x reasons before answering; the default spends hundreds of thinking tokens even
+        // on a greeting. "low" keeps the chat responsive and cheap for short advisory answers.
+        generationConfig: { thinkingConfig: { thinkingLevel: "low" } },
       }),
     });
 
@@ -63,8 +71,13 @@ export class GeminiProvider implements AIProvider {
 
         try {
           const parsed = JSON.parse(data);
-          const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (text) yield text;
+          // Walk every part rather than just parts[0]: thinking models interleave reasoning parts
+          // (flagged `thought`, or text-empty carriers for `thoughtSignature`) with the real answer.
+          const parts = parsed.candidates?.[0]?.content?.parts ?? [];
+          for (const part of parts) {
+            if (part?.thought) continue;
+            if (part?.text) yield part.text as string;
+          }
         } catch {
           /* ignore malformed keep-alive chunks */
         }

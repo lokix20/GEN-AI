@@ -37,7 +37,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "cropCalendar", labelKey: "nav.cropCalendar", path: "/crop-calendar", icon: CalendarDays, status: "ready" },
   { key: "farmDiary", labelKey: "nav.farmDiary", path: "/coming-soon/farm-diary", icon: Sprout, status: "soon" },
   { key: "market", labelKey: "nav.market", path: "/market", icon: TrendingUp, status: "ready" },
-  { key: "schemes", labelKey: "nav.schemes", path: "/schemes", icon: Newspaper, status: "ready" },
+  { key: "schemes", labelKey: "nav.schemes", path: "/coming-soon/schemes", icon: Newspaper, status: "soon" },
   { key: "expertConsultation", labelKey: "nav.expertConsultation", path: "/coming-soon/expert-consultation", icon: HeadphonesIcon, status: "soon" },
   { key: "community", labelKey: "nav.community", path: "/coming-soon/community", icon: Users, status: "soon" },
   { key: "marketplace", labelKey: "nav.marketplace", path: "/coming-soon/marketplace", icon: ShoppingBag, status: "soon" },

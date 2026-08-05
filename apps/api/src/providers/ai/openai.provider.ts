@@ -7,9 +7,9 @@ const MODEL = "gpt-4o-mini";
 export class OpenAIProvider implements AIProvider {
   constructor(private readonly apiKey: string) {}
 
-  async *streamChat({ messages, farmerContext, imageUrl }: StreamChatInput): AsyncIterable<string> {
+  async *streamChat({ messages, farmerContext, imageUrl, language }: StreamChatInput): AsyncIterable<string> {
     const chatMessages: Array<Record<string, unknown>> = [
-      { role: "system", content: buildSystemPrompt(farmerContext) },
+      { role: "system", content: buildSystemPrompt(farmerContext, language) },
       ...messages.slice(0, -1).map((m) => ({ role: m.role, content: m.content })),
     ];
 

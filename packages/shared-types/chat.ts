@@ -20,9 +20,13 @@ export const ChatSessionDTOSchema = z.object({
 });
 export type ChatSessionDTO = z.infer<typeof ChatSessionDTOSchema>;
 
+export const ChatLanguageSchema = z.enum(["te", "hi", "en"]);
+export type ChatLanguage = z.infer<typeof ChatLanguageSchema>;
+
 export const SendMessageSchema = z.object({
   sessionId: z.string().nullable(),
   content: z.string().min(1, "Message cannot be empty"),
   imageUrl: z.string().nullable().optional(),
+  language: ChatLanguageSchema.optional(),
 });
 export type SendMessageInput = z.infer<typeof SendMessageSchema>;

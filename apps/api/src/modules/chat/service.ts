@@ -106,7 +106,12 @@ export async function startReply(userId: string, input: SendMessageInput): Promi
   const turns: ChatTurn[] = history.map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content }));
   const farmerContext = await loadFarmerContext(userId);
 
-  const chunks = getAIProvider().streamChat({ messages: turns, farmerContext, imageUrl: input.imageUrl });
+  const chunks = getAIProvider().streamChat({
+    messages: turns,
+    farmerContext,
+    imageUrl: input.imageUrl,
+    language: input.language,
+  });
 
   const sessionId = session.id;
   const onComplete = async (fullText: string): Promise<ChatMessageDTO> => {

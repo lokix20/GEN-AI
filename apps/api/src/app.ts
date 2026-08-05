@@ -10,6 +10,7 @@ import { chatRoutes } from "./modules/chat/routes.js";
 import { diseaseDetectionRoutes } from "./modules/disease-detection/routes.js";
 import { uploadsRoutes } from "./modules/uploads/routes.js";
 import { usersRoutes } from "./modules/users/routes.js";
+import { marketRoutes } from "./modules/market/routes.js";
 
 export const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/users", usersRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/disease-detection", diseaseDetectionRoutes);
 app.use("/api/uploads", uploadsRoutes);
+app.use("/api/market-prices", marketRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
