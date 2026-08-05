@@ -38,13 +38,19 @@ export function SchemesPage() {
   });
 
   const eligibleSchemes = matchedSchemes.filter((m) => m.isEligible);
-  const totalAvailableBenefits = eligibleSchemes.reduce((acc, curr) => acc + curr.scheme.annualBenefitAmount, 0);
 
   // 3. AI Assistant Scheme Helper Function
   const handleAskAiAboutScheme = (scheme: Scheme) => {
     const aiPrompt = `Please explain the "${scheme.title}" scheme for my ${landAcres} acre ${farmerCrops.join("/")} farm in ${farmerState}. What are the exact eligibility rules, required documents, and step-by-step application process?`;
     navigate("/chat", { state: { initialPrompt: aiPrompt } });
   };
+
+  // Calculate realistic financial breakdown metrics
+  const directIncomeTotal = eligibleSchemes
+    .filter((m) => m.scheme.category === "income" || m.scheme.category === "state")
+    .reduce((acc, curr) => acc + curr.scheme.annualBenefitAmount, 0);
+
+  const incomeSchemesCount = eligibleSchemes.filter((m) => m.scheme.category === "income" || m.scheme.category === "state").length;
 
   return (
     <div className="flex flex-col h-[calc(100vh-1rem)] w-full bg-[#F4F3EC] select-none font-sans overflow-hidden text-left">
@@ -95,30 +101,64 @@ export function SchemesPage() {
         {/* Left Column */}
         <div className="flex-1 flex flex-col gap-6">
 
-          {/* Profile-Matched Financial Summary Banner */}
-          <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col sm:flex-row items-start justify-between gap-6 shadow-sm relative overflow-hidden">
-            <div className="flex flex-col z-10">
-              <div className="text-[11px] font-extrabold text-[#9BD96B] uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                <ShieldCheck size={14} /> Profile Matched Benefits ({farmerState})
+          {/* Improvised 3-Column Financial Summary Banner */}
+          <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col md:flex-row items-stretch justify-between gap-6 shadow-md relative overflow-hidden border border-[#006837]/40">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 z-10">
+              
+              {/* Metric 1: Direct Cash Grants */}
+              <div className="flex flex-col justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div className="text-[11px] font-extrabold text-[#9BD96B] uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                  <Sparkles size={13} /> Direct Income Grants
+                </div>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  ₹{directIncomeTotal.toLocaleString()} <span className="text-xs font-semibold text-[#A2B8AA]">/ yr</span>
+                </div>
+                <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
+                  {incomeSchemesCount} schemes (PM-KISAN + {farmerState})
+                </div>
               </div>
-              <div className="text-[36px] font-extrabold leading-none tracking-tight text-white" style={{ fontFamily: "'Sora', sans-serif" }}>
-                ₹{totalAvailableBenefits.toLocaleString()}
+
+              {/* Metric 2: Crop Insurance Cover */}
+              <div className="flex flex-col justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div className="text-[11px] font-extrabold text-[#70C1B3] uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                  <ShieldCheck size={13} /> Risk Protection
+                </div>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  ₹62,000 <span className="text-xs font-semibold text-[#A2B8AA]">/ acre</span>
+                </div>
+                <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
+                  PMFBY Kharif crop cover @ 2%
+                </div>
               </div>
-              <div className="text-[13px] font-semibold text-[#A2B8AA] mt-2">
-                Across {eligibleSchemes.length} subsidies matched for your {landAcres} ac ({farmerCrops.join(" · ")}) farm
+
+              {/* Metric 3: Credit Access */}
+              <div className="flex flex-col justify-between p-4 bg-white/5 rounded-2xl border border-white/10">
+                <div className="text-[11px] font-extrabold text-[#F3C969] uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                  <Zap size={13} /> Low-Interest Credit
+                </div>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  ₹3,00,000 <span className="text-xs font-semibold text-[#A2B8AA]">@ 4%</span>
+                </div>
+                <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
+                  Kisan Credit Card (KCC) limit
+                </div>
               </div>
+
             </div>
 
-            <div className="flex items-center gap-3 z-10 self-start sm:self-center">
+            <div className="flex flex-col justify-between items-start md:items-end z-10 shrink-0 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6">
+              <div className="text-[11px] font-extrabold text-[#9BD96B] bg-[#9BD96B]/10 px-3 py-1 rounded-full border border-[#9BD96B]/30 flex items-center gap-1">
+                <ShieldCheck size={12} /> Matched for {farmerState} ({landAcres} ac)
+              </div>
               <button 
                 onClick={() => navigate("/onboarding")}
-                className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3.5 py-2 rounded-xl border border-white/20 transition"
+                className="bg-[#9BD96B] hover:bg-[#8ac75c] text-[#0F2419] text-xs font-extrabold px-4 py-2.5 rounded-xl transition shadow-sm mt-3 w-full md:w-auto"
               >
-                Update Profile Context
+                Update Farm Profile
               </button>
             </div>
 
-            <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#9BD96B] rounded-full opacity-[0.04] blur-xl" />
+            <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#9BD96B] rounded-full opacity-[0.04] blur-xl pointer-events-none" />
           </div>
 
           {/* Scheme Cards Grid */}
