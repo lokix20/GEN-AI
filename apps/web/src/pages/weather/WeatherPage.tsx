@@ -130,7 +130,7 @@ export function WeatherPage() {
   }).slice(0, 7);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-1rem)] w-full bg-[#F4F3EC] select-none font-sans overflow-hidden">
+    <div className="flex flex-col min-h-screen w-full bg-[#F4F3EC] select-none font-sans pb-10">
       
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
@@ -157,7 +157,7 @@ export function WeatherPage() {
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-4 md:p-6 flex flex-col lg:flex-row gap-6 overflow-y-auto no-scrollbar">
+      <div className="flex-1 p-4 md:p-6 flex flex-col lg:flex-row gap-6">
         
         {/* Left Column */}
         <div className="flex-1 flex flex-col gap-6">
