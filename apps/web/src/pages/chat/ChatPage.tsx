@@ -94,7 +94,7 @@ export function ChatPage() {
     const cleanText = inputText.trim();
     if (!cleanText && !imagePreview) return;
 
-    sendMessage(cleanText || "Please analyze this crop image.", imagePreview?.url ?? null);
+    sendMessage({ content: cleanText || "Please analyze this crop image.", imageUrl: imagePreview?.url ?? null });
     setInputText("");
     setImagePreview(null);
   };
@@ -112,7 +112,7 @@ export function ChatPage() {
     const mock = mockWeek || mockSave;
 
     if (mock) {
-      sendMessage(mock.prompt);
+      sendMessage({ content: mock.prompt });
     } else {
       navigate(`/chat/${id}`);
     }
@@ -291,7 +291,7 @@ export function ChatPage() {
                   ].map((item) => (
                     <button
                       key={item.prompt}
-                      onClick={() => sendMessage(item.prompt)}
+                      onClick={() => sendMessage({ content: item.prompt })}
                       className="bg-white border border-[#E4E3DA] rounded-[20px] p-5 text-left hover:bg-[#FAF9F5] transition duration-200 shadow-sm flex flex-col gap-1.5"
                     >
                       <span style={{ color: item.tagColor }} className="text-[10px] font-extrabold tracking-wider uppercase">
