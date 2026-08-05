@@ -44,7 +44,7 @@ export class MockVisionProvider implements VisionProvider {
       cause: entry.cause,
       organicSolution: entry.organicSolution,
       chemicalSolution: entry.chemicalSolution,
-      dosageInstructions: entry.dosageInstructions,
+      dosageInstructions: "Refer to label instructions for specific crop dilution ratios.",
       actWithinHours,
       preventionTips: entry.preventionTips,
       alternativeDiagnoses: [

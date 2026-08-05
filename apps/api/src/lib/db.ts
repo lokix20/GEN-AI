@@ -340,12 +340,12 @@ export async function query(text: string, params?: any[]): Promise<any[]> {
       client.release();
     }
   } catch (err: any) {
-    if (isPostgresAvailable !== false) {
-      isPostgresAvailable = false;
-      logger.warn(
-        `PostgreSQL unavailable (${err.code || err.message}). Switching to built-in in-memory fallback database for local development.`
-      );
-    }
+    // No `!== false` guard needed: the early return above means we only reach here while
+    // isPostgresAvailable is true or null, so this still logs exactly once — on the first failure.
+    isPostgresAvailable = false;
+    logger.warn(
+      `PostgreSQL unavailable (${err.code || err.message}). Switching to built-in in-memory fallback database for local development.`
+    );
     return executeMockQuery(text, params);
   }
 }
