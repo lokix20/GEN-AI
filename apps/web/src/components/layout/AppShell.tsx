@@ -11,7 +11,9 @@ export function AppShell() {
     location.pathname.startsWith("/disease-detection") ||
     location.pathname.startsWith("/weather") ||
     location.pathname.startsWith("/irrigation") ||
-    location.pathname.startsWith("/crop-calendar");
+    location.pathname.startsWith("/crop-calendar") ||
+    location.pathname.startsWith("/market") ||
+    location.pathname.startsWith("/schemes");
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#F4F3EC' }}>

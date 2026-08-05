@@ -38,7 +38,7 @@ export function WeatherPage() {
         <div className="flex-1 flex flex-col gap-6">
           
           {/* Top Metric Banner (Dark Green) */}
-          <div className="bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-sm relative overflow-hidden">
+          <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-sm relative overflow-hidden">
              <div className="flex flex-col z-10">
                <div className="text-[11px] font-bold text-[#A2B8AA] uppercase tracking-widest mb-1">
                  Right now · 2:40 PM
@@ -77,7 +77,7 @@ export function WeatherPage() {
           </div>
 
           {/* Work Windows Chart */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
             <div>
               <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                 Work windows, next 36 hours
@@ -127,7 +127,7 @@ export function WeatherPage() {
           </div>
 
           {/* Next 7 Days */}
-          <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
+          <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
             <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
               Next 7 days
             </h3>
@@ -166,7 +166,7 @@ export function WeatherPage() {
         <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-6">
            
            {/* Alert Card */}
-           <div className="bg-[#FFF4E5] border border-[#FADEC9] rounded-[24px] p-6 flex flex-col gap-4">
+           <div className="shrink-0 bg-[#FFF4E5] border border-[#FADEC9] rounded-[24px] p-6 flex flex-col gap-4">
               <div className="flex items-center gap-3">
                 <div className="bg-[#D94F4F] text-white text-[10px] font-extrabold px-2 py-1 rounded-md uppercase tracking-wider">Alert</div>
                 <div className="text-[12px] font-semibold text-[#C27D00]">IMD · district</div>
@@ -187,7 +187,7 @@ export function WeatherPage() {
            </div>
 
            {/* Crop Impacts */}
-           <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
+           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
              <h3 className="text-[16px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                What this means for your crops
              </h3>
@@ -225,7 +225,7 @@ export function WeatherPage() {
            </div>
 
            {/* Season Rainfall Chart */}
-           <div className="bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
+           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
              <h3 className="text-[16px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
                Rainfall this season
              </h3>
@@ -245,7 +245,7 @@ export function WeatherPage() {
            </div>
 
            {/* WhatsApp alerts */}
-           <div className="bg-[#0F2419] rounded-[24px] p-6 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
+           <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
               <h4 className="text-[16px] font-extrabold tracking-tight relative z-10" style={{ fontFamily: "'Sora', sans-serif" }}>
                 Get rain alerts on WhatsApp

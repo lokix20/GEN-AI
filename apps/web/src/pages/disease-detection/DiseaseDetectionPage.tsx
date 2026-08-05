@@ -16,7 +16,7 @@ function LeftCapturePanel({
 }) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [plot, setPlot] = useState("Plot A - Paddy");
+  const [plot, setPlot] = useState("Plot A · Paddy");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,13 +81,11 @@ function LeftCapturePanel({
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="w-14 h-14 rounded-xl border border-dashed border-[#DCDBD1] flex flex-col items-center justify-center bg-[#FAFAF7] text-[#5C6B62] hover:bg-black/5 transition shrink-0">
-          <span className="text-lg leading-none">+</span>
-          <span className="text-[8px] font-bold uppercase mt-1">or<br/>browse</span>
+        <button className="w-14 h-14 rounded-xl border border-dashed border-[#DCDBD1] flex items-center justify-center bg-[#FAFAF7] text-[#A2ADA5] hover:bg-black/5 transition shrink-0 text-lg font-bold">
+          +
         </button>
-        <button className="w-14 h-14 rounded-xl border border-dashed border-[#DCDBD1] flex flex-col items-center justify-center bg-[#FAFAF7] text-[#5C6B62] hover:bg-black/5 transition shrink-0">
-          <span className="text-lg leading-none">+</span>
-          <span className="text-[8px] font-bold uppercase mt-1">or<br/>browse</span>
+        <button className="w-14 h-14 rounded-xl border border-dashed border-[#DCDBD1] flex items-center justify-center bg-[#FAFAF7] text-[#A2ADA5] hover:bg-black/5 transition shrink-0 text-lg font-bold">
+          +
         </button>
         <div className="text-[12px] font-semibold text-[#8B978F] leading-tight ml-2">
           Add 2-3 angles for a<br/>sharper result
@@ -99,7 +97,7 @@ function LeftCapturePanel({
           Which Plot?
         </div>
         <div className="flex flex-wrap gap-2">
-          {["Plot A - Paddy", "Plot B - Tomato", "Strip C - Cotton"].map((p) => (
+          {["Plot A · Paddy", "Plot B · Tomato", "Strip C · Cotton"].map((p) => (
             <button
               key={p}
               onClick={() => setPlot(p)}
@@ -202,9 +200,8 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
               </div>
             </div>
             
-            <p className="text-[14px] text-[#5C6B62] font-medium leading-relaxed mb-6">
-              <span className="font-bold text-[#12261D]">Pathogen details:</span> {report.cause} <br/>
-              Spreads fastest through standing water; 42 mm of rain is forecast Wednesday.
+            <p className="text-[14px] text-[#5C6B62] font-medium italic leading-relaxed mb-6">
+              {report.cause}
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-[#E4E3DA]">
