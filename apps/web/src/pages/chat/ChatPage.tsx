@@ -9,6 +9,7 @@ import { fetchFarmerProfile } from "../../features/profile/api.js";
 import { useAuthStore } from "../../store/auth.store.js";
 import { useSpeechRecognition } from "../../hooks/useSpeechRecognition.js";
 import { cn } from "../../lib/utils.js";
+import { Dialog, DialogContent } from "../../components/ui/dialog.js";
 
 const MOCK_THIS_WEEK = [
   { id: "mock-yellow-patches", title: "Yellow patches on paddy leaves", prompt: "Why are my rice leaves turning yellow?" },
@@ -33,6 +34,7 @@ export function ChatPage() {
   const [inputText, setInputText] = useState("");
   const [imagePreview, setImagePreview] = useState<{ url: string; localPreview: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false);
 
   // Load actual chat sessions
   const { data: sessions } = useChatSessions();
@@ -103,6 +105,7 @@ export function ChatPage() {
   };
 
   const handleNavigateSession = (id: string) => {
+    setMobileHistoryOpen(false);
     const mockWeek = MOCK_THIS_WEEK.find(s => s.id === id);
     const mockSave = MOCK_SAVED.find(s => s.id === id);
     const mock = mockWeek || mockSave;
@@ -130,111 +133,127 @@ export function ChatPage() {
   const activeSession = sessions?.find(s => s.id === sessionId);
   const currentSessionTitle = activeSession?.title;
 
-  return (
-    <div className="flex h-screen w-full overflow-hidden" style={{ backgroundColor: '#F4F3EC' }}>
-      {/* 1. LEFT SIDEBAR PANEL */}
-      <aside className="w-[260px] h-screen bg-[#0F2419] p-5 flex flex-col gap-6 text-[#F4F3EC] shrink-0 border-r border-[#1C3D2A]/30 select-none">
-        {/* Logo & Title */}
-        <div className="flex items-center gap-3">
-          <div 
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-[#0F2419] font-serif font-extrabold text-lg shadow-sm"
-            style={{ backgroundColor: '#9BD96B' }}
-          >
-            ह
-          </div>
-          <div className="flex flex-col text-left leading-tight">
-            <span style={{ fontFamily: "'Sora', sans-serif" }} className="text-[15px] font-bold text-white tracking-tight">AI Assistant</span>
-          </div>
-        </div>
-
-        {/* New Chat Button */}
-        <button
-          onClick={handleNewChat}
-          className="w-full bg-[#9BD96B] hover:bg-[#8ac75c] text-[#0F2419] rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-[14px] font-bold transition"
-          style={{ fontFamily: "'Sora', sans-serif" }}
+  // Sidebar JSX content (reused for mobile & desktop)
+  const renderSidebarContent = () => (
+    <div className="flex h-full flex-col gap-6 text-left">
+      {/* Logo & Title */}
+      <div className="flex items-center gap-3 shrink-0">
+        <div 
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-[#0F2419] font-serif font-extrabold text-lg shadow-sm"
+          style={{ backgroundColor: '#9BD96B' }}
         >
-          + New chat
+          ह
+        </div>
+        <div className="flex flex-col leading-tight">
+          <span style={{ fontFamily: "'Sora', sans-serif" }} className="text-[15px] font-bold text-white tracking-tight">AI Assistant</span>
+        </div>
+      </div>
+
+      {/* New Chat Button */}
+      <button
+        onClick={handleNewChat}
+        className="w-full bg-[#9BD96B] hover:bg-[#8ac75c] text-[#0F2419] rounded-xl py-3 px-4 flex items-center justify-center gap-2 text-[14px] font-bold transition shrink-0"
+        style={{ fontFamily: "'Sora', sans-serif" }}
+      >
+        + New chat
+      </button>
+
+      {/* History list */}
+      <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1">
+        {/* THIS WEEK */}
+        <div className="flex flex-col gap-2">
+          <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-1 uppercase">
+            This Week
+          </div>
+          <div className="flex flex-col gap-0.5">
+            {thisWeekSessions.map((session) => (
+              <button
+                key={session.id}
+                onClick={() => handleNavigateSession(session.id)}
+                className={cn(
+                  "text-[13px] font-semibold py-2 px-2.5 rounded-lg truncate text-left transition",
+                  session.id === sessionId 
+                    ? "bg-[#1C3D2A] text-[#F4F3EC]" 
+                    : "text-[#7F9A88] hover:text-[#F4F3EC] hover:bg-white/5"
+                )}
+              >
+                {session.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* SAVED ANSWERS */}
+        <div className="flex flex-col gap-2">
+          <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-1 uppercase">
+            Saved Answers
+          </div>
+          <div className="flex flex-col gap-0.5">
+            {savedSessions.map((session) => (
+              <button
+                key={session.id}
+                onClick={() => handleNavigateSession(session.id)}
+                className={cn(
+                  "text-[13px] font-semibold py-2 px-2.5 rounded-lg truncate text-left transition",
+                  session.id === sessionId 
+                    ? "bg-[#1C3D2A] text-[#F4F3EC]" 
+                    : "text-[#7F9A88] hover:text-[#F4F3EC] hover:bg-white/5"
+                )}
+              >
+                {session.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Profile Details */}
+      <div className="bg-[#1C3D2A] rounded-2xl p-4 flex flex-col gap-2.5 border border-[#2D5A3F]/50 shrink-0">
+        <div className="text-[11px] font-bold text-[#E7C56B] uppercase tracking-wider">
+          Answers use your farm profile:
+        </div>
+        <div className="space-y-1 text-[12.5px] text-[#A2B8AA] font-semibold leading-normal">
+          <div>{profile?.name || "Ramesh Farm"} · {profile?.farmSizeAcres || "4.2"} ac</div>
+          <div>{profile?.mainCrops?.join(" · ") || "Paddy · Tomato · Cotton"}</div>
+          <div>{profile?.district || "Kadapa"}, {profile?.state || "Andhra Pradesh"}</div>
+        </div>
+        <button 
+          onClick={() => navigate("/onboarding")} 
+          className="text-[#9BD96B] hover:underline text-[12px] font-bold text-left mt-1"
+        >
+          Edit farm context
         </button>
+      </div>
+    </div>
+  );
 
-        {/* History list */}
-        <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 text-left">
-          {/* THIS WEEK */}
-          <div className="flex flex-col gap-2">
-            <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-1 uppercase">
-              This Week
-            </div>
-            <div className="flex flex-col gap-0.5">
-              {thisWeekSessions.map((session) => (
-                <button
-                  key={session.id}
-                  onClick={() => handleNavigateSession(session.id)}
-                  className={cn(
-                    "text-[13px] font-semibold py-2 px-2.5 rounded-lg truncate text-left transition",
-                    session.id === sessionId 
-                      ? "bg-[#1C3D2A] text-[#F4F3EC]" 
-                      : "text-[#7F9A88] hover:text-[#F4F3EC] hover:bg-white/5"
-                  )}
-                >
-                  {session.title}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* SAVED ANSWERS */}
-          <div className="flex flex-col gap-2">
-            <div className="text-[10px] font-bold text-[#7F9A88] tracking-[0.1em] px-1 uppercase">
-              Saved Answers
-            </div>
-            <div className="flex flex-col gap-0.5">
-              {savedSessions.map((session) => (
-                <button
-                  key={session.id}
-                  onClick={() => handleNavigateSession(session.id)}
-                  className={cn(
-                    "text-[13px] font-semibold py-2 px-2.5 rounded-lg truncate text-left transition",
-                    session.id === sessionId 
-                      ? "bg-[#1C3D2A] text-[#F4F3EC]" 
-                      : "text-[#7F9A88] hover:text-[#F4F3EC] hover:bg-white/5"
-                  )}
-                >
-                  {session.title}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Profile Details */}
-        <div className="bg-[#1C3D2A] rounded-2xl p-4 flex flex-col gap-2.5 text-left border border-[#2D5A3F]/50">
-          <div className="text-[11px] font-bold text-[#E7C56B] uppercase tracking-wider">
-            Answers use your farm profile:
-          </div>
-          <div className="space-y-1 text-[12.5px] text-[#A2B8AA] font-semibold leading-normal">
-            <div>{profile?.name || "Ramesh Farm"} · {profile?.farmSizeAcres || "4.2"} ac</div>
-            <div>{profile?.mainCrops?.join(" · ") || "Paddy · Tomato · Cotton"}</div>
-            <div>{profile?.district || "Kadapa"}, {profile?.state || "Andhra Pradesh"}</div>
-          </div>
-          <button 
-            onClick={() => navigate("/onboarding")} 
-            className="text-[#9BD96B] hover:underline text-[12px] font-bold text-left mt-1"
-          >
-            Edit farm context
-          </button>
-        </div>
+  return (
+    <div className="flex h-[calc(100vh-8rem)] w-full gap-4 overflow-hidden select-none text-left">
+      {/* 1. LEFT SIDEBAR PANEL (Desktop only) */}
+      <aside className="hidden md:flex w-[260px] h-full bg-[#0F2419] p-4 flex-col rounded-2xl shrink-0 border border-[#1C3D2A]/30 overflow-hidden">
+        {renderSidebarContent()}
       </aside>
 
       {/* 2. RIGHT MAIN CONTENT PANEL */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden select-none">
+      <div className="flex-1 flex flex-col h-full bg-white border border-[#E4E3DA] rounded-2xl overflow-hidden">
         
         {/* Right Header */}
-        <div className="sticky top-0 z-20 bg-[#F4F3EC] border-b border-[#E4E3DA]/60 px-6 py-3.5 flex items-center justify-between">
-          <div style={{ fontFamily: "'Sora', sans-serif" }} className="text-lg font-bold text-[#12261D]">
-            {currentSessionTitle || "New conversation"}
+        <div className="px-6 py-3.5 border-b border-[#E4E3DA]/60 flex items-center justify-between bg-[#FAFAF7]">
+          <div className="flex items-center gap-2">
+            {/* Mobile History Toggle Button */}
+            <button 
+              onClick={() => setMobileHistoryOpen(true)}
+              className="md:hidden px-2.5 py-1 text-xs rounded-lg border border-[#DCDBD1] text-[#5C6B62] hover:text-[#12261D] font-bold"
+            >
+              📂 History
+            </button>
+            <div style={{ fontFamily: "'Sora', sans-serif" }} className="text-[15px] font-bold text-[#12261D] truncate max-w-[180px] md:max-w-xs">
+              {currentSessionTitle || "New conversation"}
+            </div>
           </div>
 
           {/* Center Tabs for language selector */}
-          <div className="flex items-center gap-2 bg-[#EBEAE1] p-1 rounded-xl">
+          <div className="flex items-center gap-1 bg-[#EBEAE1]/60 p-0.5 rounded-lg">
             {[
               { key: "te", label: "తెలుగు" },
               { key: "hi", label: "हिंदी" },
@@ -242,11 +261,9 @@ export function ChatPage() {
             ].map((lang) => (
               <button
                 key={lang.key}
-                onClick={() => {
-                  setActiveLang(lang.key as any);
-                }}
+                onClick={() => setActiveLang(lang.key as any)}
                 className={cn(
-                  "px-4 py-1.5 rounded-lg text-[13px] font-semibold transition duration-150",
+                  "px-3 py-1 rounded-md text-[12px] font-bold transition duration-150",
                   activeLang === lang.key 
                     ? "bg-[#1C3D2A] text-[#F4F3EC] shadow-sm"
                     : "text-[#5C6B62] hover:text-[#12261D]"
@@ -255,16 +272,6 @@ export function ChatPage() {
                 {lang.label}
               </button>
             ))}
-          </div>
-
-          {/* User avatar on far right */}
-          <div className="flex items-center gap-2">
-            <div 
-              onClick={() => navigate("/")}
-              className="w-9 h-9 rounded-full bg-[#0F2419] text-[#9BD96B] flex items-center justify-center font-bold text-[13px] cursor-pointer hover:opacity-90 shadow-sm"
-            >
-              RF
-            </div>
           </div>
         </div>
 
@@ -282,15 +289,15 @@ export function ChatPage() {
                 ह
               </div>
 
-              <h2 style={{ fontFamily: "'Sora', sans-serif" }} className="text-3xl font-extrabold text-[#12261D] tracking-tight">
+              <h2 style={{ fontFamily: "'Sora', sans-serif" }} className="text-2xl md:text-3xl font-extrabold text-[#12261D] tracking-tight">
                 Namaskaram, {user?.name?.split(" ")[0] || "Ramesh"}
               </h2>
-              <p className="text-[14px] text-[#5C6B62] font-medium mt-2 mb-8">
+              <p className="text-[13.5px] text-[#5C6B62] font-medium mt-2 mb-6 md:mb-8">
                 Ask about your crops, or show me a photo of the problem.
               </p>
 
               {/* Suggestions Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl mb-6">
                 {[
                   { tag: "DIAGNOSE", tagColor: "#1B7A4B", prompt: "Why are my rice leaves turning yellow?" },
                   { tag: "SELL", tagColor: "#C27D00", prompt: "Is this a good week to sell paddy?" },
@@ -313,9 +320,9 @@ export function ChatPage() {
               </div>
 
               {/* Send photo horizontal banner */}
-              <div className="bg-[#E6F3E4] border border-[#CDE5C8] rounded-2xl p-4 flex items-center justify-between w-full max-w-2xl">
+              <div className="bg-[#E6F3E4] border border-[#CDE5C8] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between w-full max-w-2xl gap-3">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#0F2419] flex items-center justify-center text-white">
+                  <div className="w-10 h-10 rounded-xl bg-[#0F2419] flex items-center justify-center text-white text-lg shrink-0">
                     📷
                   </div>
                   <div className="text-left">
@@ -325,7 +332,7 @@ export function ChatPage() {
                 </div>
                 <button 
                   onClick={() => fileInputRef.current?.click()}
-                  className="text-[#1B7A4B] font-extrabold text-[13.5px] hover:underline"
+                  className="text-[#1B7A4B] font-extrabold text-[13.5px] hover:underline whitespace-nowrap self-end sm:self-auto"
                 >
                   Open camera
                 </button>
@@ -333,7 +340,7 @@ export function ChatPage() {
             </div>
           ) : (
             // Messages bubble list
-            <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 no-scrollbar">
               {messages.map((message) => (
                 <ChatMessageBubble key={message.id} message={message} language={activeLang} />
               ))}
@@ -352,7 +359,7 @@ export function ChatPage() {
         />
 
         {/* Bottom Input Composer */}
-        <div className="p-4 bg-[#F4F3EC] border-t border-[#E4E3DA]/40 max-w-3xl mx-auto w-full flex flex-col items-center gap-2">
+        <div className="p-4 border-t border-[#E4E3DA]/40 max-w-3xl mx-auto w-full flex flex-col items-center gap-2 bg-[#FAFAF7]">
           {imagePreview && (
             <div className="relative inline-block self-start mb-2 ml-4">
               <img src={imagePreview.localPreview} alt="Preview" className="h-16 rounded-xl object-cover" />
@@ -411,13 +418,20 @@ export function ChatPage() {
             </button>
           </div>
 
-          <div className="text-[11.5px] text-[#5C6B62] font-medium mt-1">
+          <div className="text-[11.5px] text-[#5C6B62] font-medium mt-1 text-center">
             {activeLang === "te" && "Hold the mic to speak in Telugu · answers read back aloud"}
             {activeLang === "hi" && "Hold the mic to speak in Hindi · answers read back aloud"}
             {activeLang === "en" && "Hold the mic to speak in English · answers read back aloud"}
           </div>
         </div>
       </div>
+
+      {/* 3. MOBILE HISTORY DRAWER */}
+      <Dialog open={mobileHistoryOpen} onOpenChange={setMobileHistoryOpen}>
+        <DialogContent className="max-w-xs p-4 border-none overflow-hidden h-[80vh] flex flex-col rounded-2xl" style={{ backgroundColor: '#0F2419' }}>
+          {renderSidebarContent()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

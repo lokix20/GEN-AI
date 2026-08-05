@@ -1,22 +1,10 @@
 import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { SidebarNav } from "./Sidebar.js";
 import { Topbar } from "./Topbar.js";
 
 export function AppShell() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const location = useLocation();
-  const isChat = location.pathname.startsWith("/chat");
-
-  if (isChat) {
-    return (
-      <div className="flex min-h-screen w-full" style={{ backgroundColor: '#F4F3EC' }}>
-        <main className="flex-1 overflow-hidden">
-          <Outlet />
-        </main>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen" style={{ backgroundColor: '#F4F3EC' }}>
