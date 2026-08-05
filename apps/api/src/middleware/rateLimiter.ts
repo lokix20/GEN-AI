@@ -20,7 +20,8 @@ export function rateLimit(options: { windowMs: number; max: number }) {
       return next();
     }
 
-    if (bucket.count >= options.max) {
+    const effectiveMax = process.env.NODE_ENV === "development" ? Math.max(options.max, 100) : options.max;
+    if (bucket.count >= effectiveMax) {
       return next(new HttpError(429, "Too many requests, please try again later"));
     }
 
@@ -28,3 +29,4 @@ export function rateLimit(options: { windowMs: number; max: number }) {
     next();
   };
 }
+

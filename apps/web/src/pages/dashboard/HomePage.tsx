@@ -1,118 +1,65 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sun, Leaf, Droplets, TrendingUp, Camera, MessageCircle, Calendar, Cloud, Shield } from "lucide-react";
 import { useAuthStore } from "../../store/auth.store.js";
-import { MandiPriceWidget } from "../../features/mandi/MandiPriceWidget.js";
-import { DASHBOARD_TRANSLATIONS, DashboardTranslation } from "../../lib/dashboard-translations.js";
 
 const sora = { fontFamily: "'Sora', sans-serif" };
 
 export function HomePage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const [langCode, setLangCode] = useState(() => localStorage.getItem("haritha-language") || "te");
-
-  useEffect(() => {
-    const handleLangChange = () => {
-      setLangCode(localStorage.getItem("haritha-language") || "te");
-    };
-    window.addEventListener("haritha-language-change", handleLangChange);
-    return () => window.removeEventListener("haritha-language-change", handleLangChange);
-  }, []);
-
-  const dt: DashboardTranslation = DASHBOARD_TRANSLATIONS[langCode] || DASHBOARD_TRANSLATIONS["te"] || DASHBOARD_TRANSLATIONS["en"];
-
   const firstName = user?.name?.split(" ")[0] ?? "Ramesh";
 
   return (
-    <div className="flex flex-col gap-5 text-left">
+    <div className="flex flex-col gap-5">
       {/* Header Row */}
-      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+      <div className="flex items-start justify-between">
         <div>
-          <h1 style={{ ...sora, fontSize: 28, fontWeight: 700, color: '#12261D', letterSpacing: '-0.02em' }}>
-            {dt.greeting.replace("Ramesh", firstName)}
-          </h1>
-          <p style={{ fontSize: 13, color: '#5C6B62', marginTop: 3 }}>
-            {dt.subtitle}
-          </p>
+          <h1 style={{ ...sora, fontSize: 28, fontWeight: 700, color: '#12261D', letterSpacing: '-0.02em' }}>Good afternoon, {firstName}</h1>
+          <p style={{ fontSize: 13, color: '#5C6B62', marginTop: 3 }}>Tuesday, 5 August · 2 things need you today</p>
         </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-          <button 
-            onClick={() => navigate('/disease-detection')} 
-            style={{ display:'flex', alignItems:'center', gap:6, padding:'9px 16px', borderRadius:9, background:'#006837', color:'white', fontSize:13, fontWeight:700, border:'none', cursor:'pointer' }}
-          >
-            <Camera size={14}/> {dt.scanCropBtn}
+          <button onClick={() => navigate('/disease-detection')} style={{ display:'flex', alignItems:'center', gap:6, padding:'9px 16px', borderRadius:9, background:'#12261D', color:'#F4F3EC', fontSize:13, fontWeight:600, border:'none', cursor:'pointer' }}>
+            <Camera size={14}/> Scan a crop
           </button>
-          <button style={{ padding:'9px 16px', borderRadius:9, background:'white', color:'#2B3A32', fontSize:13, fontWeight:600, border:'1px solid #DCDBD1', cursor:'pointer' }}>
-            {dt.logActivityBtn}
-          </button>
+          <button style={{ padding:'9px 16px', borderRadius:9, background:'white', color:'#2B3A32', fontSize:13, fontWeight:600, border:'1px solid #DCDBD1', cursor:'pointer' }}>Log activity</button>
         </div>
       </div>
 
       {/* Priority Alert Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Card 1 - DO FIRST (dark) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        {/* Card 1 - DO FIRST (dark) - takes more visual weight */}
         <div style={{ background:'#0F2419', borderRadius:16, padding:'22px 24px', display:'flex', flexDirection:'column', gap:14 }}>
           <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-            <span style={{ background:'#C0442F', color:'white', fontSize:10, fontWeight:800, padding:'3px 8px', borderRadius:12, letterSpacing:'0.06em' }}>
-              {dt.doFirstBadge}
-            </span>
+            <span style={{ background:'#C0442F', color:'white', fontSize:10, fontWeight:800, padding:'3px 8px', borderRadius:12, letterSpacing:'0.06em' }}>DO FIRST</span>
             <span style={{ color:'#7F9A88', fontSize:12 }}>Plot A · paddy · 2.4 ac</span>
           </div>
-          <div style={{ ...sora, fontSize:19, fontWeight:700, color:'#F4F3EC', lineHeight:1.3 }}>
-            {dt.doFirstTitle}
-          </div>
-          <p style={{ fontSize:13, color:'#8CA396', lineHeight:1.55 }}>
-            {dt.doFirstDesc}
-          </p>
+          <div style={{ ...sora, fontSize:20, fontWeight:700, color:'#F4F3EC', lineHeight:1.3 }}>Drain Plot A today — blight risk before Wednesday's rain</div>
+          <p style={{ fontSize:13, color:'#8CA396', lineHeight:1.55 }}>Leaf blight was detected on 15% of the plot. Standing water plus 42 mm of rain would spread it across the field within a week.</p>
           <div style={{ display:'flex', gap:10, marginTop:4 }}>
-            <button style={{ padding:'9px 16px', borderRadius:8, background:'#9BD96B', color:'#0F2419', fontSize:13, fontWeight:700, border:'none', cursor:'pointer' }}>
-              {dt.markDoneBtn}
-            </button>
-            <button 
-              onClick={() => navigate('/disease-detection')}
-              style={{ padding:'9px 16px', borderRadius:8, background:'transparent', color:'#D7F0C2', fontSize:13, fontWeight:600, border:'1px solid #34523F', cursor:'pointer' }}
-            >
-              {dt.seeTreatmentBtn}
-            </button>
+            <button style={{ padding:'9px 16px', borderRadius:8, background:'#9BD96B', color:'#0F2419', fontSize:13, fontWeight:700, border:'none', cursor:'pointer' }}>Mark as done</button>
+            <button style={{ padding:'9px 16px', borderRadius:8, background:'transparent', color:'#D7F0C2', fontSize:13, fontWeight:600, border:'1px solid #34523F', cursor:'pointer' }}>See treatment plan</button>
           </div>
         </div>
 
         {/* Card 2 - TODAY */}
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px', display:'flex', flexDirection:'column', gap:10 }}>
-          <span style={{ fontSize:10, fontWeight:800, color:'#C27D00', letterSpacing:'0.1em', background:'#FBF1DC', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>
-            {dt.todayBadge}
-          </span>
-          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>
-            {dt.irrigateTitle}
-          </div>
-          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>
-            {dt.irrigateDesc}
-          </p>
+          <span style={{ fontSize:10, fontWeight:800, color:'#C27D00', letterSpacing:'0.1em', background:'#FBF1DC', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>TODAY</span>
+          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>Irrigate Plot B before 6 PM</div>
+          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>Tomato soil at 31% — below the fruiting band.</p>
           <div style={{ marginTop:'auto', display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:10 }}>
-            <span style={{ fontSize:12, color:'#8B978F' }}>~55 min drip</span>
-            <button onClick={() => navigate('/coming-soon/irrigation')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>
-              {dt.scheduleBtn}
-            </button>
+            <span style={{ fontSize:12, color:'#8B978F' }}>~55 min of drip</span>
+            <button onClick={() => navigate('/coming-soon/irrigation')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Schedule →</button>
           </div>
         </div>
 
         {/* Card 3 - THIS WEEK */}
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px', display:'flex', flexDirection:'column', gap:10 }}>
-          <span style={{ fontSize:10, fontWeight:800, color:'#3B6FA8', letterSpacing:'0.1em', background:'#E4EEF6', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>
-            {dt.thisWeekBadge}
-          </span>
-          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>
-            {dt.claimTitle}
-          </div>
-          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>
-            {dt.claimDesc}
-          </p>
+          <span style={{ fontSize:10, fontWeight:800, color:'#3B6FA8', letterSpacing:'0.1em', background:'#E4EEF6', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>THIS WEEK</span>
+          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>Claim PM-KISAN ₹2,000</div>
+          <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>Eligible · 4 of 5 documents already on file.</p>
           <div style={{ marginTop:'auto', display:'flex', justifyContent:'space-between', alignItems:'center', paddingTop:10 }}>
             <span style={{ fontSize:12, color:'#8B978F' }}>Closes 22 Aug</span>
-            <button onClick={() => navigate('/coming-soon/schemes')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>
-              {dt.applyBtn}
-            </button>
+            <button onClick={() => navigate('/coming-soon/schemes')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Apply →</button>
           </div>
         </div>
       </div>
@@ -123,23 +70,23 @@ export function HomePage() {
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:6 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <Sun size={14} color='#C27D00'/>
-            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{dt.weatherTitle}</span>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Weather today</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:32, fontWeight:700, color:'#12261D' }}>28°</span>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>28°</span>
             <span style={{ fontSize:14, color:'#5C6B62', fontWeight:500 }}>Sunny</span>
           </div>
-          <div style={{ fontSize:12, color:'#8B978F' }}>Humidity 65% · rain 10%</div>
+          <div style={{ fontSize:12, color:'#8B978F' }}>Humidity 65% · rain 10% · wind 12 km/h</div>
         </div>
 
         {/* Crop Health */}
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <Leaf size={14} color='#1B7A4B'/>
-            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{dt.cropHealthTitle}</span>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Crop health</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:32, fontWeight:700, color:'#12261D' }}>82</span>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>82</span>
             <span style={{ fontSize:14, color:'#8B978F' }}>/100</span>
           </div>
           <div style={{ height:5, borderRadius:3, background:'#EDECE3', overflow:'hidden' }}>
@@ -151,10 +98,10 @@ export function HomePage() {
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <Droplets size={14} color='#3B6FA8'/>
-            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{dt.soilMoistureTitle}</span>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Soil moisture</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{ ...sora, fontSize:32, fontWeight:700, color:'#12261D' }}>45%</span>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>45%</span>
             <span style={{ fontSize:11, fontWeight:700, color:'#1B7A4B', background:'#E6F3E4', padding:'2px 8px', borderRadius:10 }}>Optimal</span>
           </div>
           <div style={{ height:5, borderRadius:3, background:'#EDECE3', position:'relative' }}>
@@ -167,10 +114,10 @@ export function HomePage() {
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:8 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <TrendingUp size={14} color='#1B7A4B'/>
-            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{dt.mandiTitle}</span>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>Paddy · Kadapa mandi</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{ ...sora, fontSize:28, fontWeight:700, color:'#12261D' }}>₹2,183</span>
+            <span style={{ ...sora, fontSize:30, fontWeight:700, color:'#12261D' }}>₹2,183</span>
             <span style={{ fontSize:12, fontWeight:700, color:'#1B7A4B' }}>▲2.4%</span>
           </div>
           <div style={{ display:'flex', alignItems:'flex-end', gap:3, height:22 }}>
@@ -185,23 +132,20 @@ export function HomePage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 items-start">
         {/* Left Column */}
         <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-          {/* Interactive Mandi Price Intelligence Widget */}
-          <MandiPriceWidget />
-
           {/* My Plots */}
           <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px' }}>
-            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:4 }}>
+            <div style={{ display:'flex', alignItems:'center', justifyItems:'space-between', justifyContent:'space-between', marginBottom:4 }}>
               <div>
                 <span style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>My plots</span>
                 <div style={{ fontSize:12, color:'#8B978F', marginTop:2 }}>4.2 acres · Kharif 2026</div>
               </div>
-              <button onClick={() => navigate('/coming-soon/farm-diary')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>{dt.viewAll}</button>
+              <button onClick={() => navigate('/coming-soon/farm-diary')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>View all</button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-2.5 mt-4">
               {/* Paddy Plot */}
               <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
                 <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
-                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌾<br/><span style={{fontSize:10}}>Paddy Field</span></div>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌾<br/><span style={{fontSize:10}}>or browse files</span></div>
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
                   <span style={{ width:7, height:7, borderRadius:'50%', background:'#C0442F', display:'inline-block', flexShrink:0 }}/>
@@ -215,7 +159,7 @@ export function HomePage() {
               {/* Tomato Plot */}
               <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
                 <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
-                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🍅<br/><span style={{fontSize:10}}>Tomato Field</span></div>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🍅<br/><span style={{fontSize:10}}>or browse files</span></div>
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
                   <span style={{ width:7, height:7, borderRadius:'50%', background:'#E8A33D', display:'inline-block', flexShrink:0 }}/>
@@ -229,7 +173,7 @@ export function HomePage() {
               {/* Cotton Plot */}
               <div style={{ border:'1px solid #E4E3DA', borderRadius:12, padding:'14px 12px' }}>
                 <div style={{ height:60, background:'#F4F3EC', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:10 }}>
-                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌿<br/><span style={{fontSize:10}}>Cotton Strip</span></div>
+                  <div style={{ fontSize:11, color:'#8B978F', textAlign:'center' }}>🌿<br/><span style={{fontSize:10}}>or browse files</span></div>
                 </div>
                 <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:6 }}>
                   <span style={{ width:7, height:7, borderRadius:'50%', background:'#1B7A4B', display:'inline-block', flexShrink:0 }}/>
@@ -247,6 +191,35 @@ export function HomePage() {
               </div>
             </div>
           </div>
+
+          {/* This Week's Plan */}
+          <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'20px 22px' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 }}>
+              <div>
+                <span style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>This week's plan</span>
+                <div style={{ fontSize:12, color:'#8B978F', marginTop:2 }}>Generated from weather, crop stage and your diary</div>
+              </div>
+              <button onClick={() => navigate('/coming-soon/crop-calendar')} style={{ fontSize:13, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>Open calendar</button>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:10 }}>
+              {[
+                { day:'TUE 5', tasks:[{label:'Drain Plot A', color:'#C0442F', bg:'#FCECEA'}] },
+                { day:'WED 6', tasks:[{label:'Spray 6 AM', color:'#1B7A4B', bg:'#E6F3E4'},{label:'Rain 42 mm', color:'#5C6B62', bg:'transparent', plain:true}] },
+                { day:'THU 7', tasks:[{label:'Nothing due', color:'#8B978F', bg:'transparent', plain:true}] },
+                { day:'FRI 8', tasks:[{label:'Weed cotton', color:'#1B7A4B', bg:'#E6F3E4'}] },
+                { day:'SAT 9', tasks:[{label:'Mandi visit', color:'#3B6FA8', bg:'#E4EEF6'}] },
+              ].map(col => (
+                <div key={col.day} style={{ borderRadius:10, border:'1px solid #EDECE3', padding:'12px 10px', background:'#FAFAF7' }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:'#8B978F', marginBottom:8, letterSpacing:'0.05em' }}>{col.day}</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                    {col.tasks.map((t,i) => (
+                      <span key={i} style={{ fontSize:11, fontWeight: t.plain ? 400 : 600, color:t.color, background:t.bg, padding: t.plain ? '0' : '4px 8px', borderRadius: t.plain ? 0 : 8 }}>{t.label}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Right Sidebar */}
@@ -254,8 +227,8 @@ export function HomePage() {
           {/* Notifications */}
           <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'18px 20px' }}>
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14 }}>
-              <span style={{ ...sora, fontSize:15, fontWeight:700, color:'#12261D' }}>{dt.notificationsTitle}</span>
-              <button style={{ fontSize:12, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>{dt.viewAll}</button>
+              <span style={{ ...sora, fontSize:15, fontWeight:700, color:'#12261D' }}>Notifications</span>
+              <button style={{ fontSize:12, fontWeight:600, color:'#1B7A4B', background:'none', border:'none', cursor:'pointer' }}>View all</button>
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
               {[

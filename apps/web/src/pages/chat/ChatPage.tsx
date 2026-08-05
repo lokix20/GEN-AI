@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ChatMessageBubble } from "../../features/chat/components/ChatMessageBubble.js";
@@ -10,9 +10,7 @@ import { useAuthStore } from "../../store/auth.store.js";
 import { useSpeechRecognition } from "../../hooks/useSpeechRecognition.js";
 import { cn } from "../../lib/utils.js";
 import { Dialog, DialogContent } from "../../components/ui/dialog.js";
-import { LanguageSelector } from "../../components/shared/LanguageSelector.js";
-import { CHAT_TRANSLATIONS, ChatTranslation } from "../../lib/chat-translations.js";
-import { INDIAN_LANGUAGES } from "../../hooks/useSpeechSynthesis.js";
+import { Skeleton } from "../../components/ui/skeleton.js";
 
 const MOCK_THIS_WEEK = [
   { id: "mock-yellow-patches", title: "Yellow patches on paddy leaves", prompt: "Why are my rice leaves turning yellow?" },
@@ -28,35 +26,22 @@ const MOCK_SAVED = [
 export function ChatPage() {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const role = user?.role;
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const initialPromptSent = useRef(false);
 
-  const [langCode, setLangCode] = useState(() => localStorage.getItem("haritha-language") || "te");
+  const [activeLang, setActiveLang] = useState<"te" | "hi" | "en">("te");
   const [inputText, setInputText] = useState("");
   const [imagePreview, setImagePreview] = useState<{ url: string; localPreview: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false);
 
-  useEffect(() => {
-    const handleLangChange = () => {
-      setLangCode(localStorage.getItem("haritha-language") || "te");
-    };
-    window.addEventListener("haritha-language-change", handleLangChange);
-    return () => window.removeEventListener("haritha-language-change", handleLangChange);
-  }, []);
-
-  const ct: ChatTranslation = CHAT_TRANSLATIONS[langCode] || CHAT_TRANSLATIONS["te"] || CHAT_TRANSLATIONS["en"];
-
   // Load actual chat sessions
   const { data: sessions } = useChatSessions();
 
   // Speech Recognition hook
-  const langObj = INDIAN_LANGUAGES.find((l) => l.code === langCode);
-  const speechLang = langObj?.speechCode || "en-IN";
+  const speechLang = activeLang === "te" ? "te-IN" : activeLang === "hi" ? "hi-IN" : "en-IN";
   const { isListening, transcript, start: startSpeech, stop: stopSpeech } = useSpeechRecognition(speechLang);
 
   // Load Profile context
@@ -72,15 +57,6 @@ export function ChatPage() {
       navigate(`/chat/${session.id}`, { replace: true });
     }
   );
-
-  // Auto-send initial prompt if passed via location state (e.g. from SchemesPage "Ask AI Assistant")
-  useEffect(() => {
-    const prompt = location.state?.initialPrompt;
-    if (prompt && !initialPromptSent.current && messages.length === 0) {
-      initialPromptSent.current = true;
-      sendMessage({ content: prompt, language: langCode as any });
-    }
-  }, [location.state, sendMessage, messages.length, langCode]);
 
   // Auto-scroll on new messages
   useEffect(() => {
@@ -118,7 +94,7 @@ export function ChatPage() {
     const cleanText = inputText.trim();
     if (!cleanText && !imagePreview) return;
 
-    sendMessage({ content: cleanText || "Please analyze this crop image.", imageUrl: imagePreview?.url ?? null, language: langCode as any });
+    sendMessage(cleanText || "Please analyze this crop image.", imagePreview?.url ?? null);
     setInputText("");
     setImagePreview(null);
   };
@@ -136,7 +112,7 @@ export function ChatPage() {
     const mock = mockWeek || mockSave;
 
     if (mock) {
-      sendMessage({ content: mock.prompt, language: langCode as any });
+      sendMessage(mock.prompt);
     } else {
       navigate(`/chat/${id}`);
     }
@@ -162,7 +138,7 @@ export function ChatPage() {
         {/* THIS WEEK */}
         <div className="flex flex-col gap-3">
           <div className="text-[10px] font-bold text-[#A2ADA5] tracking-widest uppercase ml-2">
-            {ct.thisWeek}
+            This Week
           </div>
           <div className="flex flex-col gap-1">
             {thisWeekSessions.map((session) => (
@@ -185,7 +161,7 @@ export function ChatPage() {
         {/* SAVED ANSWERS */}
         <div className="flex flex-col gap-3">
           <div className="text-[10px] font-bold text-[#A2ADA5] tracking-widest uppercase ml-2">
-            {ct.savedAnswers}
+            Saved Answers
           </div>
           <div className="flex flex-col gap-1">
             {savedSessions.map((session) => (
@@ -209,7 +185,7 @@ export function ChatPage() {
       {/* Bottom Profile Details */}
       <div className="flex flex-col gap-1.5 text-left pt-6 mt-4 border-t border-[#DCDBD1]">
         <div className="text-[10px] font-bold text-[#A2ADA5] tracking-widest uppercase mb-1">
-          {ct.farmContext}
+          Farm Context
         </div>
         <div className="text-[12.5px] text-[#5C6B62] font-semibold leading-relaxed">
           <div>{profile?.name || "Ramesh Farm"} · {profile?.farmSizeAcres || "4.2"} ac</div>
@@ -220,7 +196,7 @@ export function ChatPage() {
           onClick={() => navigate("/onboarding")} 
           className="text-[#1B7A4B] hover:underline text-[12px] font-bold text-left mt-1"
         >
-          {ct.editContext}
+          Edit context
         </button>
       </div>
     </div>
@@ -233,7 +209,7 @@ export function ChatPage() {
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
           <h1 className="text-xl font-extrabold text-[#12261D] hidden md:block" style={{ fontFamily: "'Sora', sans-serif" }}>
-            {ct.headerTitle}
+            AI Assistant
           </h1>
           
           {/* Mobile History Toggle */}
@@ -241,11 +217,30 @@ export function ChatPage() {
             onClick={() => setMobileHistoryOpen(true)}
             className="md:hidden px-3 py-1.5 text-sm rounded-lg border border-[#DCDBD1] text-[#5C6B62] font-bold"
           >
-            {ct.history}
+            History
           </button>
 
-          {/* Interactive Vernacular Language Selector Dropdown */}
-          <LanguageSelector buttonClassName="bg-[#EBEAE2] border border-[#DCDBD1] text-[#12261D] px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-[#E4E3DA] transition shadow-sm" />
+          {/* Language selector pills */}
+          <div className="flex items-center gap-1 bg-[#EBEAE2] p-1 rounded-xl border border-[#E4E3DA]">
+            {[
+              { key: "te", label: "తెలుగు" },
+              { key: "hi", label: "हिंदी" },
+              { key: "en", label: "English" }
+            ].map((lang) => (
+              <button
+                key={lang.key}
+                onClick={() => setActiveLang(lang.key as any)}
+                className={cn(
+                  "px-4 py-1.5 rounded-lg text-[13px] font-bold transition duration-150",
+                  activeLang === lang.key 
+                    ? "bg-white text-[#12261D] shadow-sm border border-[#DCDBD1]"
+                    : "text-[#5C6B62] hover:text-[#12261D]"
+                )}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -253,7 +248,7 @@ export function ChatPage() {
             onClick={handleNewChat}
             className="hidden sm:flex bg-white hover:bg-[#FAFAF7] text-[#12261D] border border-[#DCDBD1] rounded-xl py-2 px-4 items-center justify-center gap-2 text-[13px] font-bold shadow-sm transition"
           >
-            {ct.newChat}
+            + New chat
           </button>
           
           <div 
@@ -280,23 +275,23 @@ export function ChatPage() {
               // Welcome screen
               <div className="flex-1 flex flex-col items-center justify-center py-6 px-4 max-w-3xl mx-auto w-full text-center">
                 <h2 style={{ fontFamily: "'Sora', sans-serif" }} className="text-3xl md:text-[34px] font-extrabold text-[#12261D] tracking-tight">
-                  {ct.welcomeGreeting.replace("Ramesh", user?.name?.split(" ")[0] || "Ramesh")}
+                  Namaskaram, {user?.name?.split(" ")[0] || "Ramesh"}
                 </h2>
                 <p className="text-[14.5px] text-[#5C6B62] font-medium mt-3 mb-10">
-                  {ct.welcomeSub}
+                  Ask about your crops — or just show me a photo of the problem.
                 </p>
 
                 {/* Suggestions Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl mb-6">
                   {[
-                    { tag: ct.tagDiagnose, tagColor: "#1B7A4B", prompt: ct.promptDiagnose },
-                    { tag: ct.tagSell, tagColor: "#C27D00", prompt: ct.promptSell },
-                    { tag: ct.tagPlan, tagColor: "#3B6FA8", prompt: ct.promptPlan },
-                    { tag: ct.tagClaim, tagColor: "#1B7A4B", prompt: ct.promptClaim }
+                    { tag: "DIAGNOSE", tagColor: "#1B7A4B", prompt: "Why are my rice leaves turning yellow?" },
+                    { tag: "SELL", tagColor: "#C27D00", prompt: "Is this a good week to sell paddy?" },
+                    { tag: "PLAN", tagColor: "#3B6FA8", prompt: "Will it rain before Thursday?" },
+                    { tag: "CLAIM", tagColor: "#1B7A4B", prompt: "Which schemes am I eligible for?" }
                   ].map((item) => (
                     <button
                       key={item.prompt}
-                      onClick={() => sendMessage({ content: item.prompt, language: langCode as any })}
+                      onClick={() => sendMessage(item.prompt)}
                       className="bg-white border border-[#E4E3DA] rounded-[20px] p-5 text-left hover:bg-[#FAF9F5] transition duration-200 shadow-sm flex flex-col gap-1.5"
                     >
                       <span style={{ color: item.tagColor }} className="text-[10px] font-extrabold tracking-wider uppercase">
@@ -316,23 +311,37 @@ export function ChatPage() {
                       📷
                     </div>
                     <div className="text-left">
-                      <div className="text-[14.5px] font-extrabold text-[#12261D]">{ct.photoBannerTitle}</div>
-                      <div className="text-[12.5px] text-[#5C6B62] font-medium mt-0.5">{ct.photoBannerSub}</div>
+                      <div className="text-[14.5px] font-extrabold text-[#12261D]">Or just send a photo</div>
+                      <div className="text-[12.5px] text-[#5C6B62] font-medium mt-0.5">A clear shot of the leaf is faster than typing.</div>
                     </div>
                   </div>
                   <button 
                     onClick={() => fileInputRef.current?.click()}
                     className="text-[#1B7A4B] font-extrabold text-[14.5px] hover:underline whitespace-nowrap self-end sm:self-auto px-2"
                   >
-                    {ct.openCamera}
+                    Open camera
                   </button>
+                </div>
+              </div>
+            ) : isLoadingMessages ? (
+              // Chat feed Skeleton loader
+              <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-5 no-scrollbar max-w-4xl mx-auto w-full">
+                <div className="flex gap-3 justify-end">
+                  <Skeleton className="h-12 w-2/3 rounded-2xl bg-[#E2E1D7]" />
+                </div>
+                <div className="flex gap-3">
+                  <Skeleton className="w-9 h-9 rounded-full shrink-0" />
+                  <Skeleton className="h-24 w-3/4 rounded-2xl" />
+                </div>
+                <div className="flex gap-3 justify-end">
+                  <Skeleton className="h-10 w-1/2 rounded-2xl bg-[#E2E1D7]" />
                 </div>
               </div>
             ) : (
               // Active chat feed
               <div className="flex-1 overflow-y-auto p-6 md:p-8 space-y-5 no-scrollbar max-w-4xl mx-auto w-full">
                 {messages.map((message) => (
-                  <ChatMessageBubble key={message.id} message={message} language={langCode} />
+                  <ChatMessageBubble key={message.id} message={message} language={activeLang} />
                 ))}
                 <div ref={bottomRef} />
               </div>
@@ -363,6 +372,7 @@ export function ChatPage() {
             )}
 
             <div className="flex items-center gap-2 bg-white border border-[#DCDBD1] rounded-2xl px-3 py-2 w-full shadow-sm min-h-[56px]">
+              {/* Image attachment / paperclip icon */}
               <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
@@ -381,47 +391,44 @@ export function ChatPage() {
                     handleSend();
                   }
                 }}
-                placeholder={ct.inputPlaceholder} 
+                placeholder="Ask about your crops, weather, or schemes..." 
                 className="w-full bg-transparent outline-none text-[#12261D] text-[15px] placeholder:text-[#8B978F] py-2 px-1"
               />
 
-              {/* Mic Icon for Voice Input */}
+              {/* Mic icon with speech recognition */}
               <button
                 type="button"
-                onMouseDown={startSpeech}
-                onMouseUp={stopSpeech}
-                onTouchStart={startSpeech}
-                onTouchEnd={stopSpeech}
+                onClick={() => (isListening ? stopSpeech() : startSpeech())}
                 className={cn(
-                  "p-2.5 rounded-xl transition shrink-0 flex items-center justify-center font-bold text-sm",
-                  isListening ? "bg-red-600 text-white animate-pulse" : "bg-[#F4F3EC] text-[#1B7A4B] hover:bg-[#E6F3E4]"
+                  "p-2 shrink-0 transition rounded-xl text-lg",
+                  isListening ? "bg-red-100 text-red-600" : "text-[#5C6B62] hover:text-[#12261D]"
                 )}
-                title="Hold to speak in your language"
               >
-                🎤
+                🎙️
               </button>
 
-              {/* Send Button */}
-              <button
-                type="button"
+              {/* Send button (dark green circle with up arrow) */}
+              <button 
                 onClick={handleSend}
-                disabled={isStreaming || isUploading || (!inputText.trim() && !imagePreview)}
-                className="bg-[#006837] hover:bg-[#1B4332] text-white p-2.5 rounded-xl transition disabled:opacity-40 shrink-0 font-bold text-sm"
+                disabled={isUploading || (!inputText.trim() && !imagePreview)}
+                className="w-10 h-10 rounded-xl bg-[#0F2419] hover:bg-[#1C3D2A] text-[#9BD96B] flex items-center justify-center font-bold text-[16px] shrink-0 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-sm"
               >
-                ➔
+                ↑
               </button>
             </div>
 
-            <div className="text-[10.5px] text-[#A2ADA5] font-bold tracking-wider uppercase mt-1">
-              {ct.micTip}
+            <div className="text-[11.5px] text-[#A2ADA5] font-semibold mt-1 text-center tracking-wide uppercase">
+              {activeLang === "te" && "Hold the mic to speak in Telugu · answers read back aloud"}
+              {activeLang === "hi" && "Hold the mic to speak in Hindi · answers read back aloud"}
+              {activeLang === "en" && "Hold the mic to speak in English · answers read back aloud"}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile History Drawer */}
+      {/* MOBILE HISTORY DRAWER */}
       <Dialog open={mobileHistoryOpen} onOpenChange={setMobileHistoryOpen}>
-        <DialogContent className="max-w-xs border-none p-0 overflow-hidden bg-[#EBEAE2]">
+        <DialogContent className="max-w-xs p-0 border-none overflow-hidden h-[90vh] flex flex-col rounded-2xl bg-[#EBEAE2]">
           {renderSidebarContent()}
         </DialogContent>
       </Dialog>
