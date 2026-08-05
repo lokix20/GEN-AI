@@ -370,7 +370,7 @@ export function WeatherPage() {
            </div>
 
            {/* WhatsApp Alerts */}
-           <div className="bg-[#0F2419] rounded-[24px] p-6 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
+           <div className="bg-[#0F2419] rounded-[24px] p-6 flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
               <h4 className="text-[16px] font-extrabold tracking-tight relative z-10 text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
                 Get rain alerts on WhatsApp
