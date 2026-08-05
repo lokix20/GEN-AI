@@ -32,7 +32,7 @@ export function SchemesPage() {
   const matchedSchemes = matchSchemesForProfile({
     name: farmerName,
     state: farmerState,
-    district: profile?.district || "Kadapa",
+    district: profile?.district || "Vizianagaram",
     farmSizeAcres: landAcres,
     mainCrops: farmerCrops,
   });

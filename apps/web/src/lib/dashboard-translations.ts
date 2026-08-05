@@ -514,7 +514,7 @@ export const DASHBOARD_TRANSLATIONS: Record<string, DashboardTranslation> = {
     weatherTitle: "Weather today",
     cropHealthTitle: "Crop health",
     soilMoistureTitle: "Soil moisture",
-    mandiTitle: "Paddy · Kadapa mandi",
+    mandiTitle: "Paddy · Vizianagaram mandi",
     mandiRateIntelligence: "Mandi Rate Intelligence & AI Forecast",
     notificationsTitle: "Notifications",
     viewAll: "View all",

@@ -35,7 +35,7 @@ export async function getWeatherData(req: Request, res: Response) {
     throw new HttpError(501, "Weather API key is not configured on this server");
   }
 
-  const city = req.query.city ? String(req.query.city) : "Kadapa";
+  const city = req.query.city ? String(req.query.city) : "Vizianagaram";
   const cacheKey = city.toLowerCase();
 
   // Check cache first

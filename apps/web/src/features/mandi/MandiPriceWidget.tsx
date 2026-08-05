@@ -23,7 +23,7 @@ const MANDI_DATA: Record<string, {
 }> = {
   paddy: {
     crop: "Paddy (Rice)",
-    mandi: "Kadapa Main Mandi",
+    mandi: "Vizianagaram Main Mandi",
     currentPrice: 2183,
     change: "+2.4%",
     isPositive: true,

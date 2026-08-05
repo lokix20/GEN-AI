@@ -60,11 +60,11 @@ export function WeatherPage() {
     queryKey: ["weather-data"],
     queryFn: async () => {
       try {
-        const response = await apiClient.get("/weather?city=Kadapa");
+        const response = await apiClient.get("/weather?city=Vizianagaram");
         return response.data;
       } catch (err) {
         // Real-time Open-Meteo Live Weather API (Free public endpoint, 0 API key required)
-        const openMeteoRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=14.47&longitude=78.82&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto");
+        const openMeteoRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=18.11&longitude=83.40&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,surface_pressure&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto");
         const data = await openMeteoRes.json();
         
         const temp = data.current?.temperature_2m ?? 31.5;
@@ -87,7 +87,7 @@ export function WeatherPage() {
               deg: 190,
             },
             weather: [{ id: 800, main: "Partly Cloudy", description: "partly cloudy & warm", icon: "02d" }],
-            name: "Kadapa",
+            name: "Vizianagaram",
           },
           forecast: {
             list: Array.from({ length: 12 }).map((_, idx) => {

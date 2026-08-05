@@ -21,7 +21,7 @@ const MOCK_USERS: Record<string, any> = {
       id: "profile-demo-id",
       userId: "farmer-demo-id",
       state: "Andhra Pradesh",
-      district: "Kadapa",
+      district: "Vizianagaram",
       village: "Vallapuzha",
       farmSizeAcres: 4.2,
       soilType: "Loamy",

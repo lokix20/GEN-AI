@@ -94,7 +94,7 @@ export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar:
               </Avatar>
               <div className="hidden flex-col items-start sm:flex leading-tight">
                 <span className="text-xs font-bold text-[#12261D]">{displayName}</span>
-                <span className="text-[10px] text-[#8B978F] font-medium">Kadapa, AP</span>
+                <span className="text-[10px] text-[#8B978F] font-medium">Vizianagaram, AP</span>
               </div>
             </button>
           </DropdownMenuTrigger>

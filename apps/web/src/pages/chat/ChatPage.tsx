@@ -190,7 +190,7 @@ export function ChatPage() {
         <div className="text-[12.5px] text-[#5C6B62] font-semibold leading-relaxed">
           <div>{profile?.name || "Ramesh Farm"} · {profile?.farmSizeAcres || "4.2"} ac</div>
           <div>{profile?.mainCrops?.join(" · ") || "Paddy · Tomato · Cotton"}</div>
-          <div>{profile?.district || "Kadapa"}, {profile?.state || "Andhra Pradesh"}</div>
+          <div>{profile?.district || "Vizianagaram"}, {profile?.state || "Andhra Pradesh"}</div>
         </div>
         <button 
           onClick={() => navigate("/onboarding")} 

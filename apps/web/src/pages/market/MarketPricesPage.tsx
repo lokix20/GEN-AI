@@ -156,7 +156,7 @@ export function MarketPricesPage() {
       })
     : [
         { mandi: "Proddatur", note: "Best net today", noteColor: "text-[#1B7A4B]", dist: "31 km", price: `₹${avgPrice + 57}`, transport: "₹38", net: `₹${avgPrice + 19}`, netColor: "text-[#1B7A4B]" },
-        { mandi: "Kadapa", note: "Your usual mandi", noteColor: "text-[#A2ADA5]", dist: "12 km", price: `₹${avgPrice}`, transport: "₹16", net: `₹${avgPrice - 16}`, netColor: "text-[#12261D]" },
+        { mandi: "Vizianagaram", note: "Your usual mandi", noteColor: "text-[#A2ADA5]", dist: "12 km", price: `₹${avgPrice}`, transport: "₹16", net: `₹${avgPrice - 16}`, netColor: "text-[#12261D]" },
         { mandi: "Rayachoti", note: "Slow offtake this week", noteColor: "text-[#A2ADA5]", dist: "58 km", price: `₹${avgPrice + 22}`, transport: "₹71", net: `₹${avgPrice - 49}`, netColor: "text-[#12261D]" },
       ];
 
@@ -268,7 +268,7 @@ export function MarketPricesPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="text-left">
                   <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
-                    {hasRecords ? `${latestMandiPrices[0].state} Mandis` : "Kadapa Mandi"} · {activeCrop.toLowerCase()}
+                    {hasRecords ? `${latestMandiPrices[0].state} Mandis` : "Vizianagaram Mandi"} · {activeCrop.toLowerCase()}
                   </h3>
                   <p className="text-[13.5px] font-medium text-[#5C6B62] mt-0.5">
                     Modal price per quintal, last arrivals timeline

@@ -1,15 +1,83 @@
 import { useNavigate } from "react-router-dom";
-import { Sun, Leaf, Droplets, TrendingUp, Camera, Calendar, Cloud, Shield } from "lucide-react";
+import { Sun, Leaf, Droplets, TrendingUp, Camera, MessageCircle, Calendar, Cloud, Shield, CloudRain, CloudSun } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "../../lib/apiClient.js";
 import { useAuthStore } from "../../store/auth.store.js";
 import { useCurrentLanguage } from "../../hooks/useCurrentLanguage.js";
 
 const sora = { fontFamily: "'Outfit', sans-serif" };
+
+interface WeatherCondition {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+interface OpenWeatherResponse {
+  current: {
+    main: {
+      temp: number;
+      feels_like: number;
+      temp_min: number;
+      temp_max: number;
+      pressure: number;
+      humidity: number;
+    };
+    wind: {
+      speed: number;
+      deg: number;
+    };
+    weather: WeatherCondition[];
+    name: string;
+  };
+  forecast: {
+    list: Array<{
+      dt: number;
+      dt_txt: string;
+      main: {
+        temp: number;
+      };
+      weather: WeatherCondition[];
+      wind: {
+        speed: number;
+      };
+      pop: number;
+    }>;
+  };
+}
 
 export function HomePage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const { t } = useCurrentLanguage();
   const firstName = user?.name?.split(" ")[0] ?? "Ramesh";
+
+  // Query actual weather data from the backend proxy for Vizianagaram
+  const { data: weatherData } = useQuery<OpenWeatherResponse>({
+    queryKey: ["weather-data"],
+    queryFn: async () => {
+      const response = await apiClient.get("/weather?city=Vizianagaram");
+      return response.data;
+    },
+  });
+
+  const currentTemp = weatherData ? Math.round(weatherData.current.main.temp) : 28;
+  const condition = weatherData ? weatherData.current.weather[0].main : "Sunny";
+  const humidity = weatherData ? weatherData.current.main.humidity : 65;
+  const windSpeed = weatherData ? Math.round(weatherData.current.wind.speed * 3.6) : 12;
+  const rainPop = weatherData?.forecast?.list?.[0]?.pop ? Math.round(weatherData.forecast.list[0].pop * 100) : 10;
+
+  // Choose Lucide Icon based on condition
+  let WeatherIcon = Sun;
+  let iconColor = "#C27D00";
+  if (condition.toLowerCase().includes("rain")) {
+    WeatherIcon = CloudRain;
+    iconColor = "#3B6FA8";
+  } else if (condition.toLowerCase().includes("cloud") || condition.toLowerCase().includes("overcast")) {
+    WeatherIcon = CloudSun;
+    iconColor = "#7A877F";
+  }
 
   return (
     <div className="flex flex-col gap-5 text-left">
@@ -101,16 +169,20 @@ export function HomePage() {
       {/* 4 Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Weather */}
-        <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:6 }}>
+        <div 
+          onClick={() => navigate('/weather')}
+          style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:6, cursor:'pointer' }}
+          className="hover:border-[#1B7A4B] transition"
+        >
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-            <Sun size={14} color='#C27D00'/>
+            <WeatherIcon size={14} color={iconColor}/>
             <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.weatherTitle || "Weather today"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>28°</span>
-            <span style={{ fontSize:14, color:'#5C6B62', fontWeight:500 }}>Sunny</span>
+            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>{currentTemp}°</span>
+            <span style={{ fontSize:14, color:'#5C6B62', fontWeight:500 }}>{condition}</span>
           </div>
-          <div style={{ fontSize:12, color:'#8B978F' }}>Humidity 65% · rain 10% · wind 12 km/h</div>
+          <div style={{ fontSize:12, color:'#8B978F' }}>Humidity {humidity}% · rain {rainPop}% · wind {windSpeed} km/h</div>
         </div>
 
         {/* Crop Health */}
@@ -147,7 +219,7 @@ export function HomePage() {
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:14, padding:'16px 18px', display:'flex', flexDirection:'column', gap:6 }}>
           <div style={{ display:'flex', alignItems:'center', gap:6 }}>
             <TrendingUp size={14} color='#1B7A4B'/>
-            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.mandiTitle || "Paddy · Kadapa mandi"}</span>
+            <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.mandiTitle || "Paddy · Vizianagaram mandi"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
             <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>₹2,183</span>

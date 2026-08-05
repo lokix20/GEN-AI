@@ -92,7 +92,7 @@ export function LandingPage() {
           />
           {/* Mandi float card (Top Left) */}
           <div className="absolute -left-4 md:-left-8 top-8 bg-white rounded-[20px] p-4 md:p-5 shadow-2xl text-left min-w-[210px] transform hover:scale-105 transition duration-300 z-20">
-            <div className="text-[11px] font-extrabold tracking-wider text-[#7A877F] uppercase">KADAPA MANDI</div>
+            <div className="text-[11px] font-extrabold tracking-wider text-[#7A877F] uppercase">VIZIANAGARAM MANDI</div>
             <div className="text-2xl font-extrabold text-[#12261D] mt-0.5">
               ₹2,183<span className="text-xs text-[#7A877F] font-semibold">/quintal</span>
             </div>
@@ -169,7 +169,7 @@ export function LandingPage() {
             </p>
             <div className="mt-auto flex flex-col gap-2 pt-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#12261D]">Kadapa Mandi · Paddy</span>
+                <span className="font-bold text-[#12261D]">Vizianagaram Mandi · Paddy</span>
                 <span className="font-extrabold text-[#1B7A4B] bg-[#E6F3E4] px-2 py-0.5 rounded">▲ 2.4%</span>
               </div>
               <div className="text-xs text-[#5C6B62]">
@@ -213,7 +213,7 @@ export function LandingPage() {
             </p>
             <div className="mt-auto bg-[#F1F0E9] rounded-xl p-3.5 border border-[#E4E3DA] flex flex-col gap-1.5">
               <div className="flex items-center justify-between text-xs font-bold text-[#12261D]">
-                <span>🌤️ 28°C · Kadapa</span>
+                <span>🌤️ 28°C · Vizianagaram</span>
                 <span className="text-[10px] font-bold bg-[#E6F3E4] text-[#1B7A4B] px-2 py-0.5 rounded-md">Best Spray Window</span>
               </div>
               <div className="text-[11.5px] text-[#5C6B62] font-medium">
@@ -315,7 +315,7 @@ export function LandingPage() {
             <div>
               <div className="text-base font-bold text-[#12261D]">Ramesh Naidu</div>
               <div className="text-sm text-[#5C6B62]">
-                4.2 acres · Paddy & Tomato · Kadapa, Andhra Pradesh
+                4.2 acres · Paddy & Tomato · Vizianagaram, Andhra Pradesh
               </div>
             </div>
           </div>

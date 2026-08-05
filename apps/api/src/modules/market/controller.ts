@@ -18,19 +18,19 @@ interface CacheEntry {
 const priceCache = new Map<string, CacheEntry>();
 const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
-// High-quality local seed fallback records matching Kadapa, AP context
+// High-quality local seed fallback records matching Vizianagaram, AP context
 const FALLBACK_RECORDS: Record<string, any[]> = {
   paddy: [
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Kadapa", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2080", max_price: "2280", modal_price: "2183" },
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Proddatur", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2100", max_price: "2340", modal_price: "2240" },
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Rayachoti", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2050", max_price: "2260", modal_price: "2205" }
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Vizianagaram", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2080", max_price: "2280", modal_price: "2183" },
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Gajapathinagaram", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2100", max_price: "2340", modal_price: "2240" },
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Cheepurupalli", commodity: "Paddy(Dhan)", variety: "BPT 5204", arrival_date: "2026-08-05T00:00:00Z", min_price: "2050", max_price: "2260", modal_price: "2205" }
   ],
   tomato: [
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Kadapa", commodity: "Tomato", variety: "Local", arrival_date: "2026-08-05T00:00:00Z", min_price: "1000", max_price: "1250", modal_price: "1120" },
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Proddatur", commodity: "Tomato", variety: "Local", arrival_date: "2026-08-05T00:00:00Z", min_price: "1050", max_price: "1300", modal_price: "1180" }
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Vizianagaram", commodity: "Tomato", variety: "Local", arrival_date: "2026-08-05T00:00:00Z", min_price: "1000", max_price: "1250", modal_price: "1120" },
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Gajapathinagaram", commodity: "Tomato", variety: "Local", arrival_date: "2026-08-05T00:00:00Z", min_price: "1050", max_price: "1300", modal_price: "1180" }
   ],
   cotton: [
-    { state: "Andhra Pradesh", district: "Kadapa", market: "Kadapa", commodity: "Cotton", variety: "BT Cotton", arrival_date: "2026-08-05T00:00:00Z", min_price: "7100", max_price: "7600", modal_price: "7340" }
+    { state: "Andhra Pradesh", district: "Vizianagaram", market: "Vizianagaram", commodity: "Cotton", variety: "BT Cotton", arrival_date: "2026-08-05T00:00:00Z", min_price: "7100", max_price: "7600", modal_price: "7340" }
   ]
 };
 

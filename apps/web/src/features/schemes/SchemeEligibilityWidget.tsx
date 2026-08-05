@@ -209,7 +209,7 @@ export function SchemeEligibilityWidget() {
               </div>
               <p>• <strong>Farmer Name:</strong> Ramesh Naidu</p>
               <p>• <strong>Land Extent:</strong> {acres} Acres ({crop.toUpperCase()} Cultivation)</p>
-              <p>• <strong>Village / District:</strong> Kadapa, Andhra Pradesh</p>
+              <p>• <strong>Village / District:</strong> Vizianagaram, Andhra Pradesh</p>
               <p>• <strong>Aadhaar Last 4 Digits:</strong> XXXX-XXXX-4821</p>
               <p>• <strong>Beneficiary Category:</strong> Small & Marginal Farmer (SF/MF)</p>
             </div>
