@@ -180,7 +180,7 @@ export function WeatherPage() {
   }).slice(0, 7);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-1rem)] w-full bg-[#F4F3EC] select-none font-sans overflow-hidden text-left">
+    <div className="flex flex-col h-[calc(100vh-1rem)] min-h-screen w-full bg-[#F4F3EC] select-none font-sans overflow-hidden text-left pb-10">
       
       {/* Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
@@ -205,7 +205,7 @@ export function WeatherPage() {
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 p-4 md:p-6 flex flex-col lg:flex-row gap-6 overflow-y-auto no-scrollbar">
+      <div className="flex-1 p-4 md:p-6 flex flex-col lg:flex-row gap-6">
         
         {/* Left Column */}
         <div className="flex-1 flex flex-col gap-6">
@@ -411,7 +411,7 @@ export function WeatherPage() {
            </div>
 
            {/* WhatsApp Alerts */}
-           <div className="bg-[#0F2419] rounded-[24px] p-6 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
+           <div className="bg-[#0F2419] rounded-[24px] p-6 flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
               <h4 className="text-[16px] font-extrabold tracking-tight relative z-10 text-left" style={{ fontFamily: "'Outfit', sans-serif" }}>
                 Get Rain &amp; Storm Alerts on WhatsApp

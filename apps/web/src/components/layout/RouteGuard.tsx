@@ -28,7 +28,7 @@ export function GuestOnlyRoute() {
   const { isAuthenticated, isBootstrapping } = useAuth();
 
   if (isBootstrapping) return null;
-  if (isAuthenticated) return <Navigate to="/" replace />;
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
 
   return <Outlet />;
 }

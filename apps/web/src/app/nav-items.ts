@@ -29,7 +29,7 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "home", labelKey: "nav.dashboard", path: "/", icon: LayoutDashboard, status: "ready" },
+  { key: "home", labelKey: "nav.dashboard", path: "/dashboard", icon: LayoutDashboard, status: "ready" },
   { key: "chat", labelKey: "nav.chat", path: "/chat", icon: MessageCircle, status: "ready" },
   { key: "diseaseDetection", labelKey: "nav.diseaseDetection", path: "/disease-detection", icon: Bug, status: "ready" },
   { key: "weather", labelKey: "nav.weather", path: "/weather", icon: Cloud, status: "ready" },

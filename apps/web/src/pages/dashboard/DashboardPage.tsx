@@ -1,5 +1,1 @@
-import { HomePage } from "./HomePage.js";
-
-export function DashboardPage() {
-  return <HomePage />;
-}
+export { HomePage as DashboardPage } from "./HomePage.js";
