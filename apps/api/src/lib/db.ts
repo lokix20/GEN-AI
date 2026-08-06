@@ -323,30 +323,12 @@ async function executeMockQuery(text: string, params: any[] = []): Promise<any[]
 }
 
 export async function query(text: string, params?: any[]): Promise<any[]> {
-  if (isPostgresAvailable === false) {
-    return executeMockQuery(text, params);
-  }
-
+  const client = await pool.connect();
   try {
-    const client = await pool.connect();
-    try {
-      if (isPostgresAvailable === null) {
-        isPostgresAvailable = true;
-        logger.info("Connected to PostgreSQL database successfully.");
-      }
-      const res = await client.query(text, params);
-      return res.rows;
-    } finally {
-      client.release();
-    }
-  } catch (err: any) {
-    // No `!== false` guard needed: the early return above means we only reach here while
-    // isPostgresAvailable is true or null, so this still logs exactly once — on the first failure.
-    isPostgresAvailable = false;
-    logger.warn(
-      `PostgreSQL unavailable (${err.code || err.message}). Switching to built-in in-memory fallback database for local development.`
-    );
-    return executeMockQuery(text, params);
+    const res = await client.query(text, params);
+    return res.rows;
+  } finally {
+    client.release();
   }
 }
 
