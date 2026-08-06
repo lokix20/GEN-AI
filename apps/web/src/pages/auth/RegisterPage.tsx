@@ -29,9 +29,9 @@ export function RegisterPage() {
   const onSubmit = async (values: RegisterInput) => {
     setIsSubmitting(true);
     try {
-      const { userId } = await registerUser(values);
-      toast.success("Account created — verify your email to continue");
-      navigate("/verify-otp", { state: { userId, purpose: "EMAIL_VERIFY" } });
+      await registerUser(values);
+      toast.success("Account created successfully!");
+      navigate("/onboarding");
     } catch (error) {
       toast.error(getApiErrorMessage(error, "Could not create your account"));
     } finally {

@@ -50,7 +50,7 @@ async function issueTokens(user: { id: string; role: UserDTO["role"] }): Promise
   return { accessToken, refreshToken };
 }
 
-export async function register(input: RegisterInput): Promise<{ userId: string }> {
+export async function register(input: RegisterInput): Promise<AuthResponse & { refreshToken: string }> {
   if (input.role === "ADMIN") {
     throw new HttpError(403, "Admin accounts cannot self-register");
   }
@@ -67,9 +67,16 @@ export async function register(input: RegisterInput): Promise<{ userId: string }
     role: input.role,
   });
 
-  await sendVerificationOtp(user.id, { email: user.email, phone: user.phone });
+  // Automatically mark email as verified to bypass OTP
+  await repo.markEmailVerified(user.id);
+  user.emailVerified = true;
 
-  return { userId: user.id };
+  const { accessToken, refreshToken } = await issueTokens(user);
+  return {
+    user: toUserDTO(user, false),
+    accessToken,
+    refreshToken,
+  };
 }
 
 async function sendVerificationOtp(userId: string, target: { email?: string | null; phone?: string | null }) {
@@ -125,10 +132,6 @@ export async function login(input: LoginInput): Promise<AuthResponse & { refresh
 
   const user = await repo.findUserById(found.id);
   if (!user) throw new HttpError(401, "Invalid email or password");
-
-  if (!user.emailVerified) {
-    throw new HttpError(403, "Please verify your account first", "EMAIL_NOT_VERIFIED", { userId: user.id });
-  }
 
   const { accessToken, refreshToken } = await issueTokens(user);
   return {

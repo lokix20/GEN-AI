@@ -30,8 +30,9 @@ function clearRefreshCookie(res: Response) {
 
 export async function register(req: Request, res: Response) {
   const input = RegisterSchema.parse(req.body);
-  const result = await authService.register(input);
-  res.status(201).json(result);
+  const { refreshToken, ...rest } = await authService.register(input);
+  setRefreshCookie(res, refreshToken);
+  res.status(201).json(rest);
 }
 
 export async function verifyOtp(req: Request, res: Response) {

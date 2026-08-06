@@ -42,7 +42,14 @@ export function useAuth() {
   const setSession = useAuthStore((s) => s.setSession);
   const clearSession = useAuthStore((s) => s.clearSession);
 
-  const register = useCallback((input: RegisterInput) => authApi.registerRequest(input), []);
+  const register = useCallback(
+    async (input: RegisterInput) => {
+      const result = await authApi.registerRequest(input);
+      setSession(result.user, result.accessToken);
+      return result;
+    },
+    [setSession],
+  );
 
   const verifyOtp = useCallback(
     async (input: VerifyOtpInput) => {

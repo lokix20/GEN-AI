@@ -10,7 +10,7 @@ import type {
 } from "@haritha/shared-types";
 import { apiClient } from "../../lib/apiClient";
 
-export async function registerRequest(input: RegisterInput): Promise<{ userId: string }> {
+export async function registerRequest(input: RegisterInput): Promise<AuthResponse> {
   const { data } = await apiClient.post("/auth/register", input);
   return data;
 }
