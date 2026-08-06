@@ -39,7 +39,7 @@ export function Topbar({ onToggleSidebar, sidebarCollapsed }: { onToggleSidebar:
 
   const dt: DashboardTranslation = DASHBOARD_TRANSLATIONS[langCode] || DASHBOARD_TRANSLATIONS["te"] || DASHBOARD_TRANSLATIONS["en"];
 
-  const displayName = user?.name || "Ramesh Farm";
+  const displayName = user?.name || "Farmer";
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[#E4E3DA] bg-white/80 backdrop-blur-md px-4 py-3 md:px-6">

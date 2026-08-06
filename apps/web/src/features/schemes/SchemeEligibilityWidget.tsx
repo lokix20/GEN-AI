@@ -3,6 +3,7 @@ import { ShieldCheck, CheckCircle, FileText, Download, Sparkles, AlertCircle } f
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
+import { useAuthStore } from "../../store/auth.store";
 
 interface Scheme {
   id: string;
@@ -16,6 +17,7 @@ interface Scheme {
 }
 
 export function SchemeEligibilityWidget() {
+  const user = useAuthStore((s) => s.user);
   const [acres, setAcres] = useState<number>(4.2);
   const [crop, setCrop] = useState<string>("paddy");
   const [category, setCategory] = useState<string>("small");
@@ -207,7 +209,7 @@ export function SchemeEligibilityWidget() {
               <div className="font-bold text-sm text-[#236A43] border-b border-[#D6E4DB] pb-1">
                 Applicant Information (Pre-filled from Farm Profile)
               </div>
-              <p>• <strong>Farmer Name:</strong> Ramesh Naidu</p>
+              <p>• <strong>Farmer Name:</strong> {user?.name || "Farmer"}</p>
               <p>• <strong>Land Extent:</strong> {acres} Acres ({crop.toUpperCase()} Cultivation)</p>
               <p>• <strong>Village / District:</strong> Vizianagaram, Andhra Pradesh</p>
               <p>• <strong>Aadhaar Last 4 Digits:</strong> XXXX-XXXX-4821</p>

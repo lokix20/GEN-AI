@@ -50,7 +50,7 @@ export function HomePage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const { t } = useCurrentLanguage();
-  const firstName = user?.name?.split(" ")[0] ?? "Ramesh";
+  const firstName = user?.name?.split(" ")[0] ?? "Farmer";
 
   // Query actual weather data from the backend proxy for Vizianagaram
   const { data: weatherData } = useQuery<OpenWeatherResponse>({

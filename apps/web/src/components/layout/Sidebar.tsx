@@ -49,7 +49,7 @@ export function SidebarNav({ onNavigate, onCollapse }: { onNavigate?: () => void
 
   const dt: DashboardTranslation = DASHBOARD_TRANSLATIONS[langCode] || DASHBOARD_TRANSLATIONS["te"] || DASHBOARD_TRANSLATIONS["en"];
 
-  const displayName = user?.name || "Ramesh Farm";
+  const displayName = user?.name || "Farmer";
 
   return (
     <div className="flex h-full flex-col bg-[#0F2419] p-5 pb-5 gap-6 text-[#F4F3EC] overflow-y-auto no-scrollbar">

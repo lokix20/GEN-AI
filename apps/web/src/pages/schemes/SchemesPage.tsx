@@ -26,7 +26,7 @@ export function SchemesPage() {
   const farmerState = profile?.state || "Andhra Pradesh";
   const farmerCrops = profile?.mainCrops || ["Paddy", "Tomato", "Cotton"];
   const landAcres = profile?.farmSizeAcres || 4.2;
-  const farmerName = profile?.name || user?.name || "Ramesh Naidu";
+  const farmerName = user?.name || "Farmer";
 
   // 2. Profile-Based Scheme Matching
   const matchedSchemes = matchSchemesForProfile({
