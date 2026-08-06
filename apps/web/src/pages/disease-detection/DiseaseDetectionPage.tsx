@@ -62,7 +62,7 @@ function LeftCapturePanel({
   return (
     <div className="w-full md:w-[420px] shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 flex flex-col gap-6 overflow-y-auto no-scrollbar relative shadow-sm">
       <div className="space-y-1">
-        <h2 className="text-[20px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+        <h2 className="text-[20px] font-extrabold text-[#12261D]">
           Photograph the problem
         </h2>
         <p className="text-[14px] font-medium text-[#5C6B62]">
@@ -155,7 +155,6 @@ function LeftCapturePanel({
           disabled={!file || isAnalyzing}
           onClick={() => { if(file) onDetect(file, plot); }}
           className="w-full bg-[#9BD96B] hover:bg-[#8ac75c] text-[#0F2419] rounded-xl py-3.5 px-4 font-extrabold text-[15px] transition disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-          style={{ fontFamily: "'Sora', sans-serif" }}
         >
           {isAnalyzing ? "Analyzing..." : "Detect disease"}
         </button>
@@ -174,7 +173,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
         <div className="w-20 h-20 rounded-full bg-[#FAFAF7] border border-[#E4E3DA] flex items-center justify-center text-3xl mb-4">
           🍃
         </div>
-        <h3 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+        <h3 className="text-xl font-extrabold text-[#12261D]">
           Ready for diagnosis
         </h3>
         <p className="text-[14px] text-[#5C6B62] font-medium mt-2 max-w-sm">
@@ -225,7 +224,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
           
           <div className="flex-1 flex flex-col pt-1">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h2 className="text-2xl font-extrabold text-[#12261D]">
                 {report.diseaseName}
               </h2>
               <div className="bg-[#FFF4E5] text-[#C27D00] text-[11px] font-extrabold px-2 py-1 rounded-md">
@@ -264,7 +263,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
           
           {/* Treatment Plan */}
           <div className="md:col-span-3 flex flex-col gap-4">
-            <h3 className="text-[17px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+            <h3 className="text-[17px] font-extrabold text-[#12261D]">
               Treatment plan
             </h3>
             
@@ -316,7 +315,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
           {/* Right Column (Other possibilities & Nearby) */}
           <div className="md:col-span-2 flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <h3 className="text-[15.5px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15.5px] font-extrabold text-[#12261D]">
                 Other possibilities
               </h3>
               <div className="flex flex-col gap-3">
@@ -342,7 +341,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
             </div>
 
             <div className="flex flex-col gap-4">
-              <h3 className="text-[15.5px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15.5px] font-extrabold text-[#12261D]">
                 Nearby inputs
               </h3>
               <div className="flex flex-col gap-3">
@@ -363,7 +362,7 @@ function RightResultPanel({ report }: { report: DiseaseReportDTO | null }) {
 
             <div className="bg-[#0F2419] rounded-[20px] p-5 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
-              <h4 className="text-[14.5px] font-extrabold tracking-tight relative z-10" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h4 className="text-[14.5px] font-extrabold tracking-tight relative z-10">
                 Want a human check?
               </h4>
               <p className="text-[12.5px] text-[#A2B8AA] font-medium leading-relaxed relative z-10">
@@ -402,7 +401,7 @@ export function DiseaseDetectionPage() {
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Crop Diagnosis
           </h1>
           

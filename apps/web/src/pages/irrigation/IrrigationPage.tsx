@@ -10,7 +10,7 @@ export function IrrigationPage() {
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Irrigation Planner
           </h1>
           
@@ -62,7 +62,7 @@ export function IrrigationPage() {
                  </div>
                </div>
                
-               <div className="text-[28px] md:text-[34px] font-extrabold tracking-tight leading-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+               <div className="text-[28px] md:text-[34px] font-extrabold tracking-tight leading-tight">
                  Today 6:00 PM · run 55 minutes
                </div>
                
@@ -88,7 +88,7 @@ export function IrrigationPage() {
           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-8">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <h3 className="text-[18px] font-extrabold text-[#12261D]">
                   Plot by plot
                 </h3>
                 <p className="text-[14px] font-medium text-[#5C6B62] mt-0.5">
@@ -181,7 +181,7 @@ export function IrrigationPage() {
           {/* Next 7 Days Schedule */}
           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[18px] font-extrabold text-[#12261D]">
                 Next 7 days
               </h3>
               <div className="text-[12.5px] font-medium text-[#5C6B62]">
@@ -243,12 +243,12 @@ export function IrrigationPage() {
            
            {/* Monthly Water */}
            <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-4">
-              <h3 className="text-[15px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15px] font-extrabold text-[#12261D]">
                 This month's water
               </h3>
               
               <div>
-                <div className="text-[42px] font-extrabold leading-none tracking-tight text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="text-[42px] font-extrabold leading-none tracking-tight text-[#12261D]">
                   86,400 <span className="text-[16px] font-bold text-[#5C6B62] tracking-normal">litres</span>
                 </div>
               </div>
@@ -264,7 +264,7 @@ export function IrrigationPage() {
 
            {/* Sensors List */}
            <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
-             <h3 className="text-[15px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+             <h3 className="text-[15px] font-extrabold text-[#12261D]">
                Sensors
              </h3>
              
@@ -304,7 +304,7 @@ export function IrrigationPage() {
               <div className="text-[12.5px] font-extrabold text-[#1B7A4B] uppercase tracking-widest">
                 Saved this season
               </div>
-              <div className="text-[32px] font-extrabold text-[#12261D] tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <div className="text-[32px] font-extrabold text-[#12261D] tracking-tight">
                 ₹3,180
               </div>
               <div className="text-[12px] font-semibold text-[#5C6B62] leading-relaxed">

@@ -139,7 +139,7 @@ export function CropCalendarPage() {
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Crop Calendar &amp; Operations
           </h1>
           
@@ -204,7 +204,7 @@ export function CropCalendarPage() {
               <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6 relative overflow-hidden">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                    <h3 className="text-[18px] font-extrabold text-[#12261D]">
                       Crop Stages Timeline
                     </h3>
                     <p className="text-[13px] font-semibold text-[#5C6B62] mt-0.5">
@@ -280,7 +280,7 @@ export function CropCalendarPage() {
               <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                    <h3 className="text-[18px] font-extrabold text-[#12261D]">
                       {currentMonthName} Field Operations
                     </h3>
                     <p className="text-[13px] font-semibold text-[#5C6B62] mt-0.5">
@@ -352,7 +352,7 @@ export function CropCalendarPage() {
                   <div className="text-[11px] font-extrabold text-[#9BD96B] uppercase tracking-widest mb-2 flex items-center gap-1.5">
                     🚜 Upcoming Field Operations
                   </div>
-                  <div className="text-[20px] font-extrabold leading-tight text-white" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                  <div className="text-[20px] font-extrabold leading-tight text-white">
                     Priority Action: Panicle Initiation
                   </div>
                   <div className="flex flex-col gap-2.5 mt-3 text-[13.5px] font-medium text-[#A2B8AA] leading-relaxed">
@@ -403,7 +403,7 @@ export function CropCalendarPage() {
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[20px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                  <h3 className="text-[20px] font-extrabold text-[#12261D]">
                     {currentMonthName} {currentYear} · Detailed Operational Calendar
                   </h3>
                   <p className="text-[13.5px] font-semibold text-[#5C6B62] mt-0.5">

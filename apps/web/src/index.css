@@ -3,20 +3,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Self-hosted SF Pro. Previously this only listed local() sources, so on any machine without the
+   font installed (i.e. all Windows/Android users) it silently fell through to Segoe UI.
+   The bundled file is the variable SF-Pro.ttf: width/optical-size pinned, weight axis kept, and
+   subset to Latin + the symbols the UI uses (₹ ° → ▲ ▼ ✓) — 21 MB down to ~88 KB, which matters
+   given the app advertises working on 2G.
+   local() stays first so macOS/iOS use their installed copy and download nothing.
+   Telugu and other Indic glyphs are NOT in SF Pro; they resolve via the Noto Sans families
+   further down the `font-sans` stack in tailwind.config.ts. */
 @font-face {
   font-family: 'SF Pro';
-  src: local('SF Pro Display'), local('SF Pro Text'), local('SF Pro'), local('-apple-system'), local('BlinkMacSystemFont');
-  font-weight: 400 900;
+  src:
+    local('SF Pro Display'),
+    local('SF Pro Text'),
+    local('SF Pro'),
+    url('/fonts/SF-Pro.woff2') format('woff2');
+  font-weight: 1 1000;
   font-style: normal;
   font-display: swap;
 }
 
-.font-sfpro {
-  font-family: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
-}
+/* Both aliases resolve to the same stack as `font-sans` (tailwind.config.ts) so the landing page
+   and the in-app pages render in one identical face, vernacular fallbacks included. */
+@layer components {
+  .font-sfpro {
+    @apply font-sans;
+  }
 
-.font-ragellan {
-  font-family: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+  .font-ragellan {
+    @apply font-sans;
+  }
 }
 
 @layer base {
@@ -105,8 +121,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-    font-family: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    /* font-sans is defined in tailwind.config.js — keep the stack in one place. */
+    @apply bg-background text-foreground font-sans;
   }
 }
 

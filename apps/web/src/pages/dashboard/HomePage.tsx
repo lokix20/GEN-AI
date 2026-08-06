@@ -5,7 +5,6 @@ import { apiClient } from "../../lib/apiClient.js";
 import { useAuthStore } from "../../store/auth.store.js";
 import { useCurrentLanguage } from "../../hooks/useCurrentLanguage.js";
 
-const sora = { fontFamily: "'Outfit', sans-serif" };
 
 interface WeatherCondition {
   id: number;
@@ -84,7 +83,7 @@ export function HomePage() {
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div>
-          <h1 style={{ ...sora, fontSize: 28, fontWeight: 700, color: '#12261D', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#12261D', letterSpacing: '-0.02em' }}>
             {t.greeting ? t.greeting.replace("{{name}}", firstName) : `Good afternoon, ${firstName}`}
           </h1>
           <p style={{ fontSize: 13, color: '#5C6B62', marginTop: 3 }}>
@@ -111,7 +110,7 @@ export function HomePage() {
             </span>
             <span style={{ color:'#7F9A88', fontSize:12 }}>Plot A · paddy · 2.4 ac</span>
           </div>
-          <div style={{ ...sora, fontSize:20, fontWeight:700, color:'#F4F3EC', lineHeight:1.3 }}>
+          <div style={{ fontSize:20, fontWeight:700, color:'#F4F3EC', lineHeight:1.3 }}>
             {t.doFirstTitle || "Drain Plot A today — blight risk before Wednesday's rain"}
           </div>
           <p style={{ fontSize:13, color:'#8CA396', lineHeight:1.55 }}>
@@ -132,7 +131,7 @@ export function HomePage() {
           <span style={{ fontSize:10, fontWeight:800, color:'#C27D00', letterSpacing:'0.1em', background:'#FBF1DC', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>
             {t.todayBadge || "TODAY"}
           </span>
-          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>
+          <div style={{ fontSize:16, fontWeight:700, color:'#12261D' }}>
             {t.irrigateTitle || "Irrigate Plot B before 6 PM"}
           </div>
           <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>
@@ -151,7 +150,7 @@ export function HomePage() {
           <span style={{ fontSize:10, fontWeight:800, color:'#3B6FA8', letterSpacing:'0.1em', background:'#E4EEF6', padding:'3px 8px', borderRadius:10, alignSelf:'flex-start' }}>
             {t.thisWeekBadge || "THIS WEEK"}
           </span>
-          <div style={{ ...sora, fontSize:16, fontWeight:700, color:'#12261D' }}>
+          <div style={{ fontSize:16, fontWeight:700, color:'#12261D' }}>
             {t.claimTitle || "Claim PM-KISAN ₹2,000"}
           </div>
           <p style={{ fontSize:13, color:'#5C6B62', lineHeight:1.5 }}>
@@ -179,7 +178,7 @@ export function HomePage() {
             <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.weatherTitle || "Weather today"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>{currentTemp}°</span>
+            <span style={{ fontSize:36, fontWeight:700, color:'#12261D' }}>{currentTemp}°</span>
             <span style={{ fontSize:14, color:'#5C6B62', fontWeight:500 }}>{condition}</span>
           </div>
           <div style={{ fontSize:12, color:'#8B978F' }}>Humidity {humidity}% · rain {rainPop}% · wind {windSpeed} km/h</div>
@@ -192,7 +191,7 @@ export function HomePage() {
             <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.cropHealthTitle || "Crop health"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>82</span>
+            <span style={{ fontSize:36, fontWeight:700, color:'#12261D' }}>82</span>
             <span style={{ fontSize:14, color:'#8B978F' }}>/100</span>
           </div>
           <div style={{ height:5, borderRadius:3, background:'#EDECE3', overflow:'hidden' }}>
@@ -207,7 +206,7 @@ export function HomePage() {
             <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.soilMoistureTitle || "Soil moisture"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>31%</span>
+            <span style={{ fontSize:36, fontWeight:700, color:'#12261D' }}>31%</span>
             <span style={{ fontSize:13, color:'#C27D00', fontWeight:600 }}>Low</span>
           </div>
           <div style={{ height:5, borderRadius:3, background:'#EDECE3', overflow:'hidden' }}>
@@ -222,7 +221,7 @@ export function HomePage() {
             <span style={{ fontSize:11, fontWeight:600, color:'#7A877F' }}>{t.mandiTitle || "Paddy · Vizianagaram mandi"}</span>
           </div>
           <div style={{ display:'flex', alignItems:'baseline', gap:4 }}>
-            <span style={{ ...sora, fontSize:36, fontWeight:700, color:'#12261D' }}>₹2,183</span>
+            <span style={{ fontSize:36, fontWeight:700, color:'#12261D' }}>₹2,183</span>
             <span style={{ fontSize:13, color:'#1B7A4B', fontWeight:600 }}>▲2.4%</span>
           </div>
           <div style={{ fontSize:12, color:'#8B978F' }}>MSP ₹2,300 · hold advisory active</div>
@@ -235,7 +234,7 @@ export function HomePage() {
         <div className="lg:col-span-2" style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'22px 24px', display:'flex', flexDirection:'column', gap:16 }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <div>
-              <div style={{ ...sora, fontSize:17, fontWeight:700, color:'#12261D' }}>
+              <div style={{ fontSize:17, fontWeight:700, color:'#12261D' }}>
                 {t.mandiRateIntelligence || "Mandi Rate Intelligence & AI Forecast"}
               </div>
               <p style={{ fontSize:12, color:'#7A877F', marginTop:2 }}>Real-time prices from 4 nearest AP mandis for Paddy (BPT 5204)</p>
@@ -256,7 +255,7 @@ export function HomePage() {
                   <span style={{ fontSize:12, fontWeight:700, color:'#12261D' }}>{m.market}</span>
                   {m.best && <span style={{ fontSize:9, fontWeight:800, background:'#1B7A4B', color:'white', padding:'2px 6px', borderRadius:8 }}>BEST NET</span>}
                 </div>
-                <span style={{ ...sora, fontSize:22, fontWeight:700, color:'#12261D' }}>{m.price}</span>
+                <span style={{ fontSize:22, fontWeight:700, color:'#12261D' }}>{m.price}</span>
                 <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color: m.best ? '#1B7A4B' : '#7A877F', fontWeight:600 }}>
                   <span>{m.change}</span>
                   <span>{m.dist}</span>
@@ -278,7 +277,7 @@ export function HomePage() {
 
         {/* Right 1 col: Quick Navigation Cards */}
         <div style={{ background:'white', border:'1px solid #E4E3DA', borderRadius:16, padding:'22px 24px', display:'flex', flexDirection:'column', gap:14 }}>
-          <div style={{ ...sora, fontSize:17, fontWeight:700, color:'#12261D' }}>
+          <div style={{ fontSize:17, fontWeight:700, color:'#12261D' }}>
             {t.quickActions || "Quick Actions"}
           </div>
 

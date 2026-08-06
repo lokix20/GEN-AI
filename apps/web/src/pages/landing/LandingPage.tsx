@@ -1,9 +1,32 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useAuth } from "../../hooks/useAuth";
+
+// Shared read-only demo account (seeded by apps/api/src/scratch-seed-users.ts) so visitors can
+// look around without signing up.
+const DEMO_EMAIL = "demo.farmer@harithasahayak.in";
+const DEMO_PASSWORD = "password123";
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
+  const [demoLoading, setDemoLoading] = useState(false);
+
+  const handleDemo = async () => {
+    if (demoLoading) return;
+    setDemoLoading(true);
+    try {
+      await login({ email: DEMO_EMAIL, password: DEMO_PASSWORD });
+      navigate("/dashboard");
+    } catch {
+      // Fall back to the login screen rather than stranding the visitor on the landing page.
+      toast.error("Demo account is unavailable right now — please sign in.");
+      navigate("/login");
+    } finally {
+      setDemoLoading(false);
+    }
+  };
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -72,6 +95,13 @@ export function LandingPage() {
               className="bg-[#9BD96B] text-[#0E2419] text-base font-bold px-8 py-4 rounded-xl hover:bg-[#8ac75c] transition shadow-lg transform hover:-translate-y-0.5 active:translate-y-0"
             >
               Start free
+            </button>
+            <button
+              onClick={handleDemo}
+              disabled={demoLoading}
+              className="border border-[#9BD96B]/60 text-[#9BD96B] text-base font-bold px-8 py-4 rounded-xl hover:bg-[#9BD96B]/10 transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {demoLoading ? "Opening demo…" : "View demo"}
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-3 pt-4 text-[#8CA396] text-sm font-medium">

@@ -166,7 +166,7 @@ export function MarketPricesPage() {
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Market Prices
           </h1>
 
@@ -231,7 +231,7 @@ export function MarketPricesPage() {
                   </div>
                 </div>
 
-                <h2 className="text-[22px] md:text-[26px] font-extrabold leading-tight text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <h2 className="text-[22px] md:text-[26px] font-extrabold leading-tight text-left">
                   {priceRecommendationText(activeCrop, avgPrice)}
                 </h2>
 
@@ -252,7 +252,7 @@ export function MarketPricesPage() {
               </div>
 
               <div className="flex flex-col items-start md:items-end shrink-0 z-10">
-                <div className="text-[36px] md:text-[42px] font-extrabold leading-none tracking-tight" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="text-[36px] md:text-[42px] font-extrabold leading-none tracking-tight">
                   ₹{avgPrice}<span className="text-[16px] font-bold text-[#A2B8AA]">/quintal</span>
                 </div>
                 <div className="text-[13px] font-bold text-[#9BD96B] mt-2">
@@ -267,7 +267,7 @@ export function MarketPricesPage() {
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="text-left">
-                  <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  <h3 className="text-[18px] font-extrabold text-[#12261D]">
                     {hasRecords ? `${latestMandiPrices[0].state} Mandis` : "Vizianagaram Mandi"} · {activeCrop.toLowerCase()}
                   </h3>
                   <p className="text-[13.5px] font-medium text-[#5C6B62] mt-0.5">
@@ -329,7 +329,7 @@ export function MarketPricesPage() {
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
               <div className="flex items-center justify-between">
                 <div className="text-left">
-                  <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+                  <h3 className="text-[18px] font-extrabold text-[#12261D]">
                     Where to sell
                   </h3>
                   <p className="text-[13.5px] font-medium text-[#5C6B62] mt-0.5">
@@ -379,11 +379,11 @@ export function MarketPricesPage() {
             
             {/* Expected Income */}
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-3">
-              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left">
                 Your expected income
               </h3>
 
-              <div className="text-[32px] font-extrabold leading-none tracking-tight text-[#12261D] text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <div className="text-[32px] font-extrabold leading-none tracking-tight text-[#12261D] text-left">
                 ₹{Math.round(avgPrice * 27.6).toLocaleString("en-IN")}
               </div>
 
@@ -401,7 +401,7 @@ export function MarketPricesPage() {
 
             {/* Your Alerts */}
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
-              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left">
                 Your alerts
               </h3>
 
@@ -430,7 +430,7 @@ export function MarketPricesPage() {
 
             {/* Other Crops Today */}
             <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-4">
-              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15px] font-extrabold text-[#12261D] text-left">
                 Other crops today
               </h3>
 
@@ -454,7 +454,7 @@ export function MarketPricesPage() {
             {/* Sell as a Group */}
             <div className="shrink-0 bg-[#0F2419] rounded-[24px] p-6 mt-auto flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
-              <h4 className="text-[15px] font-extrabold tracking-tight relative z-10 text-left" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h4 className="text-[15px] font-extrabold tracking-tight relative z-10 text-left">
                 Sell as a group
               </h4>
               <p className="text-[13px] text-[#A2B8AA] font-medium leading-relaxed relative z-10 text-left">

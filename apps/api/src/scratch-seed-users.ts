@@ -31,13 +31,13 @@ async function run() {
     [
       profileId,
       farmer.id,
-      "Kerala",
-      "Palakkad",
+      "Andhra Pradesh",
+      "Vizianagaram",
       "Vallapuzha",
       4.2,
       "Loamy",
       "Rainfed",
-      ["Rice", "Coconut"],
+      ["Paddy", "Tomato"],
       "en",
       12
     ]

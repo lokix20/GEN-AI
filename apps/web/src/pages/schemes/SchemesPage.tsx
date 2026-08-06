@@ -58,7 +58,7 @@ export function SchemesPage() {
       {/* Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Government Schemes Intelligence
           </h1>
 
@@ -110,7 +110,7 @@ export function SchemesPage() {
                 <div className="text-[11px] font-extrabold text-[#9BD96B] uppercase tracking-wider flex items-center gap-1.5 mb-1">
                   <Sparkles size={13} /> Direct Income Grants
                 </div>
-                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1">
                   ₹{directIncomeTotal.toLocaleString()} <span className="text-xs font-semibold text-[#A2B8AA]">/ yr</span>
                 </div>
                 <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
@@ -123,7 +123,7 @@ export function SchemesPage() {
                 <div className="text-[11px] font-extrabold text-[#70C1B3] uppercase tracking-wider flex items-center gap-1.5 mb-1">
                   <ShieldCheck size={13} /> Risk Protection
                 </div>
-                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1">
                   ₹62,000 <span className="text-xs font-semibold text-[#A2B8AA]">/ acre</span>
                 </div>
                 <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
@@ -136,7 +136,7 @@ export function SchemesPage() {
                 <div className="text-[11px] font-extrabold text-[#F3C969] uppercase tracking-wider flex items-center gap-1.5 mb-1">
                   <Zap size={13} /> Low-Interest Credit
                 </div>
-                <div className="text-[26px] font-extrabold text-white leading-none my-1" style={{ fontFamily: "'Sora', sans-serif" }}>
+                <div className="text-[26px] font-extrabold text-white leading-none my-1">
                   ₹3,00,000 <span className="text-xs font-semibold text-[#A2B8AA]">@ 4%</span>
                 </div>
                 <div className="text-[12px] font-semibold text-[#A2B8AA] mt-1">
@@ -164,7 +164,7 @@ export function SchemesPage() {
           {/* Scheme Cards Grid */}
           <div className="flex items-center justify-between shrink-0">
             <div>
-              <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[18px] font-extrabold text-[#12261D]">
                 {activeTab === "matched" ? "Matched Schemes for Your Farm" : "Central & State Agriculture Schemes"}
               </h3>
               <p className="text-[12.5px] font-semibold text-[#5C6B62] mt-0.5">
@@ -209,7 +209,7 @@ export function SchemesPage() {
                   </div>
 
                   <div className="text-right shrink-0">
-                    <div className="text-[22px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+                    <div className="text-[22px] font-extrabold text-[#12261D]">
                       {scheme.benefitDisplay}
                     </div>
                     <span className="text-[11px] font-bold text-[#8B978F] block">Annual Financial Cover</span>
@@ -273,7 +273,7 @@ export function SchemesPage() {
           {/* Document Wallet */}
           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-[15px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Sora', sans-serif" }}>
+              <h3 className="text-[15px] font-extrabold text-[#12261D]">
                 Document Wallet
               </h3>
               <span className="text-[12px] font-bold text-[#A2ADA5]">4 of 5</span>

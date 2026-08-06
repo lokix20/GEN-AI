@@ -6,7 +6,37 @@ import hi from "../locales/hi/translation.json";
 const te = {
   common: { appName: "హరిత సహాయక్", tagline: "మీ ఏఐ వ్యవసాయ సహాయకుడు", save: "దాచు", cancel: "రద్దు చేయి", logout: "లాగ్ అవుట్" },
   nav: { dashboard: "డ్యాష్‌బోర్డ్", chat: "AI సహాయకుడు", diseaseDetection: "పంట నిర్ధారణ", weather: "వాతావరణం", market: "మండి ధరలు", schemes: "ప్రభుత్వ పథకాలు", cropCalendar: "పంట క్యాలెండర్", irrigation: "నీటి యాజమాన్యం", farmDiary: "వ్యవసాయ రికార్డు", expertConsultation: "నిపుణుల సలహా" },
-  dashboard: { welcome: "నమస్కారం, {{name}}", quickActions: "త్వరిత పనులు", checkCrop: "పంట తెగులు పరీక్షించండి" }
+  dashboard: { welcome: "నమస్కారం, {{name}}", quickActions: "త్వరిత పనులు", checkCrop: "పంట తెగులు పరీక్షించండి" },
+  auth: {
+    loginTitle: "మళ్లీ స్వాగతం",
+    loginSubtitle: "మీ పంటల సమాచారం చూడటానికి లాగిన్ అవ్వండి",
+    registerTitle: "ఖాతా సృష్టించండి",
+    registerSubtitle: "ఉచితంగా ప్రారంభించండి — క్రెడిట్ కార్డు అవసరం లేదు",
+    name: "పేరు",
+    email: "ఇమెయిల్",
+    phone: "ఫోన్ నంబర్",
+    password: "పాస్‌వర్డ్",
+    loginButton: "లాగిన్",
+    registerButton: "ఖాతా సృష్టించండి",
+    forgotPassword: "పాస్‌వర్డ్ మర్చిపోయారా?",
+    dontHaveAccount: "ఖాతా లేదా?",
+    alreadyHaveAccount: "ఇప్పటికే ఖాతా ఉందా?",
+    signUp: "సైన్ అప్",
+    signIn: "సైన్ ఇన్",
+    continueWithGoogle: "Google తో కొనసాగండి",
+    verifyTitle: "మీ ఫోన్‌ను ధృవీకరించండి",
+    verifySubtitle: "మేము పంపిన 6 అంకెల కోడ్‌ను నమోదు చేయండి",
+    otpCode: "ధృవీకరణ కోడ్",
+    resendCode: "కోడ్ మళ్లీ పంపండి",
+    verifyButton: "ధృవీకరించండి",
+    forgotTitle: "పాస్‌వర్డ్ రీసెట్ చేయండి",
+    forgotSubtitle: "రీసెట్ కోడ్ పొందడానికి మీ ఇమెయిల్ నమోదు చేయండి",
+    sendResetCode: "రీసెట్ కోడ్ పంపండి",
+    resetTitle: "కొత్త పాస్‌వర్డ్ పెట్టండి",
+    newPassword: "కొత్త పాస్‌వర్డ్",
+    resetButton: "పాస్‌వర్డ్ మార్చండి",
+    backToLogin: "లాగిన్‌కు తిరిగి వెళ్లండి",
+  },
 };
 
 const ta = {
@@ -86,7 +116,10 @@ i18n.use(initReactI18next).init({
     ur: { translation: ur },
   },
   lng: localStorage.getItem("haritha-language") ?? "te",
-  fallbackLng: "te",
+  // Must be "en": it is the only resource with the full key set. Falling back to "te" (which only
+  // defines `nav` and `dashboard`) meant any other key resolved to nothing and rendered raw —
+  // e.g. the login screen showed "auth.loginTitle" / "auth.email" instead of real labels.
+  fallbackLng: "en",
   interpolation: { escapeValue: false },
 });
 

@@ -208,7 +208,7 @@ export function ChatPage() {
       {/* Full-width Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-6">
-          <h1 className="text-xl font-extrabold text-[#12261D] hidden md:block" style={{ fontFamily: "'Sora', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D] hidden md:block">
             AI Assistant
           </h1>
           
@@ -274,7 +274,7 @@ export function ChatPage() {
             {!isLoadingMessages && messages.length === 0 ? (
               // Welcome screen
               <div className="flex-1 flex flex-col items-center justify-center py-6 px-4 max-w-3xl mx-auto w-full text-center">
-                <h2 style={{ fontFamily: "'Sora', sans-serif" }} className="text-3xl md:text-[34px] font-extrabold text-[#12261D] tracking-tight">
+                <h2 className="text-3xl md:text-[34px] font-extrabold text-[#12261D] tracking-tight">
                   Namaskaram, {user?.name?.split(" ")[0] || "Ramesh"}
                 </h2>
                 <p className="text-[14.5px] text-[#5C6B62] font-medium mt-3 mb-10">

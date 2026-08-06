@@ -6,6 +6,32 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      // Single source of truth for typography. Without this, `font-sans` (used on every page
+      // wrapper) resolved to Tailwind's default stack and overrode the SF Pro set on <body>,
+      // so inner pages rendered in a different face than the landing page.
+      // The Noto Sans families stay at the end: font fallback is per-glyph, so Latin text
+      // uses SF Pro while Telugu/Devanagari/etc. still get their proper vernacular glyphs.
+      fontFamily: {
+        sans: [
+          "SF Pro Display",
+          "SF Pro Text",
+          "SF Pro",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Inter",
+          "system-ui",
+          "Noto Sans Telugu",
+          "Noto Sans Devanagari",
+          "Noto Sans Tamil",
+          "Noto Sans Kannada",
+          "Noto Sans Malayalam",
+          "Noto Sans Bengali",
+          "Noto Sans Gujarati",
+          "Noto Sans Gurmukhi",
+          "Noto Sans Odia",
+          "sans-serif",
+        ],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

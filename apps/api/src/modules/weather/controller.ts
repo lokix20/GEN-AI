@@ -45,8 +45,9 @@ export async function getWeatherData(req: Request, res: Response) {
   }
 
   try {
-    // WeatherAPI.com forecast endpoint returns both current and 5 days forecast
-    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&days=5&aqi=no&alerts=no`;
+    // WeatherAPI.com forecast endpoint returns both current conditions and the daily forecast.
+    // 7 days feeds the "Next 7 days" strip on the weather page.
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&days=7&aqi=no&alerts=no`;
     
     console.log("Fetching live weather from WeatherAPI.com...");
     const response = await axios.get(url, { timeout: 3000 });
@@ -110,6 +111,18 @@ export async function getWeatherData(req: Request, res: Response) {
       forecast: {
         list: hours,
       },
+      // Per-day summaries for the whole forecast window. The hourly `list` above only covers
+      // today + tomorrow, so without this the UI could never render more than 2 day cards.
+      daily: (data.forecast?.forecastday ?? []).map((fd: any) => ({
+        date: fd.date,
+        dt: fd.date_epoch,
+        maxTemp: fd.day.maxtemp_c,
+        minTemp: fd.day.mintemp_c,
+        icon: mapIconCode(fd.day.condition.icon),
+        condition: fd.day.condition.text,
+        chanceOfRain: fd.day.daily_chance_of_rain ?? 0,
+        precipMm: fd.day.totalprecip_mm ?? 0,
+      })),
     };
 
     // Cache the mapped data

@@ -50,6 +50,42 @@ interface OpenWeatherResponse {
       };
     }>;
   };
+  /** Per-day summaries covering the full forecast window (the hourly list only spans ~48h). */
+  daily?: Array<{
+    date: string;
+    dt: number;
+    maxTemp: number;
+    minTemp: number;
+    icon: string;
+    condition: string;
+    chanceOfRain: number; // percent, 0-100
+    precipMm: number;
+  }>;
+}
+
+// WMO weather codes used by Open-Meteo, mapped onto the OpenWeatherMap icon codes this page renders.
+function openMeteoCodeToIcon(code: number): string {
+  if (code === 0) return "01d";
+  if (code <= 2) return "02d";
+  if (code === 3) return "03d";
+  if (code === 45 || code === 48) return "50d";
+  if (code >= 51 && code <= 67) return "10d";
+  if (code >= 71 && code <= 77) return "13d";
+  if (code >= 80 && code <= 82) return "09d";
+  if (code >= 95) return "11d";
+  return "02d";
+}
+
+function openMeteoCodeToLabel(code: number): string {
+  if (code === 0) return "Clear";
+  if (code <= 2) return "Partly cloudy";
+  if (code === 3) return "Overcast";
+  if (code === 45 || code === 48) return "Fog";
+  if (code >= 51 && code <= 67) return "Rain";
+  if (code >= 71 && code <= 77) return "Snow";
+  if (code >= 80 && code <= 82) return "Showers";
+  if (code >= 95) return "Thunderstorm";
+  return "Partly cloudy";
 }
 
 export function WeatherPage() {
@@ -111,6 +147,22 @@ export function WeatherPage() {
               };
             }),
           },
+          // Open-Meteo's `daily=` block already returns 7 days — map it straight through instead
+          // of leaving the day strip to be derived from the 36h hourly window.
+          daily: (data.daily?.time ?? []).map((date: string, idx: number) => {
+            const code = data.daily.weather_code?.[idx] ?? 0;
+            const precip = data.daily.precipitation_sum?.[idx] ?? 0;
+            return {
+              date,
+              dt: Math.floor(new Date(date).getTime() / 1000),
+              maxTemp: data.daily.temperature_2m_max?.[idx] ?? temp,
+              minTemp: data.daily.temperature_2m_min?.[idx] ?? temp,
+              icon: openMeteoCodeToIcon(code),
+              condition: openMeteoCodeToLabel(code),
+              chanceOfRain: precip > 0 ? Math.min(95, Math.round(precip * 12)) : 0,
+              precipMm: precip,
+            };
+          }),
         };
       }
     },
@@ -152,32 +204,48 @@ export function WeatherPage() {
   const isHighWindNow = current.wind.speed * 3.6 > 15;
   const isRainingNow = current.weather[0].main.toLowerCase().includes("rain");
 
-  // Next 5 Days forecast
-  const daysMap = new Map<string, typeof forecast.list>();
-  forecast.list.forEach((slot) => {
-    const dayName = new Date(slot.dt * 1000).toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-    if (!daysMap.has(dayName)) {
-      daysMap.set(dayName, []);
-    }
-    daysMap.get(dayName)!.push(slot);
-  });
+  // Next 7 days. Prefer the API's per-day summaries — the hourly `list` only spans ~48h, so
+  // deriving days from it can never yield more than two cards.
+  const dailyForecast = (
+    weatherData.daily?.length
+      ? weatherData.daily.map((day) => {
+          const showMm = day.precipMm >= 1;
+          return {
+            d: new Date(day.dt * 1000).toLocaleDateString("en-US", { weekday: "short" }).toUpperCase(),
+            i: getWeatherEmoji(day.icon),
+            t: `${Math.round(day.maxTemp)}°`,
+            // Heavy days read better as an actual depth; otherwise show the chance of rain.
+            c: showMm ? `${Math.round(day.precipMm)} mm` : `${Math.round(day.chanceOfRain)}%`,
+            isWet: showMm || day.chanceOfRain >= 40,
+          };
+        })
+      : // Fallback: derive from the hourly window if `daily` is unavailable.
+        Array.from(
+          forecast.list
+            .reduce((map, slot) => {
+              const key = new Date(slot.dt * 1000).toDateString();
+              if (!map.has(key)) map.set(key, []);
+              map.get(key)!.push(slot);
+              return map;
+            }, new Map<string, typeof forecast.list>())
+            .entries(),
+        ).map(([key, slots]) => {
+          const maxTemp = Math.round(Math.max(...slots.map((s) => s.main.temp)));
+          const maxPop = Math.round(Math.max(...slots.map((s) => s.pop)) * 100);
+          const iconCode = slots[Math.round(slots.length / 2)]?.weather[0].icon ?? "01d";
+          return {
+            d: new Date(key).toLocaleDateString("en-US", { weekday: "short" }).toUpperCase(),
+            i: getWeatherEmoji(iconCode),
+            t: `${maxTemp}°`,
+            c: `${maxPop}%`,
+            isWet: maxPop >= 40,
+          };
+        })
+  ).slice(0, 7);
 
-  const dailyForecast = Array.from(daysMap.entries()).map(([day, slots]) => {
-    const temps = slots.map((s) => s.main.temp);
-    const maxTemp = Math.round(Math.max(...temps));
-    const iconCode = slots[Math.round(slots.length / 2)]?.weather[0].icon ?? "01d";
-    const avgPop = Math.round(
-      (slots.reduce((acc, curr) => acc + curr.pop, 0) / slots.length) * 100
-    );
-
-    return {
-      d: day,
-      i: getWeatherEmoji(iconCode),
-      t: `${maxTemp}°`,
-      c: avgPop > 20 ? `${avgPop}%` : "Clear",
-      isWet: avgPop > 30,
-    };
-  }).slice(0, 7);
+  const forecastRainMm = Math.round(
+    (weatherData.daily ?? []).slice(0, 7).reduce((acc, day) => acc + (day.precipMm ?? 0), 0),
+  );
 
   return (
     <div className="flex flex-col w-full bg-[#F4F3EC] select-none font-sans text-left pb-10">
@@ -185,7 +253,7 @@ export function WeatherPage() {
       {/* Top Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[#E4E3DA] shrink-0 bg-[#F4F3EC]">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 className="text-xl font-extrabold text-[#12261D]">
             Real-Time Weather Intelligence
           </h1>
           <div className="text-[13px] font-semibold text-[#A2ADA5]">
@@ -217,7 +285,7 @@ export function WeatherPage() {
                  Right now in {current.name}
                </div>
                <div className="flex items-baseline gap-3">
-                 <div className="text-[52px] font-extrabold leading-none tracking-tighter" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                 <div className="text-[52px] font-extrabold leading-none tracking-tighter">
                    {Math.round(current.main.temp)}°C
                  </div>
                </div>
@@ -229,15 +297,15 @@ export function WeatherPage() {
              <div className="flex items-center gap-8 md:gap-12 mt-6 md:mt-0 z-10 text-left">
                <div className="flex flex-col">
                  <span className="text-[10.5px] font-bold text-[#A2B8AA] uppercase tracking-widest mb-1">Humidity</span>
-                 <span className="text-[20px] font-extrabold" style={{ fontFamily: "'Outfit', sans-serif" }}>{current.main.humidity}%</span>
+                 <span className="text-[20px] font-extrabold">{current.main.humidity}%</span>
                </div>
                <div className="flex flex-col">
                  <span className="text-[10.5px] font-bold text-[#A2B8AA] uppercase tracking-widest mb-1">Wind Speed</span>
-                 <span className="text-[20px] font-extrabold" style={{ fontFamily: "'Outfit', sans-serif" }}>{Math.round(current.wind.speed * 3.6)} km/h</span>
+                 <span className="text-[20px] font-extrabold">{Math.round(current.wind.speed * 3.6)} km/h</span>
                </div>
                <div className="flex flex-col">
                  <span className="text-[10.5px] font-bold text-[#A2B8AA] uppercase tracking-widest mb-1">Pressure</span>
-                 <span className="text-[20px] font-extrabold" style={{ fontFamily: "'Outfit', sans-serif" }}>{current.main.pressure} hPa</span>
+                 <span className="text-[20px] font-extrabold">{current.main.pressure} hPa</span>
                </div>
              </div>
              
@@ -247,7 +315,7 @@ export function WeatherPage() {
           {/* Work Windows Chart */}
           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
             <div className="text-left">
-              <h3 className="text-[18px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              <h3 className="text-[18px] font-extrabold text-[#12261D]">
                 Work windows, next 36 hours
               </h3>
               <p className="text-[14px] font-medium text-[#5C6B62] mt-0.5">
@@ -314,21 +382,41 @@ export function WeatherPage() {
             </div>
           </div>
 
-          {/* Next 5 Days Forecast */}
+          {/* Next 7 Days Forecast */}
           <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-6">
-            <h3 className="text-[18px] font-extrabold text-[#12261D] text-left" style={{ fontFamily: "'Outfit', sans-serif" }}>
-              Next 5 days forecast
+            <h3 className="text-[18px] font-extrabold text-[#12261D] text-left">
+              Next {dailyForecast.length} days
             </h3>
-            
+
             <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
               {dailyForecast.map((day, i) => (
-                <div key={i} className={cn("min-w-[85px] flex-1 flex flex-col items-center justify-center p-4 rounded-2xl border", day.isWet ? "bg-[#E6F0FA] border-[#CDE0F5]" : "bg-[#FAFAF7] border-[#E4E3DA]")}>
+                <div
+                  key={i}
+                  className={cn(
+                    "min-w-[70px] flex-1 flex flex-col items-center justify-center p-4 rounded-2xl border",
+                    day.isWet ? "bg-[#E6F0FA] border-[#CDE0F5]" : "bg-[#FAFAF7] border-[#E4E3DA]",
+                  )}
+                >
                   <div className="text-[11px] font-extrabold text-[#5C6B62] tracking-wider mb-2">{day.d}</div>
                   <div className="text-2xl mb-2">{day.i}</div>
-                  <div className="text-[16px] font-extrabold text-[#12261D]" style={{ fontFamily: "'Outfit', sans-serif" }}>{day.t}</div>
-                  <div className={cn("text-[11px] font-bold mt-1", day.isWet ? "text-[#3B6FA8]" : "text-[#A2ADA5]")}>{day.c}</div>
+                  <div className="text-[16px] font-extrabold text-[#12261D]">
+                    {day.t}
+                  </div>
+                  <div className={cn("text-[11px] font-bold mt-1", day.isWet ? "text-[#3B6FA8]" : "text-[#A2ADA5]")}>
+                    {day.c}
+                  </div>
                 </div>
               ))}
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-[#E4E3DA]">
+              <div className="text-[13px] font-semibold text-[#5C6B62]">
+                Rain expected over these {dailyForecast.length} days:{" "}
+                <span className="font-extrabold text-[#12261D]">{forecastRainMm} mm</span>
+              </div>
+              <button className="text-[#1B7A4B] font-bold text-[13px] hover:underline transition">
+                Compare with last year →
+              </button>
             </div>
           </div>
         </div>
@@ -355,7 +443,7 @@ export function WeatherPage() {
                 <h4 className={cn(
                   "text-[18px] font-extrabold leading-tight",
                   isRainingNow || isHighWindNow ? "text-[#D94F4F]" : "text-[#C27D00]"
-                )} style={{ fontFamily: "'Outfit', sans-serif" }}>
+                )}>
                   {isRainingNow 
                     ? "Raining currently on the farm" 
                     : isHighWindNow 
@@ -374,7 +462,7 @@ export function WeatherPage() {
 
            {/* Crop Impacts */}
            <div className="shrink-0 bg-white border border-[#E4E3DA] rounded-[24px] p-6 shadow-sm flex flex-col gap-5">
-             <h3 className="text-[16px] font-extrabold text-[#12261D] text-left" style={{ fontFamily: "'Outfit', sans-serif" }}>
+             <h3 className="text-[16px] font-extrabold text-[#12261D] text-left">
                Crop Weather Advisories
              </h3>
              <div className="flex flex-col gap-4 text-left">
@@ -413,7 +501,7 @@ export function WeatherPage() {
            {/* WhatsApp Alerts */}
            <div className="bg-[#0F2419] rounded-[24px] p-6 flex flex-col gap-3 text-white relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#9BD96B] rounded-full opacity-[0.03] -translate-y-10 translate-x-10" />
-              <h4 className="text-[16px] font-extrabold tracking-tight relative z-10 text-left" style={{ fontFamily: "'Outfit', sans-serif" }}>
+              <h4 className="text-[16px] font-extrabold tracking-tight relative z-10 text-left">
                 Get Rain &amp; Storm Alerts on WhatsApp
               </h4>
               <p className="text-[13px] text-[#A2B8AA] font-medium leading-relaxed relative z-10 text-left">
